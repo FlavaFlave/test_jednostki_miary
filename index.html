@@ -1,0 +1,1819 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Trening przeliczania jednostek miary — długość, masa, objętość i czas. Ściągawka, przelicznik i losowe testy.">
+  <title>Trening jednostek miary</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E📏%3C/text%3E%3C/svg%3E">
+  <style>
+:root {
+  --bg: #f3eee4;
+  --paper: #fffdf8;
+  --ink: #1b2430;
+  --muted: #5c6570;
+  --line: #e2dacb;
+  --navy: #1e3a5f;
+  --navy-2: #2c5282;
+  --ok: #1b7a46;
+  --ok-bg: #e8f6ee;
+  --bad: #b42318;
+  --bad-bg: #fdecea;
+  --tip: #8a5a00;
+  --tip-bg: #fff6e0;
+  --shadow: 0 8px 24px rgba(30, 40, 50, 0.08);
+  --radius: 16px;
+  --len: #1565c0;
+  --len-bg: #e3f2fd;
+  --mass: #e65100;
+  --mass-bg: #fff3e0;
+  --vol: #2e7d32;
+  --vol-bg: #e8f5e9;
+  --time: #6a1b9a;
+  --time-bg: #f3e5f5;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at top left, rgba(30, 58, 95, 0.05), transparent 32rem),
+    var(--bg);
+  font: 16.5px/1.5 system-ui, "Segoe UI", Ubuntu, Cantarell, "Noto Sans", "DejaVu Sans", sans-serif;
+}
+body.sticky-on { padding-top: 52px; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 20px 18px 64px; }
+h1, h2, h3 { line-height: 1.25; margin: 0 0 0.45em; }
+h1 { font-size: 2rem; color: var(--navy); letter-spacing: -0.03em; }
+h2 { font-size: 1.25rem; }
+p { margin: 0 0 0.8em; }
+a { color: var(--navy-2); }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+
+.hero {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+.hero p { color: var(--muted); max-width: 46rem; margin: 0; }
+.badge-set { display: flex; gap: 8px; flex-wrap: wrap; }
+.pill-legend {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 10px; border-radius: 999px; font-size: 0.85rem; font-weight: 600;
+}
+.pill-legend.i-len { background: var(--len-bg); color: var(--len); }
+.pill-legend.i-mass { background: var(--mass-bg); color: var(--mass); }
+.pill-legend.i-vol { background: var(--vol-bg); color: var(--vol); }
+.pill-legend.i-time { background: var(--time-bg); color: var(--time); }
+
+.card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 18px 20px 16px;
+  margin-bottom: 16px;
+}
+.card h2 { color: var(--navy); }
+.card .lead { color: var(--muted); margin-bottom: 14px; }
+
+.cat-card { border-top: 6px solid var(--cc); background: linear-gradient(180deg, var(--cb) 0%, var(--paper) 7.5rem); }
+.cat-card h3 { color: var(--cc); display: flex; align-items: center; gap: 8px; font-size: 1.15rem; margin-bottom: 10px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-cats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* Converter */
+.conv-row {
+  display: flex; flex-wrap: wrap; gap: 10px; align-items: end;
+}
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.field label { font-size: 0.8rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.field input, .field select, #answer {
+  border: 1.5px solid #cfc6b6;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #fff;
+  color: var(--ink);
+  min-height: 44px;
+}
+.field input:focus, .field select:focus, #answer:focus, button:focus-visible {
+  outline: 3px solid rgba(44, 82, 130, 0.35);
+  outline-offset: 1px;
+  border-color: var(--navy-2);
+}
+#conv-value { width: 11rem; font-variant-numeric: tabular-nums; font-size: 1.15rem; }
+.conv-eq { font-size: 1.6rem; font-weight: 700; color: var(--navy); padding-bottom: 8px; }
+#conv-out {
+  flex: 1 1 12rem;
+  min-height: 44px;
+  border-radius: 10px;
+  background: #f6f8fb;
+  border: 1.5px dashed #c5d0de;
+  padding: 10px 14px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  display: flex; align-items: center;
+}
+.conv-cats { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.conv-cats button, .seg button, .chip, .btn {
+  border: 1.5px solid var(--line);
+  background: #fff;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-weight: 600;
+  color: var(--ink);
+  min-height: 40px;
+}
+.conv-cats button[aria-pressed="true"] { color: #fff; border-color: transparent; }
+.conv-cats button[data-cat="length"][aria-pressed="true"] { background: var(--len); }
+.conv-cats button[data-cat="mass"][aria-pressed="true"] { background: var(--mass); }
+.conv-cats button[data-cat="volume"][aria-pressed="true"] { background: var(--vol); }
+.conv-cats button[data-cat="time"][aria-pressed="true"] { background: var(--time); }
+#conv-explain { margin-top: 14px; }
+.explain-box {
+  background: #f7f4ee;
+  border-radius: 12px;
+  padding: 12px 14px;
+  color: var(--ink);
+}
+.steps { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 10px; font-variant-numeric: tabular-nums; }
+.steps .s {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-weight: 700;
+}
+.steps .s.final { background: var(--navy); color: #fff; border-color: var(--navy); }
+.steps .arr { color: var(--muted); font-weight: 700; }
+
+/* Ladder */
+.stair {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  margin: 6px 0 12px;
+}
+.stair { flex-wrap: nowrap; }
+.pill-u {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 2.7rem; padding: 6px 8px;
+  border-radius: 999px;
+  background: #fff;
+  border: 2px solid var(--cc);
+  color: var(--cc);
+  font-weight: 800;
+}
+.step {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  min-width: 2.85rem; padding: 0 2px; color: var(--cc);
+}
+.step .up, .step .down { font-size: 0.78rem; font-weight: 800; letter-spacing: 0.02em; }
+.step .bar { width: 100%; height: 3px; background: var(--cc); border-radius: 2px; margin: 2px 0; opacity: 0.7; }
+
+.eqs { margin: 0; padding: 0; list-style: none; }
+.eqs li {
+  padding: 5px 0;
+  border-bottom: 1px dashed #d9d1c3;
+  font-variant-numeric: tabular-nums;
+}
+.eqs li:last-child { border-bottom: 0; }
+.eqs b { color: var(--cc); }
+.tip-line { margin-top: 10px; font-weight: 600; color: var(--cc); font-size: 0.95rem; }
+
+/* Rules */
+.rules {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.rule {
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: #f4f7fb;
+  border: 1px solid var(--line);
+}
+.rule.smaller { background: #e8f6ee; }
+.rule.bigger { background: #eef3fb; }
+.rule.time { background: var(--time-bg); }
+.rule h3 { font-size: 1rem; margin-bottom: 6px; }
+.rule.smaller h3 { color: var(--ok); }
+.rule.bigger h3 { color: var(--navy-2); }
+.rule.time h3 { color: var(--time); }
+.examples { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-top: 12px; }
+.ex { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.ex h4 { margin: 0 0 6px; font-size: 0.95rem; color: var(--navy); }
+.ex p { margin: 0; font-size: 0.95rem; }
+
+/* Quiz */
+.quiz-head { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.chip { display: inline-flex; align-items: center; gap: 6px; user-select: none; }
+.chip input { width: 1.05rem; height: 1.05rem; accent-color: var(--navy); }
+.seg { display: inline-flex; background: #efe9dc; border-radius: 999px; padding: 3px; }
+.seg button { border: 0; background: transparent; min-height: 36px; }
+.seg button[aria-pressed="true"] { background: var(--navy); color: #fff; }
+.scoreline { font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
+.scoreline span { font-weight: 600; color: var(--muted); }
+
+#question-card {
+  margin-top: 14px;
+  padding: 18px 18px 16px;
+  border-radius: 14px;
+  background: #f7f4ee;
+  border: 1px solid var(--line);
+  border-left: 8px solid var(--navy);
+}
+#question-card[data-cat="length"] { border-left-color: var(--len); }
+#question-card[data-cat="mass"] { border-left-color: var(--mass); }
+#question-card[data-cat="volume"] { border-left-color: var(--vol); }
+#question-card[data-cat="time"] { border-left-color: var(--time); }
+#q-cat { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 6px; }
+#q-text { font-size: 1.35rem; font-weight: 750; margin: 0 0 14px; }
+.answer-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+#answer { width: 14rem; font-size: 1.2rem; font-variant-numeric: tabular-nums; font-weight: 700; }
+.unit-after { font-weight: 800; color: var(--navy); min-width: 2.2rem; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.btn { border-radius: 10px; padding: 10px 16px; }
+.btn-primary { background: var(--navy); color: #fff; border-color: var(--navy); }
+.btn-primary:hover { background: var(--navy-2); }
+.btn-primary:disabled, .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-ok { background: var(--ok); color: #fff; border-color: var(--ok); }
+.btn-ghost { background: #fff; }
+.btn-quiet { background: transparent; border-color: transparent; color: var(--muted); text-decoration: underline; padding-left: 8px; padding-right: 8px; }
+
+#feedback { margin-top: 14px; border-radius: 12px; padding: 12px 14px; display: none; }
+#feedback.show { display: block; }
+#feedback.ok { background: var(--ok-bg); color: #135c34; }
+#feedback.bad { background: var(--bad-bg); color: #8a1c14; }
+#feedback.hintonly { background: var(--tip-bg); color: #6a4600; }
+#feedback .title { font-weight: 800; font-size: 1.05rem; margin-bottom: 4px; }
+#round-bar { margin-top: 8px; display: none; }
+#round-bar.on { display: block; }
+.dots { display: flex; gap: 5px; flex-wrap: wrap; }
+.dot { width: 12px; height: 12px; border-radius: 50%; background: #ddd4c5; }
+.dot.ok { background: var(--ok); }
+.dot.bad { background: var(--bad); }
+.dot.current { outline: 2px solid var(--navy); outline-offset: 2px; }
+
+.sticky-bar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 20;
+  background: rgba(30, 58, 95, 0.95);
+  color: #fff;
+  transform: translateY(-110%);
+  transition: transform 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+.sticky-bar.on { transform: translateY(0); }
+.sticky-inner {
+  max-width: 1080px; margin: 0 auto;
+  padding: 8px 18px;
+  display: flex; gap: 12px; align-items: center; justify-content: space-between;
+  font-size: 0.9rem; font-weight: 600;
+}
+.sticky-inner button {
+  border: 1px solid rgba(255,255,255,0.4);
+  background: transparent; color: #fff;
+  border-radius: 999px; padding: 5px 12px; min-height: 34px;
+}
+
+footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: center; }
+
+#no-cat { display: none; margin-top: 12px; padding: 12px; background: var(--tip-bg); border-radius: 10px; }
+#no-cat.on { display: block; }
+
+@media (max-width: 860px) {
+  .stair { flex-wrap: wrap; }
+  .conv-cats { gap: 6px; }
+  .conv-cats button { padding: 7px 11px; }
+  .grid-2, .grid-cats, .rules, .examples { grid-template-columns: 1fr; }
+  h1 { font-size: 1.65rem; }
+  #q-text { font-size: 1.2rem; }
+  .hero { flex-direction: column; }
+  #conv-value { width: 100%; }
+  .conv-eq { display: none; }
+  .field, #conv-out { flex: 1 1 100%; }
+  #answer { width: 100%; flex: 1 1 auto; }
+}
+@media print {
+  body, body.sticky-on { background: #fff; padding: 0; }
+  .wrap { max-width: none; padding: 0; }
+  #quiz, .sticky-bar, .no-print, footer, #converter .lead + .conv-cats, .actions { display: none !important; }
+  #converter { break-inside: avoid; }
+  .card { box-shadow: none; break-inside: avoid; }
+  a { color: inherit; text-decoration: none; }
+}
+  </style>
+</head>
+<body>
+<div class="sticky-bar" id="sticky-bar" aria-hidden="true">
+  <div class="sticky-inner">
+    <span>Do mniejszej jednostki → przecinek w <strong>PRAWO</strong> (mnożysz). Do większej → przecinek w <strong>LEWO</strong> (dzielisz). Czas: ×60 albo ÷60, bez przesuwania przecinka.</span>
+    <button type="button" id="btn-scroll-cheat">Ściągawka</button>
+  </div>
+</div>
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <h1>Trening jednostek miary</h1>
+      <p>Cześć Łucja! Na górze masz przelicznik i ściągawkę — zawsze możesz na nie zerknąć. Poniżej czekają losowe zadania. Odpowiedź możesz pisać z przecinkiem albo z kropką.</p>
+    </div>
+    <div class="badge-set" aria-hidden="true">
+      <span class="pill-legend i-len">Długość</span>
+      <span class="pill-legend i-mass">Masa</span>
+      <span class="pill-legend i-vol">Objętość</span>
+      <span class="pill-legend i-time">Czas</span>
+    </div>
+  </header>
+
+  <section class="card" id="converter" style="--cc: var(--len);">
+    <h2>Przelicznik</h2>
+    <p class="lead">Wpisz liczbę, wybierz jednostki i zobacz, jak przesuwa się przecinek (albo przez co mnożyć przy czasie).</p>
+    <div class="conv-cats" role="tablist" aria-label="Kategoria przelicznika">
+      <button type="button" data-cat="length" aria-pressed="true">Długość</button>
+      <button type="button" data-cat="mass" aria-pressed="false">Masa</button>
+      <button type="button" data-cat="volume" aria-pressed="false">Objętość</button>
+      <button type="button" data-cat="time" aria-pressed="false">Czas</button>
+    </div>
+    <div class="conv-row">
+      <div class="field">
+        <label for="conv-value">Liczba</label>
+        <input id="conv-value" inputmode="decimal" autocomplete="off" value="10" aria-label="Liczba do przeliczenia">
+      </div>
+      <div class="field">
+        <label for="conv-from">Z jednostki</label>
+        <select id="conv-from"></select>
+      </div>
+      <div class="conv-eq" aria-hidden="true">=</div>
+      <div id="conv-out" aria-live="polite">0,0001&nbsp;km</div>
+      <div class="field">
+        <label for="conv-to">Na jednostkę</label>
+        <select id="conv-to"></select>
+      </div>
+    </div>
+    <div id="conv-explain"></div>
+  </section>
+
+  <section class="card" id="cheatsheet">
+    <h2>Ściągawka</h2>
+    <p class="lead">Najważniejsza zasada przy milimetrach, gramach i litrach: patrzysz, ile jest zer między jednostkami, i o tyle miejsc przesuwasz przecinek.</p>
+    <div class="rules">
+      <div class="rule smaller">
+        <h3>Do mniejszej jednostki →</h3>
+        <p>Wynik ma być w mniejszej jednostce (np. z m na cm), więc <strong>mnożymy</strong>. Przecinek idzie w <strong>PRAWO</strong> o tyle miejsc, ile jest zer.</p>
+        <p>Przykład: 2,5&nbsp;m na cm (dwa zera) → 250&nbsp;cm.</p>
+      </div>
+      <div class="rule bigger">
+        <h3>← Do większej jednostki</h3>
+        <p>Wynik ma być w większej jednostce (np. z cm na km), więc <strong>dzielimy</strong>. Przecinek idzie w <strong>LEWO</strong> o tyle miejsc, ile jest zer.</p>
+        <p>Przykład: 10&nbsp;cm na km (pięć zer) → 0,0001&nbsp;km.</p>
+      </div>
+      <div class="rule time">
+        <h3>Czas jest inny!</h3>
+        <p>Tu <strong>nie przesuwamy przecinka</strong>. Godziny, minuty i sekundy przeliczamy przez <strong>60</strong> (albo 3600, gdy z godzin od razu na sekundy).</p>
+        <p>1&nbsp;h = 60&nbsp;min = 3&nbsp;600&nbsp;s.</p>
+      </div>
+    </div>
+    <div class="examples">
+      <div class="ex">
+        <h4>10 cm = ? km</h4>
+        <p>Z cm do km idziesz w górę o 5 zer (cm→dm→m→km: 1+1+3). Przecinek o 5 miejsc w lewo:<br><strong>10 → 0,0001&nbsp;km</strong>.</p>
+      </div>
+      <div class="ex">
+        <h4>4 l i 100 ml = ? ml</h4>
+        <p>Najpierw wszystko na mililitry. 4&nbsp;l = 4 × 1000 = 4000&nbsp;ml, plus 100&nbsp;ml.<br><strong>4&nbsp;l 100&nbsp;ml = 4100&nbsp;ml</strong>.</p>
+      </div>
+      <div class="ex">
+        <h4>1 h 35 min = ? s</h4>
+        <p>Bez przesuwania przecinka: 1&nbsp;h = 3600&nbsp;s, 35&nbsp;min = 35 × 60 = 2100&nbsp;s.<br><strong>3600 + 2100 = 5700&nbsp;s</strong>.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="grid-cats" id="cat-grid">
+    <section class="card cat-card" style="--cc: var(--len); --cb: var(--len-bg);">
+      <h3>Długość</h3>
+      <div class="stair" style="--cc: var(--len);" aria-label="Drabinka długości">
+        <span class="pill-u">mm</span>
+        <span class="step"><span class="up">×10</span><span class="bar"></span><span class="down">÷10</span></span>
+        <span class="pill-u">cm</span>
+        <span class="step"><span class="up">×10</span><span class="bar"></span><span class="down">÷10</span></span>
+        <span class="pill-u">dm</span>
+        <span class="step"><span class="up">×10</span><span class="bar"></span><span class="down">÷10</span></span>
+        <span class="pill-u">m</span>
+        <span class="step"><span class="up">×1000</span><span class="bar"></span><span class="down">÷1000</span></span>
+        <span class="pill-u">km</span>
+      </div>
+      <ul class="eqs" style="--cc: var(--len);">
+        <li><b>1 cm</b> = 10 mm</li>
+        <li><b>1 dm</b> = 10 cm = 100 mm</li>
+        <li><b>1 m</b> = 10 dm = 100 cm = 1&nbsp;000 mm</li>
+        <li><b>1 km</b> = 1&nbsp;000 m = 10&nbsp;000 dm = 100&nbsp;000 cm = 1&nbsp;000&nbsp;000 mm</li>
+      </ul>
+      <p class="tip-line">Pamiętaj: z metrów na kilometry jest ×1000, nie ×10.</p>
+    </section>
+
+    <section class="card cat-card" style="--cc: var(--mass); --cb: var(--mass-bg);">
+      <h3>Masa (waga)</h3>
+      <div class="stair" style="--cc: var(--mass);" aria-label="Drabinka masy">
+        <span class="pill-u">g</span>
+        <span class="step"><span class="up">×10</span><span class="bar"></span><span class="down">÷10</span></span>
+        <span class="pill-u">dag</span>
+        <span class="step"><span class="up">×100</span><span class="bar"></span><span class="down">÷100</span></span>
+        <span class="pill-u">kg</span>
+        <span class="step"><span class="up">×1000</span><span class="bar"></span><span class="down">÷1000</span></span>
+        <span class="pill-u">t</span>
+      </div>
+      <ul class="eqs" style="--cc: var(--mass);">
+        <li><b>1 dag</b> = 10 g</li>
+        <li><b>1 kg</b> = 100 dag = 1&nbsp;000 g</li>
+        <li><b>1 t</b> = 1&nbsp;000 kg = 100&nbsp;000 dag = 1&nbsp;000&nbsp;000 g</li>
+      </ul>
+      <p class="tip-line">Uwaga: z dag na kg są dwa zera (×100), nie jedno.</p>
+    </section>
+
+    <section class="card cat-card" style="--cc: var(--vol); --cb: var(--vol-bg);">
+      <h3>Objętość</h3>
+      <div class="stair" style="--cc: var(--vol);" aria-label="Drabinka objętości">
+        <span class="pill-u">ml</span>
+        <span class="step"><span class="up">×1000</span><span class="bar"></span><span class="down">÷1000</span></span>
+        <span class="pill-u">l</span>
+        <span class="step"><span class="up">×100</span><span class="bar"></span><span class="down">÷100</span></span>
+        <span class="pill-u">hl</span>
+      </div>
+      <ul class="eqs" style="--cc: var(--vol);">
+        <li><b>1 l</b> = 1&nbsp;000 ml</li>
+        <li><b>1 hl</b> = 100 l = 100&nbsp;000 ml</li>
+      </ul>
+      <p class="tip-line">Z mililitrów na litry są trzy zera. Z litrów na hektolitry — dwa.</p>
+    </section>
+
+    <section class="card cat-card" style="--cc: var(--time); --cb: var(--time-bg);">
+      <h3>Czas</h3>
+      <div class="stair" style="--cc: var(--time);" aria-label="Drabinka czasu">
+        <span class="pill-u">s</span>
+        <span class="step"><span class="up">×60</span><span class="bar"></span><span class="down">÷60</span></span>
+        <span class="pill-u">min</span>
+        <span class="step"><span class="up">×60</span><span class="bar"></span><span class="down">÷60</span></span>
+        <span class="pill-u">h</span>
+      </div>
+      <ul class="eqs" style="--cc: var(--time);">
+        <li><b>1 min</b> = 60 s</li>
+        <li><b>1 h</b> = 60 min = 3&nbsp;600 s</li>
+      </ul>
+      <p class="tip-line">Tu nie ma przesuwania przecinka — tylko mnożenie i dzielenie przez 60.</p>
+    </section>
+  </div>
+
+  <section class="card" id="quiz">
+    <div class="quiz-head">
+      <h2>Test</h2>
+      <div class="scoreline" id="scoreline">Wynik: 0/0 <span>· Seria: 0 · Rekord: 0</span></div>
+    </div>
+    <div class="filters">
+      <label class="chip"><input type="checkbox" id="cat-length" checked> Długość</label>
+      <label class="chip"><input type="checkbox" id="cat-mass" checked> Masa</label>
+      <label class="chip"><input type="checkbox" id="cat-volume" checked> Objętość</label>
+      <label class="chip"><input type="checkbox" id="cat-time" checked> Czas</label>
+      <div class="seg" role="group" aria-label="Trudność">
+        <button type="button" id="diff-easy" aria-pressed="true">Łatwe</button>
+        <button type="button" id="diff-hard" aria-pressed="false">Trudne</button>
+      </div>
+    </div>
+    <div id="round-bar"><div class="dots" id="round-dots"></div></div>
+    <div id="no-cat">Zaznacz chociaż jedną kategorię, żeby dostać pytanie.</div>
+
+    <div id="question-card" data-cat="length">
+      <div id="q-cat">Długość</div>
+      <p id="q-text">Ładowanie pytania…</p>
+      <div class="answer-row">
+        <input id="answer" inputmode="decimal" autocomplete="off" aria-label="Twoja odpowiedź" placeholder="wpisz wynik">
+        <span class="unit-after" id="unit-after">km</span>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="btn-check">Sprawdź</button>
+        <button type="button" class="btn btn-ok" id="btn-next" hidden>Następne</button>
+        <button type="button" class="btn btn-ghost" id="btn-tip">Podpowiedź</button>
+        <button type="button" class="btn btn-ghost no-print" id="btn-round">Runda 10 pytań</button>
+        <button type="button" class="btn btn-quiet no-print" id="btn-reset">Wyczyść wyniki</button>
+      </div>
+      <div id="feedback" role="status"></div>
+    </div>
+    <p class="lead" style="margin:12px 0 0;font-size:0.92rem;">Po sprawdzeniu odpowiedzi naciśnij <strong>Enter</strong>, żeby przejść do kolejnego zadania. Podpowiedź pokazuje tylko kierunek i czynnik, nie wynik.</p>
+  </section>
+
+  <footer>
+    Strona działa bez internetu — wystarczy otworzyć plik <strong>index.html</strong>. Nadaje się też do publikacji na GitHub Pages.
+  </footer>
+</div>
+<script id="engine">
+/* Silnik przeliczania jednostek – działa w przeglądarce i w Node. */
+(function (root) {
+  "use strict";
+
+  const pow10 = (n) => 10n ** BigInt(n);
+
+  function gcd(a, b) {
+    a = a < 0n ? -a : a;
+    b = b < 0n ? -b : b;
+    while (b !== 0n) {
+      const t = a % b;
+      a = b;
+      b = t;
+    }
+    return a;
+  }
+
+  function groupThousands(s) {
+    return s.replace(/\B(?=(\d{3})+(?!\d))/g, "\u00A0");
+  }
+
+  /** value = coef / 10^scale (coef is BigInt) */
+  function canon(coef, scale) {
+    if (coef === 0n) return { coef: 0n, scale: 0 };
+    const sign = coef < 0n ? -1n : 1n;
+    let c = coef < 0n ? -coef : coef;
+    let sc = scale;
+    while (sc > 0 && c % 10n === 0n) {
+      c /= 10n;
+      sc--;
+    }
+    return { coef: sign * c, scale: sc };
+  }
+
+  function formatPL(coef, scale) {
+    const r = canon(coef, scale);
+    if (r.coef === 0n) return "0";
+    const sign = r.coef < 0n ? "−" : "";
+    let c = r.coef < 0n ? -r.coef : r.coef;
+    let s = c.toString();
+    if (r.scale === 0) return sign + groupThousands(s);
+    if (s.length <= r.scale) {
+      s = s.padStart(r.scale, "0");
+      return sign + "0," + s;
+    }
+    const i = s.length - r.scale;
+    return sign + groupThousands(s.slice(0, i)) + "," + s.slice(i);
+  }
+
+  function formatPLStr(str) {
+    const r = parseDecimal(str);
+    if (!r) return String(str);
+    return formatPL(r.coef, r.scale);
+  }
+
+  /** Parse a number written with comma or dot, spaces ignored. Returns {coef,scale} or null. */
+  function parseDecimal(str) {
+    if (str == null) return null;
+    let s = String(str).trim().replace(/[\s\u00A0\u202F\u2009]/g, "");
+    s = s.replace(/−/g, "-").replace(",", ".");
+    if (s === "" || s === "-" || s === "." || s === "-.") return null;
+    if (!/^-?\d+(\.\d+)?$/.test(s) && !/^-?\.\d+$/.test(s)) return null;
+    const neg = s[0] === "-";
+    if (neg) s = s.slice(1);
+    if (s[0] === ".") s = "0" + s;
+    const parts = s.split(".");
+    const whole = parts[0] || "0";
+    const frac = parts[1] || "";
+    const digits = (whole + frac).replace(/^0+/, "") || "0";
+    let coef = BigInt(digits);
+    if (neg) coef = -coef;
+    return canon(coef, frac.length);
+  }
+
+  function rationalsEqual(a, b) {
+    if (!a || !b) return false;
+    return a.coef * pow10(b.scale) === b.coef * pow10(a.scale);
+  }
+
+  function addR(a, b) {
+    const scale = Math.max(a.scale, b.scale);
+    const coef = a.coef * pow10(scale - a.scale) + b.coef * pow10(scale - b.scale);
+    return canon(coef, scale);
+  }
+
+  function convertMetric(val, fromU, toU, zeros) {
+    const shift = zeros[fromU] - zeros[toU];
+    if (shift >= 0) return canon(val.coef * pow10(shift), val.scale);
+    return canon(val.coef, val.scale - shift);
+  }
+
+  function convertTime(val, fromU, toU) {
+    const fact = { s: 1n, min: 60n, h: 3600n };
+    let num = val.coef * fact[fromU];
+    let den = fact[toU] * pow10(val.scale);
+    const g = gcd(num, den);
+    num /= g;
+    den /= g;
+    let d = den;
+    let twos = 0,
+      fives = 0;
+    while (d % 2n === 0n) {
+      d /= 2n;
+      twos++;
+    }
+    while (d % 5n === 0n) {
+      d /= 5n;
+      fives++;
+    }
+    if (d !== 1n) {
+      return { exact: false, coef: num, scale: 0, den, remainder: d };
+    }
+    const scale = Math.max(twos, fives);
+    const coef = num * 2n ** BigInt(scale - twos) * 5n ** BigInt(scale - fives);
+    return Object.assign({ exact: true }, canon(coef, scale));
+  }
+
+  const UNITS = {
+    mm: { short: "mm", cat: "length", forms: { one: "milimetr", few: "milimetry", many: "milimetrów", frac: "milimetra" }, ile: "milimetrów", na: "milimetry", w: "milimetrach" },
+    cm: { short: "cm", cat: "length", forms: { one: "centymetr", few: "centymetry", many: "centymetrów", frac: "centymetra" }, ile: "centymetrów", na: "centymetry", w: "centymetrach" },
+    dm: { short: "dm", cat: "length", forms: { one: "decymetr", few: "decymetry", many: "decymetrów", frac: "decymetra" }, ile: "decymetrów", na: "decymetry", w: "decymetrach" },
+    m: { short: "m", cat: "length", forms: { one: "metr", few: "metry", many: "metrów", frac: "metra" }, ile: "metrów", na: "metry", w: "metrach" },
+    km: { short: "km", cat: "length", forms: { one: "kilometr", few: "kilometry", many: "kilometrów", frac: "kilometra" }, ile: "kilometrów", na: "kilometry", w: "kilometrach" },
+    g: { short: "g", cat: "mass", forms: { one: "gram", few: "gramy", many: "gramów", frac: "grama" }, ile: "gramów", na: "gramy", w: "gramach" },
+    dag: { short: "dag", cat: "mass", forms: { one: "dekagram", few: "dekagramy", many: "dekagramów", frac: "dekagrama" }, ile: "dekagramów", na: "dekagramy", w: "dekagramach" },
+    kg: { short: "kg", cat: "mass", forms: { one: "kilogram", few: "kilogramy", many: "kilogramów", frac: "kilograma" }, ile: "kilogramów", na: "kilogramy", w: "kilogramach" },
+    t: { short: "t", cat: "mass", forms: { one: "tona", few: "tony", many: "ton", frac: "tony" }, ile: "ton", na: "tony", w: "tonach" },
+    ml: { short: "ml", cat: "volume", forms: { one: "mililitr", few: "mililitry", many: "mililitrów", frac: "mililitra" }, ile: "mililitrów", na: "mililitry", w: "mililitrach" },
+    l: { short: "l", cat: "volume", forms: { one: "litr", few: "litry", many: "litrów", frac: "litra" }, ile: "litrów", na: "litry", w: "litrach" },
+    hl: { short: "hl", cat: "volume", forms: { one: "hektolitr", few: "hektolitry", many: "hektolitrów", frac: "hektolitra" }, ile: "hektolitrów", na: "hektolitry", w: "hektolitrach" },
+    s: { short: "s", cat: "time", forms: { one: "sekunda", few: "sekundy", many: "sekund", frac: "sekundy" }, ile: "sekund", na: "sekundy", w: "sekundach" },
+    min: { short: "min", cat: "time", forms: { one: "minuta", few: "minuty", many: "minut", frac: "minuty" }, ile: "minut", na: "minuty", w: "minutach" },
+    h: { short: "h", cat: "time", forms: { one: "godzina", few: "godziny", many: "godzin", frac: "godziny" }, ile: "godzin", na: "godziny", w: "godzinach" },
+  };
+
+  const CATS = {
+    length: {
+      id: "length",
+      name: "Długość",
+      units: ["mm", "cm", "dm", "m", "km"],
+      zeros: { mm: 0, cm: 1, dm: 2, m: 3, km: 6 },
+      neighbors: [
+        ["mm", "cm"],
+        ["cm", "dm"],
+        ["dm", "m"],
+        ["m", "km"],
+      ],
+      metric: true,
+    },
+    mass: {
+      id: "mass",
+      name: "Masa",
+      units: ["g", "dag", "kg", "t"],
+      zeros: { g: 0, dag: 1, kg: 3, t: 6 },
+      neighbors: [
+        ["g", "dag"],
+        ["dag", "kg"],
+        ["kg", "t"],
+      ],
+      metric: true,
+    },
+    volume: {
+      id: "volume",
+      name: "Objętość",
+      units: ["ml", "l", "hl"],
+      zeros: { ml: 0, l: 3, hl: 5 },
+      neighbors: [
+        ["ml", "l"],
+        ["l", "hl"],
+      ],
+      metric: true,
+    },
+    time: {
+      id: "time",
+      name: "Czas",
+      units: ["s", "min", "h"],
+      factor: { s: 1, min: 60, h: 3600 },
+      neighbors: [
+        ["s", "min"],
+        ["min", "h"],
+      ],
+      metric: false,
+    },
+  };
+
+  function isIntegerRational(r) {
+    return canon(r.coef, r.scale).scale === 0;
+  }
+
+  function integerValue(r) {
+    const c = canon(r.coef, r.scale);
+    if (c.scale !== 0) return null;
+    return c.coef;
+  }
+
+  function unitForm(r, unitId) {
+    const u = UNITS[unitId];
+    if (!isIntegerRational(r)) return u.forms.frac;
+    const n = integerValue(r);
+    const abs = n < 0n ? -n : n;
+    if (abs === 1n) return u.forms.one;
+    const n10 = Number(abs % 10n);
+    const n100 = Number(abs % 100n);
+    if (n10 >= 2 && n10 <= 4 && (n100 < 12 || n100 > 14)) return u.forms.few;
+    return u.forms.many;
+  }
+
+  function qtyText(r, unitId, useShort) {
+    const num = formatPL(r.coef, r.scale);
+    if (useShort) return num + "\u00A0" + UNITS[unitId].short;
+    return num + "\u00A0" + unitForm(r, unitId);
+  }
+
+  function makeRng(seed) {
+    if (typeof seed === "function") return seed;
+    if (seed == null) return Math.random;
+    let a = seed | 0;
+    return function () {
+      a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function randInt(rng, a, b) {
+    return a + Math.floor(rng() * (b - a + 1));
+  }
+
+  function pick(rng, arr) {
+    return arr[randInt(rng, 0, arr.length - 1)];
+  }
+
+  function parseIntStr(n) {
+    return { coef: BigInt(n), scale: 0 };
+  }
+
+  function fromNiceDecimal(str) {
+    return parseDecimal(String(str).replace(".", ","));
+  }
+
+  /* ---------- hints ---------- */
+
+  function zerosBetween(cat, fromU, toU) {
+    return cat.zeros[fromU] - cat.zeros[toU];
+  }
+
+  function pathUnits(cat, fromU, toU) {
+    const i = cat.units.indexOf(fromU);
+    const j = cat.units.indexOf(toU);
+    const step = i < j ? 1 : -1;
+    const path = [];
+    for (let k = i; k !== j; k += step) {
+      path.push([cat.units[k], cat.units[k + step]]);
+    }
+    return path;
+  }
+
+  function metricHint(val, fromU, toU, cat, result) {
+    const d = zerosBetween(cat, fromU, toU);
+    const zeros = Math.abs(d);
+    const factor = formatPL(pow10(zeros), 0);
+    const toSmaller = d > 0;
+    const dir = toSmaller ? "PRAWO" : "LEWO";
+    const op = toSmaller ? "mnożymy" : "dzielimy";
+    const kind = toSmaller ? "mniejszej" : "większej";
+    const start = formatPL(val.coef, val.scale);
+    const end = formatPL(result.coef, result.scale);
+    const path = pathUnits(cat, fromU, toU)
+      .map(([a, b]) => {
+        const z = Math.abs(zerosBetween(cat, a, b));
+        const arrow = zerosBetween(cat, a, b) > 0 ? "×" : "÷";
+        return a + " " + arrow + formatPL(pow10(z), 0) + " → " + b;
+      })
+      .join(", ");
+    const lines = [];
+    lines.push("Z <strong>" + fromU + "</strong> na <strong>" + toU + "</strong> idziesz do <strong>" + kind + "</strong> jednostki, więc <strong>" + op + "</strong>.");
+    if (path) lines.push("Droga: " + path + ".");
+    lines.push("Między " + fromU + " a " + toU + " jest <strong>" + zeros + (zeros === 1 ? " zero" : zeros < 5 ? " zera" : " zer") + "</strong> (czynnik " + factor + ").");
+    lines.push("Przecinek przesuwamy o <strong>" + zeros + (zeros === 1 ? " miejsce" : zeros < 5 ? " miejsca" : " miejsc") + " w " + dir + "</strong>.");
+    lines.push("Czyli: " + start + "\u00A0" + fromU + " = <strong>" + end + "\u00A0" + toU + "</strong>.");
+    return lines.join(" ");
+  }
+
+  function metricTip(fromU, toU, cat) {
+    const d = zerosBetween(cat, fromU, toU);
+    const zeros = Math.abs(d);
+    const toSmaller = d > 0;
+    const dir = toSmaller ? "PRAWO" : "LEWO";
+    const op = toSmaller ? "mnożysz" : "dzielisz";
+    const kind = toSmaller ? "mniejszej" : "większej";
+    return "Do " + kind + " jednostki — " + op + ". Między " + fromU + " a " + toU + ": przecinek o " + zeros + (zeros === 1 ? " miejsce" : zeros < 5 ? " miejsca" : " miejsc") + " w " + dir + ".";
+  }
+
+  function timeHintSimple(val, fromU, toU, result) {
+    const fact = CATS.time.factor;
+    const ratio = fact[fromU] / fact[toU];
+    const start = formatPL(val.coef, val.scale);
+    const end = formatPL(result.coef, result.scale);
+    const lines = [];
+    lines.push("<strong>Przy czasie nie przesuwamy przecinka</strong> — mnożymy albo dzielimy przez 60.");
+    if (ratio >= 1) {
+      const k = ratio === 60 ? "60" : "3600";
+      lines.push(start + "\u00A0" + fromU + " × " + k + " = <strong>" + end + "\u00A0" + toU + "</strong>.");
+    } else {
+      const k = 1 / ratio === 60 ? "60" : "3600";
+      lines.push(start + "\u00A0" + fromU + " ÷ " + k + " = <strong>" + end + "\u00A0" + toU + "</strong>.");
+    }
+    if (fromU === "h" && toU === "s") {
+      lines.push("(1\u00A0h = 60\u00A0min = 3\u00A0600\u00A0s)");
+    } else if (fromU === "s" && toU === "h") {
+      lines.push("(3\u00A0600\u00A0s = 1\u00A0h)");
+    } else if ((fromU === "h" && toU === "min") || (fromU === "min" && toU === "h")) {
+      lines.push("(1\u00A0h = 60\u00A0min)");
+    } else {
+      lines.push("(1\u00A0min = 60\u00A0s)");
+    }
+    return lines.join(" ");
+  }
+
+  function timeTip(fromU, toU) {
+    const fact = CATS.time.factor;
+    const ratio = fact[fromU] / fact[toU];
+    if (ratio >= 1) {
+      const k = ratio === 60 ? "60" : "3600";
+      return "Przy czasie nie przesuwamy przecinka. Z " + fromU + " na " + toU + " mnożysz przez " + k + ".";
+    }
+    const k = 1 / ratio === 60 ? "60" : "3600";
+    return "Przy czasie nie przesuwamy przecinka. Z " + fromU + " na " + toU + " dzielisz przez " + k + ".";
+  }
+
+  /* ---------- question wording ---------- */
+
+  function wordSimple(rng, val, fromU, toU) {
+    const qtyFull = qtyText(val, fromU, false);
+    const qtyShort = qtyText(val, fromU, true);
+    const ile = UNITS[toU].ile;
+    const variants = [
+      { q: "Ile " + ile + " to " + qtyFull + "?", short: false },
+      { q: qtyShort + " = ?", short: true },
+      { q: "Przelicz " + qtyShort + " na " + UNITS[toU].na + ".", short: false },
+      { q: "Ile to jest " + qtyShort + " w " + UNITS[toU].w + "?", short: false },
+    ];
+    const v = pick(rng, variants);
+    return { prompt: v.q, unitLabel: UNITS[toU].short };
+  }
+
+  function wordCompound(rng, a, uA, b, uB, toU) {
+    const leftFull = qtyText(a, uA, false) + " i " + qtyText(b, uB, false);
+    const leftShort = qtyText(a, uA, true) + " i " + qtyText(b, uB, true);
+    const ile = UNITS[toU].ile;
+    const variants = [
+      { q: "Ile " + ile + " to " + leftFull + "?" },
+      { q: leftShort + " = ?" },
+      { q: "Przelicz " + leftShort + " na " + UNITS[toU].na + "." },
+    ];
+    const v = pick(rng, variants);
+    return { prompt: v.q, unitLabel: UNITS[toU].short };
+  }
+
+  /* ---------- generators ---------- */
+
+  const NICE_INT = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 16, 20, 25, 30, 32, 40, 50, 60, 75, 80];
+  const NICE_DEC = ["0,1", "0,2", "0,25", "0,5", "0,75", "1,5", "2,5", "3,5", "4,5", "5,5", "7,5", "12,5", "0,01", "0,02", "0,05", "0,12", "0,4", "1,25", "2,25"];
+
+  function isNeighbor(cat, a, b) {
+    return cat.neighbors.some((p) => (p[0] === a && p[1] === b) || (p[0] === b && p[1] === a));
+  }
+
+  function unitPairs(cat, easy) {
+    const us = cat.units;
+    const pairs = [];
+    for (let i = 0; i < us.length; i++) {
+      for (let j = 0; j < us.length; j++) {
+        if (i === j) continue;
+        if (easy && !isNeighbor(cat, us[i], us[j])) continue;
+        if (!easy && isNeighbor(cat, us[i], us[j])) {
+          // hard: mostly distant, but allow neighbor with decimals / compounds separately
+          continue;
+        }
+        pairs.push([us[i], us[j]]);
+      }
+    }
+    return pairs;
+  }
+
+  function generateMetricSimple(rng, cat, easy) {
+    let fromU, toU;
+    if (easy) {
+      const pair = pick(rng, cat.neighbors);
+      if (rng() < 0.5) {
+        fromU = pair[0];
+        toU = pair[1];
+      } else {
+        fromU = pair[1];
+        toU = pair[0];
+      }
+    } else {
+      const pairs = unitPairs(cat, false);
+      const p = pick(rng, pairs.length ? pairs : unitPairs(cat, true));
+      fromU = p[0];
+      toU = p[1];
+    }
+
+    const d = zerosBetween(cat, fromU, toU); // >0 to smaller
+    let val;
+
+    if (easy) {
+      if (d > 0) {
+        val = parseIntStr(pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25, 30, 40, 50]));
+      } else {
+        const zeros = -d;
+        const k = pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15]);
+        val = { coef: BigInt(k) * pow10(zeros), scale: 0 };
+      }
+    } else {
+      const zeros = Math.abs(d);
+      const ints = zeros >= 5 ? [1, 2, 5, 10, 20, 25, 50] : NICE_INT;
+      const useDec = rng() < 0.45 && zeros < 5;
+      if (useDec) {
+        const cand = NICE_DEC.filter((s) => {
+          const r = parseDecimal(s);
+          const places = r.scale;
+          return places + (d < 0 ? zeros : 0) <= 5;
+        });
+        val = cand.length ? parseDecimal(pick(rng, cand)) : parseIntStr(pick(rng, ints));
+      } else {
+        val = parseIntStr(pick(rng, ints));
+      }
+    }
+
+    const result = convertMetric(val, fromU, toU, cat.zeros);
+    const word = wordSimple(rng, val, fromU, toU);
+    return {
+      type: "simple",
+      cat: cat.id,
+      difficulty: easy ? "easy" : "hard",
+      fromU,
+      toU,
+      prompt: word.prompt,
+      unitLabel: word.unitLabel,
+      answer: result,
+      answerDisplay: formatPL(result.coef, result.scale),
+      hint: metricHint(val, fromU, toU, cat, result),
+      tip: metricTip(fromU, toU, cat),
+      startDisplay: formatPL(val.coef, val.scale),
+    };
+  }
+
+  /* Compound: two parts, second smaller than one of the first unit. */
+  const COMPOUND_PAIRS = {
+    length: [
+      ["m", "cm"],
+      ["m", "dm"],
+      ["m", "mm"],
+      ["km", "m"],
+      ["km", "cm"],
+      ["dm", "cm"],
+      ["cm", "mm"],
+      ["dm", "mm"],
+      ["km", "dm"],
+    ],
+    mass: [
+      ["kg", "g"],
+      ["kg", "dag"],
+      ["t", "kg"],
+      ["dag", "g"],
+      ["t", "g"],
+      ["t", "dag"],
+    ],
+    volume: [
+      ["l", "ml"],
+      ["hl", "l"],
+      ["hl", "ml"],
+    ],
+    time: [
+      ["h", "min"],
+      ["min", "s"],
+      ["h", "s"],
+    ],
+  };
+
+  function maxSecond(cat, uA, uB) {
+    if (cat.metric) {
+      return Number(pow10(cat.zeros[uA] - cat.zeros[uB]));
+    }
+    return CATS.time.factor[uA] / CATS.time.factor[uB];
+  }
+
+  function generateMetricCompound(rng, cat) {
+    const pair = pick(rng, COMPOUND_PAIRS[cat.id]);
+    const uA = pair[0],
+      uB = pair[1];
+    const cap = maxSecond(cat, uA, uB);
+    const aN = pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15]);
+    let bN;
+    if (cap >= 1000) {
+      bN = pick(rng, [1, 2, 5, 10, 15, 20, 25, 30, 40, 50, 75, 80, 100, 125, 150, 200, 250, 300, 400, 500, 750]);
+    } else if (cap >= 100) {
+      bN = pick(rng, [1, 2, 5, 10, 15, 20, 25, 30, 35, 40, 50, 60, 75, 80]);
+    } else {
+      bN = pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    }
+    if (bN >= cap) bN = cap - 1;
+    if (bN < 1) bN = 1;
+
+    const a = parseIntStr(aN);
+    const b = parseIntStr(bN);
+
+    const targets = [uB];
+    const smallest = cat.units[0];
+    if (smallest !== uB) targets.push(smallest);
+    const bInA = convertMetric(b, uB, uA, cat.zeros);
+    if (bInA.scale <= 3 && rng() < 0.35) targets.push(uA); // e.g. 4 l 100 ml = ? l → 4,1
+    const toU = pick(rng, targets);
+
+    const p1 = convertMetric(a, uA, toU, cat.zeros);
+    const p2 = convertMetric(b, uB, toU, cat.zeros);
+    const result = addR(p1, p2);
+
+    const word = wordCompound(rng, a, uA, b, uB, toU);
+    const leftShort = qtyText(a, uA, true) + " i " + qtyText(b, uB, true);
+
+    let hint;
+    if (toU === uB || cat.zeros[toU] <= cat.zeros[uB]) {
+      const aIn = convertMetric(a, uA, toU, cat.zeros);
+      const bIn = convertMetric(b, uB, toU, cat.zeros);
+      hint =
+        "Najpierw zamień wszystko na " +
+        UNITS[toU].ile +
+        " (mniejsza albo docelowa jednostka). " +
+        qtyText(a, uA, true) +
+        " = <strong>" +
+        formatPL(aIn.coef, aIn.scale) +
+        "\u00A0" +
+        toU +
+        "</strong>. " +
+        qtyText(b, uB, true) +
+        " = <strong>" +
+        formatPL(bIn.coef, bIn.scale) +
+        "\u00A0" +
+        toU +
+        "</strong>. " +
+        "Razem: " +
+        formatPL(aIn.coef, aIn.scale) +
+        " + " +
+        formatPL(bIn.coef, bIn.scale) +
+        " = <strong>" +
+        formatPL(result.coef, result.scale) +
+        "\u00A0" +
+        toU +
+        "</strong>.";
+      if (toU !== uB && cat.zeros[toU] < cat.zeros[uB]) {
+        hint +=
+          " (Z " +
+          uA +
+          " najpierw na " +
+          uB +
+          " albo od razu na " +
+          toU +
+          " — pamiętaj, ile zer jest po drodze.)";
+      }
+    } else {
+      const inSmall = addR(convertMetric(a, uA, uB, cat.zeros), convertMetric(b, uB, uB, cat.zeros));
+      hint =
+        "Najpierw zamień na " +
+        UNITS[uB].ile +
+        ": " +
+        leftShort +
+        " = <strong>" +
+        formatPL(inSmall.coef, inSmall.scale) +
+        "\u00A0" +
+        uB +
+        "</strong>. " +
+        metricHint(inSmall, uB, toU, cat, result);
+    }
+
+    const tip =
+      "Zamień " +
+      uA +
+      " na " +
+      uB +
+      " (przecinek / zera według drabinki) i dodaj " +
+      formatPL(b.coef, b.scale) +
+      "\u00A0" +
+      uB +
+      (toU === uB ? "." : ", a potem przelicz na " + toU + ".");
+
+    return {
+      type: "compound",
+      cat: cat.id,
+      difficulty: "hard",
+      fromU: uA,
+      fromU2: uB,
+      toU,
+      prompt: word.prompt,
+      unitLabel: word.unitLabel,
+      answer: result,
+      answerDisplay: formatPL(result.coef, result.scale),
+      hint,
+      tip,
+    };
+  }
+
+  /* Time simple */
+  const TIME_TO_LARGER = {
+    "s:min": [6, 12, 15, 18, 24, 30, 36, 45, 48, 60, 75, 90, 120, 150, 180, 240, 300, 360, 450, 600, 720, 900],
+    "s:h": [36, 90, 180, 360, 450, 720, 900, 1800, 3600, 5400, 7200, 9000, 10800],
+    "min:h": [15, 30, 45, 60, 75, 90, 120, 135, 150, 180, 240, 300, 360],
+  };
+  const TIME_FROM_DEC = {
+    min: ["0,5", "0,25", "0,75", "1,5", "2,5", "3,5", "5,5"],
+    h: ["0,5", "0,25", "0,75", "1,5", "2,5", "3,5"],
+    s: [],
+  };
+
+  function generateTimeSimple(rng, easy) {
+    const cat = CATS.time;
+    let fromU, toU;
+    if (easy) {
+      const pair = pick(rng, cat.neighbors);
+      if (rng() < 0.5) {
+        fromU = pair[0];
+        toU = pair[1];
+      } else {
+        fromU = pair[1];
+        toU = pair[0];
+      }
+    } else {
+      const all = [
+        ["s", "min"],
+        ["min", "s"],
+        ["min", "h"],
+        ["h", "min"],
+        ["s", "h"],
+        ["h", "s"],
+      ];
+      const p = pick(rng, all);
+      fromU = p[0];
+      toU = p[1];
+    }
+
+    const fact = cat.factor;
+    const toSmaller = fact[fromU] > fact[toU];
+    let val;
+
+    if (easy) {
+      if (toSmaller) {
+        val = parseIntStr(pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15]));
+      } else {
+        const key = fromU + ":" + toU;
+        const list = (TIME_TO_LARGER[key] || [60, 120, 180]).filter((n) => n % (fact[fromU] / fact[toU] || 1) === 0 || true);
+        const nice = (TIME_TO_LARGER[key] || [60]).filter((n) => {
+          const conv = convertTime(parseIntStr(n), fromU, toU);
+          return conv.exact && conv.scale === 0;
+        });
+        val = parseIntStr(pick(rng, nice.length ? nice : [60, 120, 180]));
+      }
+    } else {
+      if (toSmaller) {
+        if (rng() < 0.35 && TIME_FROM_DEC[fromU] && TIME_FROM_DEC[fromU].length) {
+          val = parseDecimal(pick(rng, TIME_FROM_DEC[fromU]));
+        } else {
+          val = parseIntStr(pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 24, 30]));
+        }
+      } else {
+        const key = fromU + ":" + toU;
+        val = parseIntStr(pick(rng, TIME_TO_LARGER[key] || [30, 60, 90, 120]));
+      }
+    }
+
+    const result = convertTime(val, fromU, toU);
+    if (!result.exact) {
+      return generateTimeSimple(rng, easy);
+    }
+    if (easy && result.scale !== 0) {
+      return generateTimeSimple(rng, easy);
+    }
+
+    const word = wordSimple(rng, val, fromU, toU);
+    return {
+      type: "simple",
+      cat: "time",
+      difficulty: easy ? "easy" : "hard",
+      fromU,
+      toU,
+      prompt: word.prompt,
+      unitLabel: word.unitLabel,
+      answer: { coef: result.coef, scale: result.scale },
+      answerDisplay: formatPL(result.coef, result.scale),
+      hint: timeHintSimple(val, fromU, toU, result),
+      tip: timeTip(fromU, toU),
+    };
+  }
+
+  function generateTimeCompound(rng) {
+    const pair = pick(rng, COMPOUND_PAIRS.time);
+    const uA = pair[0],
+      uB = pair[1];
+    const cap = maxSecond(CATS.time, uA, uB);
+    const aN = pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12]);
+    let bChoices;
+    if (cap === 60) {
+      bChoices = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+    } else if (cap === 3600) {
+      bChoices = [30, 36, 45, 60, 90, 120, 150, 180, 300, 600, 900, 1800];
+    } else {
+      bChoices = [5, 10, 15];
+    }
+    let bN = pick(rng, bChoices);
+    if (bN >= cap) bN = cap / 2;
+
+    const a = parseIntStr(aN);
+    const b = parseIntStr(bN);
+
+    const targets = [uB];
+    if (uB !== "s") targets.push("s");
+    if (rng() < 0.25) targets.push(uA);
+    let toU = pick(rng, targets);
+
+    let p1 = convertTime(a, uA, toU);
+    let p2 = convertTime(b, uB, toU);
+    if (!p1.exact || !p2.exact) {
+      toU = uB === "s" || uA === "s" ? "s" : "s";
+      p1 = convertTime(a, uA, toU);
+      p2 = convertTime(b, uB, toU);
+    }
+    if (!p1.exact || !p2.exact) return generateTimeCompound(rng);
+
+    const result = addR(p1, p2);
+    const word = wordCompound(rng, a, uA, b, uB, toU);
+    const leftShort = qtyText(a, uA, true) + " i " + qtyText(b, uB, true);
+
+    const hint =
+      "<strong>Przy czasie nie przesuwamy przecinka</strong> — korzystamy z 60 i 3\u00A0600. " +
+      qtyText(a, uA, true) +
+      " = <strong>" +
+      formatPL(p1.coef, p1.scale) +
+      "\u00A0" +
+      toU +
+      "</strong>. " +
+      qtyText(b, uB, true) +
+      " = <strong>" +
+      formatPL(p2.coef, p2.scale) +
+      "\u00A0" +
+      toU +
+      "</strong>. " +
+      "Razem: " +
+      formatPL(p1.coef, p1.scale) +
+      " + " +
+      formatPL(p2.coef, p2.scale) +
+      " = <strong>" +
+      formatPL(result.coef, result.scale) +
+      "\u00A0" +
+      toU +
+      "</strong>.";
+
+    const tip =
+      "Zamień " +
+      uA +
+      " i " +
+      uB +
+      " na " +
+      toU +
+      " (pamiętaj: 1\u00A0min = 60\u00A0s, 1\u00A0h = 60\u00A0min = 3\u00A0600\u00A0s), potem dodaj.";
+
+    return {
+      type: "compound",
+      cat: "time",
+      difficulty: "hard",
+      fromU: uA,
+      fromU2: uB,
+      toU,
+      prompt: word.prompt,
+      unitLabel: word.unitLabel,
+      answer: result,
+      answerDisplay: formatPL(result.coef, result.scale),
+      hint,
+      tip,
+    };
+  }
+
+  function generateQuestion(opts) {
+    const rng = makeRng(opts && opts.rng != null ? opts.rng : opts && opts.seed != null ? opts.seed : null);
+    const easy = !opts || opts.difficulty !== "hard";
+    let catIds = (opts && opts.categories) || ["length", "mass", "volume", "time"];
+    catIds = catIds.filter((id) => CATS[id]);
+    if (!catIds.length) return null;
+    const cat = CATS[pick(rng, catIds)];
+
+    if (cat.id === "time") {
+      if (!easy && rng() < 0.45) return generateTimeCompound(rng);
+      return generateTimeSimple(rng, easy);
+    }
+    if (!easy && rng() < 0.4) return generateMetricCompound(rng, cat);
+    return generateMetricSimple(rng, cat, easy);
+  }
+
+  /* Converter */
+  function convert(valueStr, fromU, toU) {
+    const val = parseDecimal(valueStr);
+    if (!val) return { ok: false, error: "Nieprawidłowa liczba." };
+    const uF = UNITS[fromU],
+      uT = UNITS[toU];
+    if (!uF || !uT) return { ok: false, error: "Nieznana jednostka." };
+    if (uF.cat !== uT.cat) return { ok: false, error: "Jednostki z różnych kategorii." };
+    const cat = CATS[uF.cat];
+    if (cat.metric) {
+      const result = convertMetric(val, fromU, toU, cat.zeros);
+      return {
+        ok: true,
+        exact: true,
+        result,
+        display: formatPL(result.coef, result.scale),
+        hint: metricHint(val, fromU, toU, cat, result),
+        tip: metricTip(fromU, toU, cat),
+        shift: zerosBetween(cat, fromU, toU),
+        metric: true,
+        startDisplay: formatPL(val.coef, val.scale),
+      };
+    }
+    const result = convertTime(val, fromU, toU);
+    if (!result.exact) {
+      const fact = { s: 1n, min: 60n, h: 3600n };
+      const num = val.coef * fact[fromU];
+      const den = fact[toU] * pow10(val.scale);
+      const g = gcd(num, den);
+      const n = num / g;
+      const d = den / g;
+      return {
+        ok: true,
+        exact: false,
+        display: formatPL(n, 0) + "/" + formatPL(d, 0),
+        fraction: { n, d },
+        hint: timeHintSimple(val, fromU, toU, { coef: n, scale: 0 }) + " Wynik to ułamek " + formatPL(n, 0) + "/" + formatPL(d, 0) + " (nie kończy się w rozwinięciu dziesiętnym).",
+        tip: timeTip(fromU, toU),
+        metric: false,
+        startDisplay: formatPL(val.coef, val.scale),
+      };
+    }
+    return {
+      ok: true,
+      exact: true,
+      result,
+      display: formatPL(result.coef, result.scale),
+      hint: timeHintSimple(val, fromU, toU, result),
+      tip: timeTip(fromU, toU),
+      metric: false,
+      startDisplay: formatPL(val.coef, val.scale),
+    };
+  }
+
+  /** How many powers of 10 the user is off (for a gentle hint). null if not a power-of-10 slip. */
+  function commaSlip(user, correct) {
+    if (!user || !correct || user.coef === 0n || correct.coef === 0n) return null;
+    const ua = canon(user.coef < 0n ? -user.coef : user.coef, user.scale);
+    const ca = canon(correct.coef < 0n ? -correct.coef : correct.coef, correct.scale);
+    if ((user.coef < 0n) !== (correct.coef < 0n)) return null;
+    // ua.coef / 10^ua.scale  vs  ca.coef / 10^ca.scale
+    // if digits equal after canon... not necessarily same coef if different trailing
+    // Compare ua.coef * 10^ca.scale  and ca.coef * 10^ua.scale — ratio should be 10^k
+    let n1 = ua.coef * pow10(ca.scale);
+    let n2 = ca.coef * pow10(ua.scale);
+    if (n1 === n2) return 0;
+    let k = 0;
+    if (n1 > n2) {
+      while (n1 % 10n === 0n) {
+        n1 /= 10n;
+        k++;
+        if (n1 === n2) return k;
+      }
+      return null;
+    }
+    k = 0;
+    while (n2 % 10n === 0n) {
+      n2 /= 10n;
+      k--;
+      if (n1 === n2) return k;
+    }
+    return null;
+  }
+
+  const api = {
+    UNITS,
+    CATS,
+    pow10,
+    gcd,
+    canon,
+    formatPL,
+    formatPLStr,
+    parseDecimal,
+    rationalsEqual,
+    addR,
+    convertMetric,
+    convertTime,
+    convert,
+    unitForm,
+    qtyText,
+    makeRng,
+    generateQuestion,
+    commaSlip,
+    groupThousands,
+  };
+
+  if (typeof module !== "undefined" && module.exports) {
+    module.exports = api;
+  }
+  root.Jednostki = api;
+})(typeof globalThis !== "undefined" ? globalThis : this);
+
+</script>
+<script id="ui">
+(function () {
+  "use strict";
+  const J = window.Jednostki;
+  const $ = (id) => document.getElementById(id);
+
+  const CAT_LABEL = { length: "Długość", mass: "Masa", volume: "Objętość", time: "Czas" };
+  const STORAGE = "lucja-jednostki-stats-v1";
+  const PRAISE = [
+    "Brawo! Dobrze policzyłaś.",
+    "Świetnie! Zgadza się.",
+    "Super, poprawna odpowiedź!",
+    "Tak trzymać! Trafiłaś w punkt.",
+    "Doskonale! Policzyłaś to bez błędu.",
+  ];
+  const TRY_AGAIN = [
+    "Nie tym razem. Poprawna odpowiedź to {ans}.",
+    "Prawie, ale wyszło inaczej. Poprawna odpowiedź to {ans}.",
+    "Spokojnie, zobacz, jak to policzyć. Poprawna odpowiedź to {ans}.",
+  ];
+
+  let difficulty = "easy";
+  let current = null;
+  let checked = false;
+  let tipShown = false;
+  let recent = [];
+  let stats = loadStats();
+  let round = null; // {total, i, results:[]}
+
+  function loadStats() {
+    try {
+      const s = JSON.parse(localStorage.getItem(STORAGE) || "null");
+      if (s && typeof s.correct === "number") return s;
+    } catch (e) {}
+    return {
+      correct: 0,
+      wrong: 0,
+      streak: 0,
+      bestStreak: 0,
+      byCat: { length: { c: 0, w: 0 }, mass: { c: 0, w: 0 }, volume: { c: 0, w: 0 }, time: { c: 0, w: 0 } },
+    };
+  }
+  function saveStats() {
+    try { localStorage.setItem(STORAGE, JSON.stringify(stats)); } catch (e) {}
+  }
+
+  function selectedCats() {
+    const ids = [];
+    if ($("cat-length").checked) ids.push("length");
+    if ($("cat-mass").checked) ids.push("mass");
+    if ($("cat-volume").checked) ids.push("volume");
+    if ($("cat-time").checked) ids.push("time");
+    return ids;
+  }
+
+  function renderScore() {
+    const total = stats.correct + stats.wrong;
+    $("scoreline").innerHTML =
+      "Wynik: " + stats.correct + "/" + total +
+      " <span>· Seria: " + stats.streak + " · Rekord: " + stats.bestStreak + "</span>";
+  }
+
+  function ungroup(s) {
+    return String(s).replace(/[\s\u00A0\u202F]/g, "").replace(".", ",");
+  }
+
+  function shiftParts(w, f, dir) {
+    if (dir < 0) {
+      if (w.length <= 1) return { w: "0", f: (w === "0" ? "0" : w) + f };
+      return { w: w.slice(0, -1), f: w.slice(-1) + f };
+    }
+    if (!f.length) return { w: w + "0", f: "" };
+    return { w: w + f[0], f: f.slice(1) };
+  }
+  function fmtParts(p, trim) {
+    let w = p.w.replace(/^0+(?=\d)/, "") || "0";
+    let f = p.f;
+    if (trim) f = f.replace(/0+$/, "");
+    if (!f) return J.groupThousands(w);
+    return J.groupThousands(w) + "," + f;
+  }
+  function commaSteps(startDisplay, shift) {
+    if (!shift) return [startDisplay];
+    let s = ungroup(startDisplay);
+    if (!s.includes(",")) s += ",";
+    const bits = s.split(",");
+    let p = { w: bits[0] || "0", f: bits[1] || "" };
+    const out = [fmtParts(p, true)];
+    const dir = shift > 0 ? 1 : -1;
+    const n = Math.abs(shift);
+    for (let i = 0; i < n; i++) {
+      p = shiftParts(p.w, p.f, dir);
+      out.push(fmtParts(p, i === n - 1));
+    }
+    return out;
+  }
+  function renderSteps(steps) {
+    if (!steps || steps.length < 2) return "";
+    const parts = [];
+    steps.forEach((s, i) => {
+      if (i) parts.push('<span class="arr" aria-hidden="true">→</span>');
+      parts.push('<span class="s' + (i === steps.length - 1 ? " final" : "") + '">' + s + "</span>");
+    });
+    return '<div class="steps">' + parts.join("") + "</div>";
+  }
+
+  /* ----- converter ----- */
+  let convCat = "length";
+  const convDefaults = { length: ["cm", "km"], mass: ["g", "kg"], volume: ["ml", "l"], time: ["min", "s"] };
+
+  function fillUnitSelect(sel, catId, picked) {
+    const cat = J.CATS[catId];
+    sel.innerHTML = "";
+    cat.units.forEach((u) => {
+      const opt = document.createElement("option");
+      opt.value = u;
+      opt.textContent = u + " — " + J.UNITS[u].forms.one;
+      if (u === picked) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  }
+  function setConvCat(catId, keepValue) {
+    convCat = catId;
+    document.querySelectorAll(".conv-cats button").forEach((b) => {
+      b.setAttribute("aria-pressed", b.getAttribute("data-cat") === catId ? "true" : "false");
+    });
+    $("converter").style.setProperty("--cc", "var(--" + ({ length: "len", mass: "mass", volume: "vol", time: "time" }[catId]) + ")");
+    const d = convDefaults[catId];
+    fillUnitSelect($("conv-from"), catId, d[0]);
+    fillUnitSelect($("conv-to"), catId, d[1]);
+    if (!keepValue) {
+      if (catId === "length") $("conv-value").value = "10";
+      else if (catId === "mass") $("conv-value").value = "2500";
+      else if (catId === "volume") $("conv-value").value = "4";
+      else $("conv-value").value = "2";
+    }
+    updateConverter();
+  }
+  function updateConverter() {
+    const raw = $("conv-value").value;
+    const fromU = $("conv-from").value;
+    const toU = $("conv-to").value;
+    const box = $("conv-explain");
+    const out = $("conv-out");
+    if (!raw.trim()) {
+      out.textContent = "—";
+      box.innerHTML = "";
+      return;
+    }
+    const res = J.convert(raw, fromU, toU);
+    if (!res.ok) {
+      out.textContent = "—";
+      box.innerHTML = '<div class="explain-box">' + res.error + "</div>";
+      return;
+    }
+    out.innerHTML = res.display + "&nbsp;" + toU;
+    let extra = "";
+    if (res.metric && res.shift) {
+      extra = renderSteps(commaSteps(res.startDisplay, res.shift));
+    }
+    box.innerHTML = '<div class="explain-box">' + res.hint + extra + "</div>";
+  }
+
+  document.querySelectorAll(".conv-cats button").forEach((b) => {
+    b.addEventListener("click", () => setConvCat(b.getAttribute("data-cat"), false));
+  });
+  ["conv-value", "conv-from", "conv-to"].forEach((id) => {
+    $(id).addEventListener("input", updateConverter);
+    $(id).addEventListener("change", updateConverter);
+  });
+
+  /* ----- quiz ----- */
+  function newQuestion() {
+    const cats = selectedCats();
+    if (!cats.length) {
+      $("no-cat").classList.add("on");
+      $("question-card").style.display = "none";
+      current = null;
+      return;
+    }
+    $("no-cat").classList.remove("on");
+    $("question-card").style.display = "";
+    let q = null;
+    for (let i = 0; i < 12; i++) {
+      q = J.generateQuestion({ categories: cats, difficulty: difficulty });
+      const key = q.prompt + "|" + q.answerDisplay;
+      if (recent.indexOf(key) === -1) break;
+    }
+    current = q;
+    recent.push(q.prompt + "|" + q.answerDisplay);
+    if (recent.length > 12) recent.shift();
+    checked = false;
+    tipShown = false;
+    $("q-cat").textContent = CAT_LABEL[q.cat] + (q.difficulty === "hard" ? " · trudne" : " · łatwe") + (q.type === "compound" ? " · złożone" : "");
+    $("q-text").textContent = q.prompt;
+    $("unit-after").textContent = q.unitLabel;
+    $("question-card").setAttribute("data-cat", q.cat);
+    $("answer").value = "";
+    $("answer").disabled = false;
+    $("btn-check").hidden = false;
+    $("btn-check").disabled = false;
+    $("btn-next").hidden = true;
+    $("btn-tip").disabled = false;
+    const fb = $("feedback");
+    fb.className = "";
+    fb.innerHTML = "";
+    $("answer").focus();
+    renderRoundDots();
+  }
+
+  function placesWord(n) {
+    n = Math.abs(n);
+    if (n === 1) return "1 miejsce";
+    if (n >= 2 && n <= 4) return n + " miejsca";
+    return n + " miejsc";
+  }
+
+  function checkAnswer() {
+    if (!current || checked) return;
+    const raw = $("answer").value;
+    const parsed = J.parseDecimal(raw);
+    if (!parsed) {
+      const fb = $("feedback");
+      fb.className = "show hintonly";
+      fb.innerHTML = '<div class="title">Wpisz odpowiedź</div><p>Możesz użyć przecinka albo kropki, na przykład 0,0001 albo 4 100.</p>';
+      $("answer").focus();
+      return;
+    }
+    checked = true;
+    const ok = J.rationalsEqual(parsed, current.answer);
+    const fb = $("feedback");
+    const ans = current.answerDisplay + "\u00A0" + current.unitLabel;
+    if (ok) {
+      stats.correct++;
+      stats.streak++;
+      if (stats.streak > stats.bestStreak) stats.bestStreak = stats.streak;
+      if (stats.byCat[current.cat]) stats.byCat[current.cat].c++;
+      fb.className = "show ok";
+      const praise = PRAISE[Math.floor(Math.random() * PRAISE.length)];
+      fb.innerHTML = '<div class="title">' + praise + "</div><p>" + current.hint + extraSteps(current) + "</p>";
+      if (round) round.results.push(true);
+    } else {
+      stats.wrong++;
+      stats.streak = 0;
+      if (stats.byCat[current.cat]) stats.byCat[current.cat].w++;
+      fb.className = "show bad";
+      let title = TRY_AGAIN[Math.floor(Math.random() * TRY_AGAIN.length)].replace("{ans}", ans);
+      const slip = J.commaSlip(parsed, current.answer);
+      if (slip && slip !== 0) {
+        const dir = slip > 0 ? "prawo" : "lewo";
+        title = "Prawie! Cyfry się zgadzają, ale przecinek jest o " + placesWord(slip) + " za daleko w " + dir + ". Poprawna odpowiedź to " + ans + ".";
+      }
+      fb.innerHTML = '<div class="title">' + title + "</div><p>" + current.hint + extraSteps(current) + "</p>";
+      if (round) round.results.push(false);
+    }
+    saveStats();
+    renderScore();
+    $("answer").disabled = true;
+    $("btn-check").hidden = true;
+    $("btn-next").hidden = false;
+    $("btn-tip").disabled = true;
+    $("btn-next").focus();
+    renderRoundDots();
+    if (round && round.results.length >= round.total) finishRound();
+  }
+
+  function extraSteps(q) {
+    if (q.type !== "simple" || !J.CATS[q.cat].metric || !q.startDisplay) return "";
+    const shift = J.CATS[q.cat].zeros[q.fromU] - J.CATS[q.cat].zeros[q.toU];
+    if (!shift) return "";
+    return renderSteps(commaSteps(q.startDisplay, shift));
+  }
+
+  function showTip() {
+    if (!current || checked || tipShown) return;
+    tipShown = true;
+    const fb = $("feedback");
+    fb.className = "show hintonly";
+    fb.innerHTML = '<div class="title">Podpowiedź</div><p>' + current.tip + "</p>";
+  }
+
+  function startRound() {
+    round = { total: 10, results: [] };
+    $("round-bar").classList.add("on");
+    $("btn-round").textContent = "Przerwij rundę";
+    newQuestion();
+  }
+  function cancelRound() {
+    round = null;
+    $("round-bar").classList.remove("on");
+    $("btn-round").textContent = "Runda 10 pytań";
+    $("round-dots").innerHTML = "";
+  }
+  function finishRound() {
+    const okc = round.results.filter(Boolean).length;
+    const fb = $("feedback");
+    const extra = document.createElement("p");
+    extra.style.marginTop = "8px";
+    extra.innerHTML = "<strong>Koniec rundy.</strong> Odpowiedziałaś poprawnie na <strong>" + okc + " z " + round.total + "</strong> pytań. Możesz zacząć kolejną rundę albo ćwiczyć dalej po jednym zadaniu.";
+    fb.appendChild(extra);
+    $("btn-next").textContent = "Ćwicz dalej";
+    $("btn-round").textContent = "Nowa runda 10 pytań";
+    round = { total: 10, results: round.results, done: true };
+  }
+  function renderRoundDots() {
+    if (!round) return;
+    const d = $("round-dots");
+    d.innerHTML = "";
+    for (let i = 0; i < round.total; i++) {
+      const s = document.createElement("span");
+      s.className = "dot";
+      if (round.results[i] === true) s.classList.add("ok");
+      else if (round.results[i] === false) s.classList.add("bad");
+      if (!round.done && i === round.results.length) s.classList.add("current");
+      d.appendChild(s);
+    }
+  }
+
+  $("btn-check").addEventListener("click", checkAnswer);
+  $("btn-next").addEventListener("click", function () {
+    if (round && round.done) cancelRound();
+    $("btn-next").textContent = "Następne";
+    newQuestion();
+  });
+  $("btn-tip").addEventListener("click", showTip);
+  $("btn-round").addEventListener("click", function () {
+    if (round && !round.done) cancelRound();
+    else {
+      cancelRound();
+      startRound();
+    }
+  });
+  $("btn-reset").addEventListener("click", function () {
+    if (!confirm("Wyczyścić zapisany wynik i serię?")) return;
+    stats = { correct: 0, wrong: 0, streak: 0, bestStreak: 0, byCat: { length: { c: 0, w: 0 }, mass: { c: 0, w: 0 }, volume: { c: 0, w: 0 }, time: { c: 0, w: 0 } } };
+    saveStats();
+    renderScore();
+  });
+
+  $("diff-easy").addEventListener("click", function () {
+    difficulty = "easy";
+    $("diff-easy").setAttribute("aria-pressed", "true");
+    $("diff-hard").setAttribute("aria-pressed", "false");
+    if (!checked) newQuestion();
+  });
+  $("diff-hard").addEventListener("click", function () {
+    difficulty = "hard";
+    $("diff-hard").setAttribute("aria-pressed", "true");
+    $("diff-easy").setAttribute("aria-pressed", "false");
+    if (!checked) newQuestion();
+  });
+  ["cat-length", "cat-mass", "cat-volume", "cat-time"].forEach((id) => {
+    $(id).addEventListener("change", function () {
+      if (!checked) newQuestion();
+    });
+  });
+
+  document.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter") return;
+    const t = e.target;
+    if (t && (t.id === "conv-value" || t.id === "conv-from" || t.id === "conv-to")) return;
+    if (!current) return;
+    e.preventDefault();
+    if (!checked) checkAnswer();
+    else if (!$("btn-next").hidden) $("btn-next").click();
+  });
+
+  $("btn-scroll-cheat").addEventListener("click", function () {
+    $("cheatsheet").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+
+  const sticky = $("sticky-bar");
+  const cheat = $("cheatsheet");
+  function onScroll() {
+    const rect = cheat.getBoundingClientRect();
+    const on = rect.bottom < 0;
+    sticky.classList.toggle("on", on);
+    sticky.setAttribute("aria-hidden", on ? "false" : "true");
+    document.body.classList.toggle("sticky-on", on);
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+
+  setConvCat("length", true);
+  $("conv-from").value = "cm";
+  $("conv-to").value = "km";
+  updateConverter();
+  renderScore();
+  newQuestion();
+})();
+</script>
+</body>
+</html>
