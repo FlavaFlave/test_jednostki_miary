@@ -222,6 +222,23 @@ button { cursor: pointer; }
 .seg button[aria-pressed="true"] { background: var(--navy); color: #fff; }
 .scoreline { font-weight: 700; color: var(--navy); font-variant-numeric: tabular-nums; }
 .scoreline span { font-weight: 600; color: var(--muted); }
+.meter-wrap { margin: 14px 0 12px; padding: 12px 14px; border-radius: 14px; background: #f7f4ee; border: 1px solid var(--line); }
+.meter-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+.meter-head strong { font-size: 1.05rem; color: var(--navy); font-variant-numeric: tabular-nums; }
+.meter-bar { height: 14px; background: #e6dfd2; border-radius: 999px; overflow: hidden; }
+#meter-fill { height: 100%; width: 0%; border-radius: 999px; transition: width 0.35s ease, background 0.35s ease; background: #bdb6a8; }
+.meter-wrap.red #meter-fill { background: #c62828; }
+.meter-wrap.yellow #meter-fill { background: #f9a825; }
+.meter-wrap.green #meter-fill { background: #2e7d32; }
+.meter-dots { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 8px; }
+.meter-dots .md { width: 10px; height: 10px; border-radius: 50%; background: #ddd4c5; }
+.meter-dots .md.ok { background: #2e7d32; }
+.meter-dots .md.bad { background: #c62828; }
+#review-box { margin-top: 10px; display: none; }
+#review-box.on { display: block; }
+#review-box h3 { font-size: 0.95rem; margin: 0 0 6px; color: var(--navy); }
+#review-list { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px; }
+#review-list li { background: #fff6e0; color: #6a4600; border: 1px solid #ead7a0; border-radius: 999px; padding: 4px 10px; font-weight: 700; font-size: 0.9rem; }
 
 #question-card {
   margin-top: 14px;
@@ -387,8 +404,8 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
         <p>Z cm do km idziesz w górę o 5 zer (cm→dm→m→km: 1+1+3). Przecinek o 5 miejsc w lewo:<br><strong>10 → 0,0001&nbsp;km</strong>.</p>
       </div>
       <div class="ex">
-        <h4>4 l i 100 ml = ? ml</h4>
-        <p>Najpierw wszystko na mililitry. 4&nbsp;l = 4 × 1000 = 4000&nbsp;ml, plus 100&nbsp;ml.<br><strong>4&nbsp;l 100&nbsp;ml = 4100&nbsp;ml</strong>.</p>
+        <h4>1 l i 3 dl = ? ml</h4>
+        <p>Najpierw wszystko na mililitry. 1&nbsp;l = 1000&nbsp;ml, 3&nbsp;dl = 3 × 100 = 300&nbsp;ml.<br><strong>1&nbsp;l 3&nbsp;dl = 1300&nbsp;ml</strong>.</p>
       </div>
       <div class="ex">
         <h4>1 h 35 min = ? s</h4>
@@ -443,16 +460,16 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
       <h3>Objętość</h3>
       <div class="stair" style="--cc: var(--vol);" aria-label="Drabinka objętości">
         <span class="pill-u">ml</span>
-        <span class="step"><span class="up">×1000</span><span class="bar"></span><span class="down">÷1000</span></span>
-        <span class="pill-u">l</span>
         <span class="step"><span class="up">×100</span><span class="bar"></span><span class="down">÷100</span></span>
-        <span class="pill-u">hl</span>
+        <span class="pill-u">dl</span>
+        <span class="step"><span class="up">×10</span><span class="bar"></span><span class="down">÷10</span></span>
+        <span class="pill-u">l</span>
       </div>
       <ul class="eqs" style="--cc: var(--vol);">
-        <li><b>1 l</b> = 1&nbsp;000 ml</li>
-        <li><b>1 hl</b> = 100 l = 100&nbsp;000 ml</li>
+        <li><b>1 dl</b> = 100 ml</li>
+        <li><b>1 l</b> = 10 dl = 1&nbsp;000 ml</li>
       </ul>
-      <p class="tip-line">Z mililitrów na litry są trzy zera. Z litrów na hektolitry — dwa.</p>
+      <p class="tip-line">Z ml na dl dwa zera (×100), z dl na l jedno zero (×10). W obie strony: 1,5&nbsp;l = 15&nbsp;dl = 1500&nbsp;ml, a 250&nbsp;ml = 2,5&nbsp;dl.</p>
     </section>
 
     <section class="card cat-card" style="--cc: var(--time); --cb: var(--time-bg);">
@@ -485,6 +502,18 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
       <div class="seg" role="group" aria-label="Trudność">
         <button type="button" id="diff-easy" aria-pressed="true">Łatwe</button>
         <button type="button" id="diff-hard" aria-pressed="false">Trudne</button>
+      </div>
+    </div>
+    <div class="meter-wrap" id="meter-wrap">
+      <div class="meter-head">
+        <strong id="meter-text">Ostatnie 0: 0/0</strong>
+        <span class="scoreline" id="scoreline-sub" hidden></span>
+      </div>
+      <div class="meter-bar" aria-hidden="true"><div id="meter-fill"></div></div>
+      <div class="meter-dots" id="meter-dots" aria-hidden="true"></div>
+      <div id="review-box">
+        <h3>Do powtórki</h3>
+        <ul id="review-list"></ul>
       </div>
     </div>
     <div id="round-bar"><div class="dots" id="round-dots"></div></div>
@@ -643,7 +672,7 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     t: { short: "t", cat: "mass", forms: { one: "tona", few: "tony", many: "ton", frac: "tony" }, ile: "ton", na: "tony", w: "tonach" },
     ml: { short: "ml", cat: "volume", forms: { one: "mililitr", few: "mililitry", many: "mililitrów", frac: "mililitra" }, ile: "mililitrów", na: "mililitry", w: "mililitrach" },
     l: { short: "l", cat: "volume", forms: { one: "litr", few: "litry", many: "litrów", frac: "litra" }, ile: "litrów", na: "litry", w: "litrach" },
-    hl: { short: "hl", cat: "volume", forms: { one: "hektolitr", few: "hektolitry", many: "hektolitrów", frac: "hektolitra" }, ile: "hektolitrów", na: "hektolitry", w: "hektolitrach" },
+    dl: { short: "dl", cat: "volume", forms: { one: "decylitr", few: "decylitry", many: "decylitrów", frac: "decylitra" }, ile: "decylitrów", na: "decylitry", w: "decylitrach" },
     s: { short: "s", cat: "time", forms: { one: "sekunda", few: "sekundy", many: "sekund", frac: "sekundy" }, ile: "sekund", na: "sekundy", w: "sekundach" },
     min: { short: "min", cat: "time", forms: { one: "minuta", few: "minuty", many: "minut", frac: "minuty" }, ile: "minut", na: "minuty", w: "minutach" },
     h: { short: "h", cat: "time", forms: { one: "godzina", few: "godziny", many: "godzin", frac: "godziny" }, ile: "godzin", na: "godziny", w: "godzinach" },
@@ -678,11 +707,11 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     volume: {
       id: "volume",
       name: "Objętość",
-      units: ["ml", "l", "hl"],
-      zeros: { ml: 0, l: 3, hl: 5 },
+      units: ["ml", "dl", "l"],
+      zeros: { ml: 0, dl: 2, l: 3 },
       neighbors: [
-        ["ml", "l"],
-        ["l", "hl"],
+        ["ml", "dl"],
+        ["dl", "l"],
       ],
       metric: true,
     },
@@ -900,48 +929,145 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     return pairs;
   }
 
-  function generateMetricSimple(rng, cat, easy) {
-    let fromU, toU;
-    if (easy) {
-      const pair = pick(rng, cat.neighbors);
-      if (rng() < 0.5) {
-        fromU = pair[0];
-        toU = pair[1];
-      } else {
-        fromU = pair[1];
-        toU = pair[0];
+  const EASY_DEC_START = ["0,1", "0,2", "0,3", "0,4", "0,5", "0,6", "0,7", "0,8", "0,9", "1,2", "1,5", "2,4", "2,5", "3,5", "4,2", "4,5", "5,5", "6,5", "7,5", "8,5", "12,5"];
+  const HARD_DEC_START = ["0,35", "1,05", "0,25", "2,25", "0,15", "3,75", "1,25", "0,45", "2,05", "4,25", "0,75", "0,08", "0,05", "6,25", "1,75", "0,125", "2,4", "3,5", "0,8", "4,2", "12,5", "0,12", "2,75", "0,65", "3,05", "0,55"];
+
+  function resultScaleAfterShift(startR, d) {
+    // d = zeros[from] - zeros[to]; result scale is start.scale - d, then canon
+    const r = d >= 0 ? canon(startR.coef * pow10(d), startR.scale) : canon(startR.coef, startR.scale - d);
+    return r.scale;
+  }
+
+  function metricDecimalPool(easy, d) {
+    const raw = easy ? EASY_DEC_START : HARD_DEC_START;
+    return raw.filter((s) => {
+      const r = parseDecimal(s);
+      if (easy && r.scale !== 1) return false;
+      const rs = resultScaleAfterShift(r, d);
+      if (easy && rs > 2) return false;
+      if (!easy && rs > 4) return false;
+      const c = r.coef < 0n ? -r.coef : r.coef;
+      const intDigits = c.toString().length > r.scale ? c.toString().length - r.scale : 1;
+      return intDigits <= 4;
+    });
+  }
+
+  function generateMetricSimple(rng, cat, easy, force) {
+    force = force || {};
+    let toSmaller = rng() < 0.5;
+    if (force.dir === "toSmaller") toSmaller = true;
+    if (force.dir === "toBigger") toSmaller = false;
+    if (force.fromU && force.toU) {
+      toSmaller = cat.zeros[force.fromU] - cat.zeros[force.toU] > 0;
+    }
+
+    function pairsInDir(neighborsMode) {
+      const us = cat.units;
+      const pairs = [];
+      for (let i = 0; i < us.length; i++) {
+        for (let j = 0; j < us.length; j++) {
+          if (i === j) continue;
+          const from = us[i],
+            to = us[j];
+          const d = cat.zeros[from] - cat.zeros[to];
+          if (toSmaller && d <= 0) continue;
+          if (!toSmaller && d >= 0) continue;
+          const neigh = isNeighbor(cat, from, to);
+          if (easy && !neigh) continue;
+          if (!easy && neighborsMode === "only" && !neigh) continue;
+          if (!easy && neighborsMode === "no" && neigh) continue;
+          pairs.push([from, to]);
+        }
       }
+      return pairs;
+    }
+
+    let fromU, toU;
+    if (force.fromU && force.toU) {
+      fromU = force.fromU;
+      toU = force.toU;
     } else {
-      const pairs = unitPairs(cat, false);
-      const p = pick(rng, pairs.length ? pairs : unitPairs(cat, true));
+      let pairs;
+      if (easy) {
+        pairs = pairsInDir("only");
+      } else {
+        const distant = pairsInDir("no");
+        const neigh = pairsInDir("only");
+        if (distant.length && neigh.length) pairs = rng() < 0.55 ? distant : neigh;
+        else pairs = distant.length ? distant : neigh;
+      }
+      if (!pairs.length) pairs = pairsInDir("all");
+      const p = pick(rng, pairs);
       fromU = p[0];
       toU = p[1];
     }
-
-    const d = zerosBetween(cat, fromU, toU); // >0 to smaller
+    const d = zerosBetween(cat, fromU, toU);
     let val;
+    let wantDec;
+    if (force.kind === "dec") wantDec = true;
+    else if (force.kind === "int") wantDec = false;
+    else if (typeof force.decimalStart === "boolean") wantDec = force.decimalStart;
+    else wantDec = rng() < 0.36;
 
-    if (easy) {
-      if (d > 0) {
-        val = parseIntStr(pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25, 30, 40, 50]));
-      } else {
-        const zeros = -d;
-        const k = pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15]);
-        val = { coef: BigInt(k) * pow10(zeros), scale: 0 };
+    if (wantDec) {
+      let pool = metricDecimalPool(easy, d);
+      if (!pool.length && !force.fromU) {
+        const allPairs = pairsInDir("all");
+        const usable = allPairs.filter((pr) => metricDecimalPool(easy, zerosBetween(cat, pr[0], pr[1])).length);
+        if (usable.length) {
+          const pr = pick(rng, usable);
+          fromU = pr[0];
+          toU = pr[1];
+          pool = metricDecimalPool(easy, zerosBetween(cat, fromU, toU));
+        }
       }
-    } else {
-      const zeros = Math.abs(d);
-      const ints = zeros >= 5 ? [1, 2, 5, 10, 20, 25, 50] : NICE_INT;
-      const useDec = rng() < 0.45 && zeros < 5;
-      if (useDec) {
-        const cand = NICE_DEC.filter((s) => {
-          const r = parseDecimal(s);
-          const places = r.scale;
-          return places + (d < 0 ? zeros : 0) <= 5;
-        });
-        val = cand.length ? parseDecimal(pick(rng, cand)) : parseIntStr(pick(rng, ints));
+      if (pool.length) val = parseDecimal(pick(rng, pool));
+      else if (force.kind === "dec") return null;
+      else wantDec = false;
+    }
+
+    if (!wantDec) {
+      if (easy) {
+        if (d > 0) {
+          val = parseIntStr(pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 25, 30, 40, 50]));
+        } else {
+          const zeros = -d;
+          const k = pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15]);
+          val = { coef: BigInt(k) * pow10(zeros), scale: 0 };
+        }
+      } else if (d < 0) {
+        const zeros = -d;
+        const niceRes = ["0,25", "0,5", "0,75", "1,5", "2,5", "3,5", "4,5", "5,5", "7,5", "12,5", "0,1", "0,2", "0,4", "1,25", "2,25", "4,1", "0,45", "3,2", "0,05", "0,8"];
+        function startFromResult(res) {
+          return convertMetric(res, toU, fromU, cat.zeros);
+        }
+        function reasonable(r) {
+          const c = r.coef < 0n ? -r.coef : r.coef;
+          const intDigits = c.toString().length > r.scale ? c.toString().length - r.scale : 1;
+          return intDigits <= 7 && r.scale <= 4;
+        }
+        if (rng() < 0.6) {
+          const cand = niceRes.filter((s) => reasonable(startFromResult(parseDecimal(s))));
+          const res = parseDecimal(pick(rng, cand.length ? cand : ["0,5", "1,5", "2,5"]));
+          val = startFromResult(res);
+        } else {
+          const k = pick(rng, zeros >= 5 ? [1, 2, 5, 10] : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15]);
+          val = startFromResult(parseIntStr(k));
+        }
+        if (!reasonable(val)) val = startFromResult(parseDecimal("0,5"));
       } else {
-        val = parseIntStr(pick(rng, ints));
+        const zeros = d;
+        const ints = zeros >= 5 ? [1, 2, 5, 10, 20, 25, 50] : NICE_INT;
+        const useDec = rng() < 0.2 && zeros < 5;
+        if (useDec) {
+          const cand = NICE_DEC.filter((s) => {
+            const r = parseDecimal(s);
+            return r.scale + zeros <= 5;
+          });
+          val = cand.length ? parseDecimal(pick(rng, cand)) : parseIntStr(pick(rng, ints));
+        } else {
+          val = parseIntStr(pick(rng, ints));
+        }
       }
     }
 
@@ -960,6 +1086,7 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
       hint: metricHint(val, fromU, toU, cat, result),
       tip: metricTip(fromU, toU, cat),
       startDisplay: formatPL(val.coef, val.scale),
+      decimalStart: !isIntegerRational(val),
     };
   }
 
@@ -985,9 +1112,9 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
       ["t", "dag"],
     ],
     volume: [
+      ["l", "dl"],
       ["l", "ml"],
-      ["hl", "l"],
-      ["hl", "ml"],
+      ["dl", "ml"],
     ],
     time: [
       ["h", "min"],
@@ -1009,113 +1136,134 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
       uB = pair[1];
     const cap = maxSecond(cat, uA, uB);
     const aN = pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15]);
-    let bN;
+    const toBigger = rng() < 0.5;
+    let pool;
     if (cap >= 1000) {
-      bN = pick(rng, [1, 2, 5, 10, 15, 20, 25, 30, 40, 50, 75, 80, 100, 125, 150, 200, 250, 300, 400, 500, 750]);
+      pool = [1, 2, 5, 10, 15, 20, 25, 30, 40, 50, 75, 80, 100, 125, 150, 200, 250, 300, 400, 500, 750];
     } else if (cap >= 100) {
-      bN = pick(rng, [1, 2, 5, 10, 15, 20, 25, 30, 35, 40, 50, 60, 75, 80]);
+      pool = [1, 2, 5, 10, 15, 20, 25, 30, 35, 40, 50, 60, 75, 80];
     } else {
-      bN = pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+      pool = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     }
-    if (bN >= cap) bN = cap - 1;
-    if (bN < 1) bN = 1;
+    pool = pool.filter((n) => n < cap && n >= 1);
+    if (!pool.length) pool = [Math.max(1, cap - 1)];
+    if (toBigger) {
+      const nice = pool.filter((n) => convertMetric(parseIntStr(n), uB, uA, cat.zeros).scale <= 2);
+      if (nice.length) pool = nice;
+    }
+    const bN = pick(rng, pool);
 
     const a = parseIntStr(aN);
     const b = parseIntStr(bN);
-
-    const targets = [uB];
     const smallest = cat.units[0];
-    if (smallest !== uB) targets.push(smallest);
-    const bInA = convertMetric(b, uB, uA, cat.zeros);
-    if (bInA.scale <= 3 && rng() < 0.35) targets.push(uA); // e.g. 4 l 100 ml = ? l → 4,1
-    const toU = pick(rng, targets);
 
-    const p1 = convertMetric(a, uA, toU, cat.zeros);
-    const p2 = convertMetric(b, uB, toU, cat.zeros);
-    const result = addR(p1, p2);
-
-    const word = wordCompound(rng, a, uA, b, uB, toU);
-    const leftShort = qtyText(a, uA, true) + " i " + qtyText(b, uB, true);
-
-    let hint;
-    if (toU === uB || cat.zeros[toU] <= cat.zeros[uB]) {
-      const aIn = convertMetric(a, uA, toU, cat.zeros);
-      const bIn = convertMetric(b, uB, toU, cat.zeros);
-      hint =
-        "Najpierw zamień wszystko na " +
-        UNITS[toU].ile +
-        " (mniejsza albo docelowa jednostka). " +
-        qtyText(a, uA, true) +
-        " = <strong>" +
-        formatPL(aIn.coef, aIn.scale) +
-        "\u00A0" +
-        toU +
-        "</strong>. " +
-        qtyText(b, uB, true) +
-        " = <strong>" +
-        formatPL(bIn.coef, bIn.scale) +
-        "\u00A0" +
-        toU +
-        "</strong>. " +
-        "Razem: " +
-        formatPL(aIn.coef, aIn.scale) +
-        " + " +
-        formatPL(bIn.coef, bIn.scale) +
-        " = <strong>" +
-        formatPL(result.coef, result.scale) +
-        "\u00A0" +
-        toU +
-        "</strong>.";
-      if (toU !== uB && cat.zeros[toU] < cat.zeros[uB]) {
-        hint +=
-          " (Z " +
+    function finishCompound(toU, asSimpleFrom) {
+      const p1 = convertMetric(a, uA, toU, cat.zeros);
+      const p2 = convertMetric(b, uB, toU, cat.zeros);
+      const result = addR(p1, p2);
+      const leftShort = qtyText(a, uA, true) + " i " + qtyText(b, uB, true);
+      let prompt, unitLabel, typ, tip, hint, startDisplay, fromUOut, fromU2Out;
+      if (asSimpleFrom) {
+        const start = addR(convertMetric(a, uA, asSimpleFrom, cat.zeros), convertMetric(b, uB, asSimpleFrom, cat.zeros));
+        const word = wordSimple(rng, start, asSimpleFrom, toU);
+        prompt = word.prompt;
+        unitLabel = word.unitLabel;
+        typ = "simple";
+        startDisplay = formatPL(start.coef, start.scale);
+        hint = metricHint(start, asSimpleFrom, toU, cat, result);
+        tip = metricTip(asSimpleFrom, toU, cat);
+        fromUOut = asSimpleFrom;
+        fromU2Out = undefined;
+      } else {
+        const word = wordCompound(rng, a, uA, b, uB, toU);
+        prompt = word.prompt;
+        unitLabel = word.unitLabel;
+        typ = "compound";
+        fromUOut = uA;
+        fromU2Out = uB;
+        if (toU === uB || cat.zeros[toU] <= cat.zeros[uB]) {
+          const aIn = convertMetric(a, uA, toU, cat.zeros);
+          const bIn = convertMetric(b, uB, toU, cat.zeros);
+          hint =
+            "Najpierw zamień wszystko na " +
+            UNITS[toU].ile +
+            " (mniejsza albo docelowa jednostka). " +
+            qtyText(a, uA, true) +
+            " = <strong>" +
+            formatPL(aIn.coef, aIn.scale) +
+            "\u00A0" +
+            toU +
+            "</strong>. " +
+            qtyText(b, uB, true) +
+            " = <strong>" +
+            formatPL(bIn.coef, bIn.scale) +
+            "\u00A0" +
+            toU +
+            "</strong>. " +
+            "Razem: " +
+            formatPL(aIn.coef, aIn.scale) +
+            " + " +
+            formatPL(bIn.coef, bIn.scale) +
+            " = <strong>" +
+            formatPL(result.coef, result.scale) +
+            "\u00A0" +
+            toU +
+            "</strong>.";
+        } else {
+          const inSmall = addR(convertMetric(a, uA, uB, cat.zeros), convertMetric(b, uB, uB, cat.zeros));
+          hint =
+            "Najpierw zamień na " +
+            UNITS[uB].ile +
+            ": " +
+            leftShort +
+            " = <strong>" +
+            formatPL(inSmall.coef, inSmall.scale) +
+            "\u00A0" +
+            uB +
+            "</strong>. " +
+            metricHint(inSmall, uB, toU, cat, result);
+        }
+        tip =
+          "Zamień " +
           uA +
-          " najpierw na " +
+          " na " +
           uB +
-          " albo od razu na " +
-          toU +
-          " — pamiętaj, ile zer jest po drodze.)";
+          " (przecinek / zera według drabinki) i dodaj " +
+          formatPL(b.coef, b.scale) +
+          "\u00A0" +
+          uB +
+          (toU === uB ? "." : ", a potem przelicz na " + toU + ".");
       }
-    } else {
-      const inSmall = addR(convertMetric(a, uA, uB, cat.zeros), convertMetric(b, uB, uB, cat.zeros));
-      hint =
-        "Najpierw zamień na " +
-        UNITS[uB].ile +
-        ": " +
-        leftShort +
-        " = <strong>" +
-        formatPL(inSmall.coef, inSmall.scale) +
-        "\u00A0" +
-        uB +
-        "</strong>. " +
-        metricHint(inSmall, uB, toU, cat, result);
+      const out = {
+        type: typ,
+        cat: cat.id,
+        difficulty: "hard",
+        fromU: fromUOut,
+        toU,
+        prompt,
+        unitLabel,
+        answer: result,
+        answerDisplay: formatPL(result.coef, result.scale),
+        hint,
+        tip,
+      };
+      if (fromU2Out) out.fromU2 = fromU2Out;
+      if (startDisplay) out.startDisplay = startDisplay;
+      return out;
     }
 
-    const tip =
-      "Zamień " +
-      uA +
-      " na " +
-      uB +
-      " (przecinek / zera według drabinki) i dodaj " +
-      formatPL(b.coef, b.scale) +
-      "\u00A0" +
-      uB +
-      (toU === uB ? "." : ", a potem przelicz na " + toU + ".");
+    if (!toBigger) {
+      const targets = [uB];
+      if (smallest !== uB) targets.push(smallest);
+      return finishCompound(pick(rng, targets), null);
+    }
 
-    return {
-      type: "compound",
-      cat: cat.id,
-      difficulty: "hard",
-      fromU: uA,
-      fromU2: uB,
-      toU,
-      prompt: word.prompt,
-      unitLabel: word.unitLabel,
-      answer: result,
-      answerDisplay: formatPL(result.coef, result.scale),
-      hint,
-      tip,
-    };
+    // To a bigger unit: "4 l 100 ml = ? l" (4,1) or the same value asked as "4100 ml = ? l".
+    if (rng() < 0.55) {
+      const srcU = smallest !== uA && rng() < 0.7 ? smallest : uB;
+      return finishCompound(uA, srcU);
+    }
+    return finishCompound(uA, null);
   }
 
   /* Time simple */
@@ -1130,10 +1278,29 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     s: [],
   };
 
-  function generateTimeSimple(rng, easy) {
+  function timeDecimalPool(fromU, toU, easy) {
+    const raw = easy
+      ? ["0,5", "1,5", "2,5", "3,5", "4,5", "5,5", "1,2", "2,4", "3,6", "4,8"]
+      : ["0,5", "1,5", "2,5", "3,5", "0,25", "0,75", "1,25", "0,125", "2,25", "1,2", "2,4", "3,6", "4,8", "0,6"];
+    return raw.filter((str) => {
+      const v = parseDecimal(str);
+      if (easy && v.scale !== 1) return false;
+      const r = convertTime(v, fromU, toU);
+      if (!r.exact) return false;
+      if (easy && r.scale > 2) return false;
+      if (!easy && r.scale > 3) return false;
+      return true;
+    });
+  }
+
+  function generateTimeSimple(rng, easy, force) {
+    force = force || {};
     const cat = CATS.time;
     let fromU, toU;
-    if (easy) {
+    if (force.fromU && force.toU) {
+      fromU = force.fromU;
+      toU = force.toU;
+    } else if (easy) {
       const pair = pick(rng, cat.neighbors);
       if (rng() < 0.5) {
         fromU = pair[0];
@@ -1159,38 +1326,64 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     const fact = cat.factor;
     const toSmaller = fact[fromU] > fact[toU];
     let val;
+    let wantDec;
+    if (force.kind === "dec") wantDec = true;
+    else if (force.kind === "int") wantDec = false;
+    else if (typeof force.decimalStart === "boolean") wantDec = force.decimalStart;
+    else wantDec = rng() < 0.36;
 
-    if (easy) {
-      if (toSmaller) {
-        val = parseIntStr(pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15]));
-      } else {
-        const key = fromU + ":" + toU;
-        const list = (TIME_TO_LARGER[key] || [60, 120, 180]).filter((n) => n % (fact[fromU] / fact[toU] || 1) === 0 || true);
-        const nice = (TIME_TO_LARGER[key] || [60]).filter((n) => {
-          const conv = convertTime(parseIntStr(n), fromU, toU);
-          return conv.exact && conv.scale === 0;
+    if (wantDec) {
+      let pool = timeDecimalPool(fromU, toU, easy);
+      if (!pool.length && !force.fromU) {
+        const all = easy
+          ? [["s", "min"], ["min", "s"], ["min", "h"], ["h", "min"]]
+          : [["s", "min"], ["min", "s"], ["min", "h"], ["h", "min"], ["s", "h"], ["h", "s"]];
+        const curToSmaller = CATS.time.factor[fromU] > CATS.time.factor[toU];
+        const usable = all.filter((pr) => {
+          const ts = CATS.time.factor[pr[0]] > CATS.time.factor[pr[1]];
+          return ts === curToSmaller && timeDecimalPool(pr[0], pr[1], easy).length;
         });
-        val = parseIntStr(pick(rng, nice.length ? nice : [60, 120, 180]));
+        if (usable.length) {
+          const pr = pick(rng, usable);
+          fromU = pr[0];
+          toU = pr[1];
+          pool = timeDecimalPool(fromU, toU, easy);
+        }
       }
-    } else {
-      if (toSmaller) {
-        if (rng() < 0.35 && TIME_FROM_DEC[fromU] && TIME_FROM_DEC[fromU].length) {
-          val = parseDecimal(pick(rng, TIME_FROM_DEC[fromU]));
+      if (pool.length) val = parseDecimal(pick(rng, pool));
+      else if (force.kind === "dec") return null;
+      else wantDec = false;
+    }
+
+    if (!wantDec) {
+      if (easy) {
+        if (toSmaller) {
+          val = parseIntStr(pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15]));
         } else {
-          val = parseIntStr(pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 24, 30]));
+          const key = fromU + ":" + toU;
+          const nice = (TIME_TO_LARGER[key] || [60]).filter((n) => {
+            const conv = convertTime(parseIntStr(n), fromU, toU);
+            return conv.exact && conv.scale === 0;
+          });
+          val = parseIntStr(pick(rng, nice.length ? nice : [60, 120, 180]));
         }
       } else {
-        const key = fromU + ":" + toU;
-        val = parseIntStr(pick(rng, TIME_TO_LARGER[key] || [30, 60, 90, 120]));
+        if (toSmaller) {
+          val = parseIntStr(pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15, 20, 24, 30]));
+        } else {
+          const key = fromU + ":" + toU;
+          val = parseIntStr(pick(rng, TIME_TO_LARGER[key] || [30, 60, 90, 120]));
+        }
       }
     }
 
     const result = convertTime(val, fromU, toU);
     if (!result.exact) {
-      return generateTimeSimple(rng, easy);
+      if (force.fromU) return null;
+      return generateTimeSimple(rng, easy, force);
     }
-    if (easy && result.scale !== 0) {
-      return generateTimeSimple(rng, easy);
+    if (easy && result.scale !== 0 && !wantDec && !isIntegerRational(val)) {
+      return generateTimeSimple(rng, easy, force);
     }
 
     const word = wordSimple(rng, val, fromU, toU);
@@ -1206,6 +1399,8 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
       answerDisplay: formatPL(result.coef, result.scale),
       hint: timeHintSimple(val, fromU, toU, result),
       tip: timeTip(fromU, toU),
+      startDisplay: formatPL(val.coef, val.scale),
+      decimalStart: !isIntegerRational(val),
     };
   }
 
@@ -1215,35 +1410,64 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
       uB = pair[1];
     const cap = maxSecond(CATS.time, uA, uB);
     const aN = pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12]);
+    const toBigger = rng() < 0.5;
     let bChoices;
-    if (cap === 60) {
+    if (toBigger) {
+      if (uA === "h" && uB === "min") bChoices = [15, 30, 45];
+      else if (uA === "h" && uB === "s") bChoices = [180, 360, 450, 900, 1800];
+      else bChoices = [6, 12, 15, 18, 24, 30, 36, 45];
+    } else if (cap === 60) {
       bChoices = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
     } else if (cap === 3600) {
       bChoices = [30, 36, 45, 60, 90, 120, 150, 180, 300, 600, 900, 1800];
     } else {
       bChoices = [5, 10, 15];
     }
-    let bN = pick(rng, bChoices);
-    if (bN >= cap) bN = cap / 2;
+    bChoices = bChoices.filter((n) => n < cap);
+    if (!bChoices.length) bChoices = [cap / 2];
+    const bN = pick(rng, bChoices);
 
     const a = parseIntStr(aN);
     const b = parseIntStr(bN);
 
-    const targets = [uB];
-    if (uB !== "s") targets.push("s");
-    if (rng() < 0.25) targets.push(uA);
-    let toU = pick(rng, targets);
+    const targetsSmall = [uB];
+    if (uB !== "s") targetsSmall.push("s");
+    let toU = toBigger ? uA : pick(rng, targetsSmall);
 
     let p1 = convertTime(a, uA, toU);
     let p2 = convertTime(b, uB, toU);
     if (!p1.exact || !p2.exact) {
-      toU = uB === "s" || uA === "s" ? "s" : "s";
+      toU = "s";
       p1 = convertTime(a, uA, toU);
       p2 = convertTime(b, uB, toU);
     }
     if (!p1.exact || !p2.exact) return generateTimeCompound(rng);
 
     const result = addR(p1, p2);
+
+    if (toU === uA && rng() < 0.55) {
+      const srcU = uB !== "s" && rng() < 0.5 ? "s" : uB;
+      const start = addR(convertTime(a, uA, srcU), convertTime(b, uB, srcU));
+      if (start.exact !== false) {
+        const startR = { coef: start.coef, scale: start.scale };
+        const wordS = wordSimple(rng, startR, srcU, toU);
+        return {
+          type: "simple",
+          cat: "time",
+          difficulty: "hard",
+          fromU: srcU,
+          toU,
+          prompt: wordS.prompt,
+          unitLabel: wordS.unitLabel,
+          answer: result,
+          answerDisplay: formatPL(result.coef, result.scale),
+          hint: timeHintSimple(startR, srcU, toU, result),
+          tip: timeTip(srcU, toU),
+          startDisplay: formatPL(startR.coef, startR.scale),
+        };
+      }
+    }
+
     const word = wordCompound(rng, a, uA, b, uB, toU);
     const leftShort = qtyText(a, uA, true) + " i " + qtyText(b, uB, true);
 
@@ -1296,20 +1520,184 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     };
   }
 
-  function generateQuestion(opts) {
-    const rng = makeRng(opts && opts.rng != null ? opts.rng : opts && opts.seed != null ? opts.seed : null);
+  const SKILL_BASE = 1;
+  const SKILL_MAX = 8;
+  const WEAK_DRAW_RATE = 0.55;
+
+  function questionDir(q) {
+    const cat = CATS[q.cat];
+    if (cat.metric) return cat.zeros[q.fromU] - cat.zeros[q.toU] > 0 ? "toSmaller" : "toBigger";
+    return cat.factor[q.fromU] > cat.factor[q.toU] ? "toSmaller" : "toBigger";
+  }
+
+  function questionSkill(q) {
+    const kind = q.type === "compound" ? "compound" : q.decimalStart ? "dec" : "int";
+    return q.cat + "|" + q.fromU + "|" + q.toU + "|" + questionDir(q) + "|" + kind;
+  }
+
+  function parseSkill(key) {
+    const p = String(key).split("|");
+    return { cat: p[0], fromU: p[1], toU: p[2], dir: p[3], kind: p[4] };
+  }
+
+  function skillLabel(key) {
+    const s = parseSkill(key);
+    if (!s.fromU || !s.toU) return key;
+    let t = s.fromU + " → " + s.toU;
+    if (s.kind === "dec") t += " (z przecinkiem)";
+    if (s.kind === "compound") t += " (złożone)";
+    return t;
+  }
+
+  function updateSkillWeights(weights, key, correct) {
+    const next = Object.assign({}, weights || {});
+    const s = Object.assign({ w: SKILL_BASE, streak: 0, correct: 0, wrong: 0 }, next[key] || {});
+    if (correct) {
+      s.correct++;
+      s.streak++;
+      if (s.streak >= 2 && s.w > SKILL_BASE) {
+        s.w = Math.max(SKILL_BASE, s.w - 1);
+        s.streak = 0;
+      }
+    } else {
+      s.wrong++;
+      s.streak = 0;
+      s.w = Math.min(SKILL_MAX, s.w + 2);
+    }
+    next[key] = s;
+    return next;
+  }
+
+  function isSkillCompatible(key, catIds, easy) {
+    const s = parseSkill(key);
+    if (!CATS[s.cat] || !catIds || catIds.indexOf(s.cat) === -1) return false;
+    const cat = CATS[s.cat];
+    if (!cat.units.includes(s.fromU) || !cat.units.includes(s.toU)) return false;
+    if (s.fromU === s.toU) return false;
+    if (easy && s.kind === "compound") return false;
+    if (easy && !isNeighbor(cat, s.fromU, s.toU)) return false;
+    if (s.kind === "dec") {
+      if (cat.metric) {
+        const d = cat.zeros[s.fromU] - cat.zeros[s.toU];
+        if (!metricDecimalPool(easy, d).length) return false;
+      } else if (!timeDecimalPool(s.fromU, s.toU, easy).length) return false;
+    }
+    return true;
+  }
+
+  function weakSkillKeys(weights, catIds, easy) {
+    const out = [];
+    const w = weights || {};
+    Object.keys(w).forEach((k) => {
+      if (w[k] && w[k].w > SKILL_BASE && isSkillCompatible(k, catIds, easy)) out.push(k);
+    });
+    return out;
+  }
+
+  function weightedPickKey(keys, weights, rng) {
+    let sum = 0;
+    const ws = keys.map((k) => {
+      const w = (weights[k] && weights[k].w) || SKILL_BASE;
+      sum += w;
+      return w;
+    });
+    if (sum <= 0) return pick(rng, keys);
+    let r = rng() * sum;
+    for (let i = 0; i < keys.length; i++) {
+      r -= ws[i];
+      if (r <= 0) return keys[i];
+    }
+    return keys[keys.length - 1];
+  }
+
+  function finalizeQuestion(q) {
+    if (!q) return null;
+    if (q.decimalStart == null) {
+      q.decimalStart = !!(q.startDisplay && String(q.startDisplay).indexOf(",") !== -1);
+    }
+    q.skillKey = questionSkill(q);
+    return q;
+  }
+
+  function generateQuestionOnce(opts, rng) {
     const easy = !opts || opts.difficulty !== "hard";
     let catIds = (opts && opts.categories) || ["length", "mass", "volume", "time"];
     catIds = catIds.filter((id) => CATS[id]);
     if (!catIds.length) return null;
-    const cat = CATS[pick(rng, catIds)];
+
+    let force = opts && opts.force ? Object.assign({}, opts.force) : null;
+    if (!force && opts && opts.skill) force = parseSkill(opts.skill);
+    if (!force && opts && opts.weights) {
+      const weak = weakSkillKeys(opts.weights, catIds, easy);
+      const rate = opts.weakRate != null ? opts.weakRate : WEAK_DRAW_RATE;
+      if (weak.length && rng() < rate) {
+        force = parseSkill(weightedPickKey(weak, opts.weights, rng));
+      }
+    }
+
+    if (force && force.cat && catIds.indexOf(force.cat) === -1) force = null;
+    const cat = CATS[(force && force.cat) || pick(rng, catIds)];
+    const wantCompound = force ? force.kind === "compound" : !easy && rng() < (cat.id === "time" ? 0.45 : 0.4);
 
     if (cat.id === "time") {
-      if (!easy && rng() < 0.45) return generateTimeCompound(rng);
-      return generateTimeSimple(rng, easy);
+      if (wantCompound) return generateTimeCompound(rng);
+      return generateTimeSimple(rng, easy, force);
     }
-    if (!easy && rng() < 0.4) return generateMetricCompound(rng, cat);
-    return generateMetricSimple(rng, cat, easy);
+    if (wantCompound) {
+      // If a specific pair was requested, try a few times to match units.
+      if (force && force.fromU && force.toU) {
+        for (let i = 0; i < 10; i++) {
+          const q = generateMetricCompound(rng, cat);
+          if (q && q.fromU === force.fromU && q.toU === force.toU) return q;
+        }
+      }
+      return generateMetricCompound(rng, cat);
+    }
+    return generateMetricSimple(rng, cat, easy, force);
+  }
+
+  function generateQuestion(opts) {
+    const rng = makeRng(opts && opts.rng != null ? opts.rng : opts && opts.seed != null ? opts.seed : null);
+    const last = opts && opts.lastPrompt;
+    let q = null;
+    for (let attempt = 0; attempt < 16; attempt++) {
+      q = generateQuestionOnce(opts, rng);
+      if (!q) continue;
+      if (last && q.prompt === last && attempt < 14) continue;
+      break;
+    }
+    return finalizeQuestion(q);
+  }
+
+  function commaSteps(startDisplay, shift) {
+    if (!shift) return [startDisplay];
+    let s = String(startDisplay).replace(/[\s\u00A0\u202F\u2009]/g, "").replace(".", ",");
+    if (!s.includes(",")) s += ",";
+    const bits = s.split(",");
+    let p = { w: bits[0] || "0", f: bits[1] || "" };
+    function shiftParts(w, f, dir) {
+      if (dir < 0) {
+        if (w.length <= 1) return { w: "0", f: (w === "0" ? "0" : w) + f };
+        return { w: w.slice(0, -1), f: w.slice(-1) + f };
+      }
+      if (!f.length) return { w: w + "0", f: "" };
+      return { w: w + f[0], f: f.slice(1) };
+    }
+    function fmtParts(parts, trim) {
+      let w = parts.w.replace(/^0+(?=\d)/, "") || "0";
+      let f = parts.f;
+      if (trim) f = f.replace(/0+$/, "");
+      if (!f) return groupThousands(w);
+      return groupThousands(w) + "," + f;
+    }
+    const out = [fmtParts(p, true)];
+    const dir = shift > 0 ? 1 : -1;
+    const n = Math.abs(shift);
+    for (let i = 0; i < n; i++) {
+      p = shiftParts(p.w, p.f, dir);
+      out.push(fmtParts(p, i === n - 1));
+    }
+    return out;
   }
 
   /* Converter */
@@ -1416,6 +1804,18 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     generateQuestion,
     commaSlip,
     groupThousands,
+    isIntegerRational,
+    questionSkill,
+    parseSkill,
+    skillLabel,
+    updateSkillWeights,
+    isSkillCompatible,
+    weakSkillKeys,
+    weightedPickKey,
+    commaSteps,
+    SKILL_BASE,
+    SKILL_MAX,
+    WEAK_DRAW_RATE,
   };
 
   if (typeof module !== "undefined" && module.exports) {
@@ -1454,18 +1854,30 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
   let stats = loadStats();
   let round = null; // {total, i, results:[]}
 
-  function loadStats() {
-    try {
-      const s = JSON.parse(localStorage.getItem(STORAGE) || "null");
-      if (s && typeof s.correct === "number") return s;
-    } catch (e) {}
+  function emptyStats() {
     return {
       correct: 0,
       wrong: 0,
       streak: 0,
       bestStreak: 0,
       byCat: { length: { c: 0, w: 0 }, mass: { c: 0, w: 0 }, volume: { c: 0, w: 0 }, time: { c: 0, w: 0 } },
+      recent: [],
+      skills: {},
     };
+  }
+  function loadStats() {
+    const base = emptyStats();
+    try {
+      const s = JSON.parse(localStorage.getItem(STORAGE) || "null");
+      if (s && typeof s.correct === "number") {
+        return Object.assign(base, s, {
+          recent: Array.isArray(s.recent) ? s.recent.slice(-20) : [],
+          skills: s.skills && typeof s.skills === "object" ? s.skills : {},
+          byCat: Object.assign(base.byCat, s.byCat || {}),
+        });
+      }
+    } catch (e) {}
+    return base;
   }
   function saveStats() {
     try { localStorage.setItem(STORAGE, JSON.stringify(stats)); } catch (e) {}
@@ -1485,6 +1897,38 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     $("scoreline").innerHTML =
       "Wynik: " + stats.correct + "/" + total +
       " <span>· Seria: " + stats.streak + " · Rekord: " + stats.bestStreak + "</span>";
+    const rec = Array.isArray(stats.recent) ? stats.recent.slice(-20) : [];
+    const n = rec.length;
+    const okc = rec.filter(Boolean).length;
+    const pct = n ? Math.round((100 * okc) / n) : 0;
+    const label = n ? ("Ostatnie " + n + ": " + okc + "/" + n + " (" + pct + "%)") : "Ostatnie 0: 0/0";
+    $("meter-text").textContent = label;
+    const wrap = $("meter-wrap");
+    wrap.classList.remove("red", "yellow", "green");
+    if (n) wrap.classList.add(pct < 50 ? "red" : pct < 80 ? "yellow" : "green");
+    $("meter-fill").style.width = (n ? pct : 0) + "%";
+    const dots = $("meter-dots");
+    dots.innerHTML = "";
+    rec.forEach((v) => {
+      const d = document.createElement("span");
+      d.className = "md " + (v ? "ok" : "bad");
+      dots.appendChild(d);
+    });
+    const weak = J.weakSkillKeys(stats.skills || {}, selectedCats(), false);
+    const box = $("review-box");
+    const list = $("review-list");
+    list.innerHTML = "";
+    if (!weak.length) box.classList.remove("on");
+    else {
+      box.classList.add("on");
+      weak
+        .sort((a, b) => ((stats.skills[b] && stats.skills[b].w) || 0) - ((stats.skills[a] && stats.skills[a].w) || 0))
+        .forEach((k) => {
+          const li = document.createElement("li");
+          li.textContent = J.skillLabel(k);
+          list.appendChild(li);
+        });
+    }
   }
 
   function ungroup(s) {
@@ -1533,7 +1977,7 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
 
   /* ----- converter ----- */
   let convCat = "length";
-  const convDefaults = { length: ["cm", "km"], mass: ["g", "kg"], volume: ["ml", "l"], time: ["min", "s"] };
+  const convDefaults = { length: ["cm", "km"], mass: ["g", "kg"], volume: ["ml", "dl"], time: ["min", "s"] };
 
   function fillUnitSelect(sel, catId, picked) {
     const cat = J.CATS[catId];
@@ -1558,7 +2002,7 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     if (!keepValue) {
       if (catId === "length") $("conv-value").value = "10";
       else if (catId === "mass") $("conv-value").value = "2500";
-      else if (catId === "volume") $("conv-value").value = "4";
+      else if (catId === "volume") $("conv-value").value = "250";
       else $("conv-value").value = "2";
     }
     updateConverter();
@@ -1583,7 +2027,7 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     out.innerHTML = res.display + "&nbsp;" + toU;
     let extra = "";
     if (res.metric && res.shift) {
-      extra = renderSteps(commaSteps(res.startDisplay, res.shift));
+      extra = renderSteps(J.commaSteps(res.startDisplay, res.shift));
     }
     box.innerHTML = '<div class="explain-box">' + res.hint + extra + "</div>";
   }
@@ -1608,8 +2052,15 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     $("no-cat").classList.remove("on");
     $("question-card").style.display = "";
     let q = null;
+    const lastPrompt = recent.length ? recent[recent.length - 1].split("|")[0] : "";
     for (let i = 0; i < 12; i++) {
-      q = J.generateQuestion({ categories: cats, difficulty: difficulty });
+      q = J.generateQuestion({
+        categories: cats,
+        difficulty: difficulty,
+        weights: stats.skills,
+        lastPrompt: lastPrompt,
+      });
+      if (!q) continue;
       const key = q.prompt + "|" + q.answerDisplay;
       if (recent.indexOf(key) === -1) break;
     }
@@ -1618,7 +2069,10 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     if (recent.length > 12) recent.shift();
     checked = false;
     tipShown = false;
-    $("q-cat").textContent = CAT_LABEL[q.cat] + (q.difficulty === "hard" ? " · trudne" : " · łatwe") + (q.type === "compound" ? " · złożone" : "");
+    $("q-cat").textContent =
+      CAT_LABEL[q.cat] +
+      (q.difficulty === "hard" ? " · trudne" : " · łatwe") +
+      (q.type === "compound" ? " · złożone" : q.decimalStart ? " · z przecinkiem" : "");
     $("q-text").textContent = q.prompt;
     $("unit-after").textContent = q.unitLabel;
     $("question-card").setAttribute("data-cat", q.cat);
@@ -1657,6 +2111,10 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     const ok = J.rationalsEqual(parsed, current.answer);
     const fb = $("feedback");
     const ans = current.answerDisplay + "\u00A0" + current.unitLabel;
+    if (!Array.isArray(stats.recent)) stats.recent = [];
+    stats.recent.push(ok);
+    if (stats.recent.length > 20) stats.recent = stats.recent.slice(-20);
+    stats.skills = J.updateSkillWeights(stats.skills || {}, current.skillKey || J.questionSkill(current), ok);
     if (ok) {
       stats.correct++;
       stats.streak++;
@@ -1695,7 +2153,7 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     if (q.type !== "simple" || !J.CATS[q.cat].metric || !q.startDisplay) return "";
     const shift = J.CATS[q.cat].zeros[q.fromU] - J.CATS[q.cat].zeros[q.toU];
     if (!shift) return "";
-    return renderSteps(commaSteps(q.startDisplay, shift));
+    return renderSteps(J.commaSteps(q.startDisplay, shift));
   }
 
   function showTip() {
@@ -1758,8 +2216,8 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     }
   });
   $("btn-reset").addEventListener("click", function () {
-    if (!confirm("Wyczyścić zapisany wynik i serię?")) return;
-    stats = { correct: 0, wrong: 0, streak: 0, bestStreak: 0, byCat: { length: { c: 0, w: 0 }, mass: { c: 0, w: 0 }, volume: { c: 0, w: 0 }, time: { c: 0, w: 0 } } };
+    if (!confirm("Wyczyścić zapisany wynik, serię, ostatnie 20 odpowiedzi i listę powtórek?")) return;
+    stats = emptyStats();
     saveStats();
     renderScore();
   });
