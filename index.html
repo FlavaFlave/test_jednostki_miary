@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Trening przeliczania jednostek miary — długość, masa, objętość i czas. Ściągawka, przelicznik i losowe testy.">
-  <title>Trening jednostek miary</title>
+  <meta name="description" content="Trening z matematyki dla klasy 7: jednostki miary (długość, masa, pole, objętość, czas) i własności pierwiastkowania. Ściągawki, ćwiczenia i sprawdziany.">
+  <title>Trening z matematyki — jednostki miary i pierwiastki</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E📏%3C/text%3E%3C/svg%3E">
   <style>
 :root {
@@ -31,6 +31,10 @@
   --vol-bg: #e8f5e9;
   --time: #6a1b9a;
   --time-bg: #f3e5f5;
+  --area: #00838f;
+  --area-bg: #e0f7fa;
+  --cubic: #ad1457;
+  --cubic-bg: #fce4ec;
 }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
@@ -69,6 +73,8 @@ button { cursor: pointer; }
 .pill-legend.i-mass { background: var(--mass-bg); color: var(--mass); }
 .pill-legend.i-vol { background: var(--vol-bg); color: var(--vol); }
 .pill-legend.i-time { background: var(--time-bg); color: var(--time); }
+.pill-legend.i-area { background: var(--area-bg); color: var(--area); }
+.pill-legend.i-cubic { background: var(--cubic-bg); color: var(--cubic); }
 
 .card {
   background: var(--paper);
@@ -134,6 +140,8 @@ button { cursor: pointer; }
 .conv-cats button[data-cat="mass"][aria-pressed="true"] { background: var(--mass); }
 .conv-cats button[data-cat="volume"][aria-pressed="true"] { background: var(--vol); }
 .conv-cats button[data-cat="time"][aria-pressed="true"] { background: var(--time); }
+.conv-cats button[data-cat="area"][aria-pressed="true"] { background: var(--area); }
+.conv-cats button[data-cat="cubic"][aria-pressed="true"] { background: var(--cubic); }
 #conv-explain { margin-top: 14px; }
 .explain-box {
   background: #f7f4ee;
@@ -190,7 +198,7 @@ button { cursor: pointer; }
 /* Rules */
 .rules {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
   margin-bottom: 8px;
 }
@@ -252,6 +260,35 @@ button { cursor: pointer; }
 #question-card[data-cat="mass"] { border-left-color: var(--mass); }
 #question-card[data-cat="volume"] { border-left-color: var(--vol); }
 #question-card[data-cat="time"] { border-left-color: var(--time); }
+#question-card[data-cat="area"] { border-left-color: var(--area); }
+#question-card[data-cat="cubic"] { border-left-color: var(--cubic); }
+.rule.dims { background: #eef7f8; }
+.rule.dims h3 { color: var(--area); }
+.mode-seg { margin-bottom: 12px; }
+#exam-setup, #exam-summary { display: none; }
+#exam-setup.on, #exam-summary.on { display: block; }
+#exam-setup .box, #exam-summary .box { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; background: #fff; }
+#exam-setup .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 10px 0; }
+#exam-setup .count-btn[aria-pressed="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
+#exam-history { font-size: 0.9rem; color: var(--muted); margin: 10px 0 0; padding-left: 18px; }
+#exam-progress { display: none; font-weight: 700; color: var(--navy); }
+body.exam #exam-progress { display: inline; }
+body.exam #converter, body.exam #cheatsheet, body.exam #cat-grid, body.exam .sticky-bar,
+body.exam #btn-tip, body.exam #btn-round, body.exam #btn-reset, body.exam #btn-next, body.exam .quiz-note,
+body.exam .scoreline, body.exam #meter-wrap { display: none !important; }
+body.exam { padding-top: 0 !important; }
+body.exam .filters, body.exam .mode-seg { pointer-events: none; opacity: 0.45; }
+#btn-exam-stop { display: none; }
+body.exam #btn-exam-stop { display: inline-flex; }
+.sum-head { display: flex; gap: 18px; flex-wrap: wrap; align-items: baseline; margin-bottom: 10px; }
+.sum-score { font-size: 2rem; font-weight: 800; color: var(--navy); }
+.sum-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; margin: 10px 0; }
+.sum-table th, .sum-table td { border-bottom: 1px solid var(--line); padding: 7px 6px; text-align: left; vertical-align: top; }
+.sum-table tr.ok td.res { color: var(--ok); font-weight: 800; }
+.sum-table tr.bad td.res { color: var(--bad); font-weight: 800; }
+.sum-table tr.bad { background: #fff8f7; }
+.sum-table details { margin-top: 4px; color: var(--muted); }
+.sum-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
 #q-cat { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 6px; }
 #q-text { font-size: 1.35rem; font-weight: 750; margin: 0 0 14px; }
 .answer-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
@@ -311,6 +348,7 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
   .conv-cats { gap: 6px; }
   .conv-cats button { padding: 7px 11px; }
   .grid-2, .grid-cats, .rules, .examples { grid-template-columns: 1fr; }
+  .sum-table th:nth-child(1), .sum-table td:nth-child(1) { display: none; }
   h1 { font-size: 1.65rem; }
   #q-text { font-size: 1.2rem; }
   .hero { flex-direction: column; }
@@ -327,36 +365,123 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
   .card { box-shadow: none; break-inside: avoid; }
   a { color: inherit; text-decoration: none; }
 }
+
+/* ---------- zakładki ---------- */
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 16px; }
+.tabs button {
+  border: 1.5px solid var(--line); background: #fff; color: var(--ink);
+  border-radius: 12px; padding: 10px 18px; font-weight: 750; font-size: 1.02rem; min-height: 44px;
+}
+.tabs button[aria-selected="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
+body.tab-roots .sticky-bar, body.tab-roots #unit-badges { display: none !important; }
+body.tab-roots { padding-top: 0 !important; }
+body.exam .tabs, body.rexam .tabs { pointer-events: none; opacity: 0.45; }
+
+/* ---------- zapis matematyczny ---------- */
+.rad { display: inline-flex; align-items: stretch; white-space: nowrap; }
+.rad > .rr { border-top: 1.6px solid currentColor; padding: 1px 3px 0 2px; margin-left: 1px; display: inline-flex; align-items: center; }
+.fr { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; font-size: 0.82em; line-height: 1.15; margin: 0 2px; }
+.fr > .fn { border-bottom: 1.4px solid currentColor; padding: 0 3px; }
+.fr > .fd { padding: 0 3px; }
+.cmpq { display: inline-block; min-width: 1.6em; text-align: center; border: 2px dashed var(--muted); border-radius: 8px; color: var(--muted); margin: 0 6px; }
+
+/* ---------- ściągawka pierwiastków ---------- */
+.rule.r-ok { background: #e8f6ee; } .rule.r-ok h3 { color: var(--ok); }
+.rule.r-bad { background: var(--bad-bg); } .rule.r-bad h3 { color: var(--bad); }
+.rule.r-in { background: #eef3fb; } .rule.r-in h3 { color: var(--navy-2); }
+.rule.r-out { background: #fff6e0; } .rule.r-out h3 { color: var(--tip); }
+.sq-table { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; font-variant-numeric: tabular-nums; }
+.sq-table span { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 3px 8px; font-size: 0.92rem; }
+
+/* ---------- karta zadania ---------- */
+.qcard { margin-top: 14px; padding: 18px 18px 16px; border-radius: 14px; background: #f7f4ee; border: 1px solid var(--line); border-left: 8px solid var(--navy); }
+.qcard[data-type="oblicz"] { border-left-color: var(--len); }
+.qcard[data-type="wlacz"] { border-left-color: var(--navy-2); }
+.qcard[data-type="wylacz"] { border-left-color: var(--mass); }
+.qcard[data-type="uprosc"] { border-left-color: var(--vol); }
+.qcard[data-type="porownaj"] { border-left-color: var(--time); }
+.qcard[data-type="rownanie"] { border-left-color: var(--cubic); }
+.qcat { font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 6px; }
+.qinstr { margin: 0 0 6px; font-weight: 600; color: var(--muted); }
+.qexpr { font-size: 1.7rem; font-weight: 700; margin: 4px 0 16px; line-height: 1.6; }
+.r-in-num, .r-in-a, .r-in-b {
+  border: 1.5px solid #cfc6b6; border-radius: 10px; padding: 10px 12px; background: #fff; color: var(--ink);
+  min-height: 44px; font-size: 1.2rem; font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.r-in-num { width: 12rem; }
+.r-in-a { width: 5rem; text-align: right; }
+.r-in-b { width: 7rem; }
+.r-in-num:focus, .r-in-a:focus, .r-in-b:focus { outline: 3px solid rgba(44, 82, 130, 0.35); border-color: var(--navy-2); }
+.r-pre { font-size: 1.35rem; font-weight: 800; color: var(--navy); }
+.r-rootsign { font-size: 1.9rem; font-weight: 700; color: var(--navy); line-height: 1; }
+.r-cmp-btn { font-size: 1.5rem; font-weight: 800; min-width: 64px; min-height: 52px; border-radius: 12px; border: 1.5px solid var(--line); background: #fff; }
+.r-cmp-btn[aria-pressed="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
+.fb { margin-top: 14px; border-radius: 12px; padding: 12px 14px; display: none; line-height: 1.9; }
+.fb.show { display: block; }
+.fb.ok { background: var(--ok-bg); color: #135c34; }
+.fb.bad { background: var(--bad-bg); color: #8a1c14; }
+.fb.hintonly { background: var(--tip-bg); color: #6a4600; }
+.fb .title { font-weight: 800; font-size: 1.05rem; margin-bottom: 4px; line-height: 1.4; }
+.r-warn { display: none; margin-top: 12px; padding: 12px; background: var(--tip-bg); border-radius: 10px; }
+.r-warn.on { display: block; }
+.r-panel { display: none; margin-top: 14px; }
+.r-panel.on { display: block; }
+.r-panel .box { border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; background: #fff; }
+.r-panel .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin: 10px 0; }
+.r-count-btn[aria-pressed="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
+.exam-history { font-size: 0.9rem; color: var(--muted); margin: 10px 0 0; padding-left: 18px; }
+#r-progress { display: none; font-weight: 700; color: var(--navy); }
+#r-btn-stop { display: none; }
+body.rexam #r-progress { display: inline; }
+body.rexam #r-btn-stop { display: inline-flex; }
+body.rexam #r-cheat, body.rexam #r-btn-tip, body.rexam #r-btn-reset, body.rexam #r-btn-next, body.rexam #r-score, body.rexam .r-note { display: none !important; }
+body.rexam .r-lock { pointer-events: none; opacity: 0.45; }
+.sum-table .rad, .sum-table .fr { font-size: 1em; }
+.sum-table td { line-height: 1.8; }
+@media (max-width: 860px) {
+  .qexpr { font-size: 1.4rem; }
+  .r-in-num { width: 100%; }
+}
   </style>
 </head>
 <body>
 <div class="sticky-bar" id="sticky-bar" aria-hidden="true">
   <div class="sticky-inner">
-    <span>Do mniejszej jednostki → przecinek w <strong>PRAWO</strong> (mnożysz). Do większej → przecinek w <strong>LEWO</strong> (dzielisz). Czas: ×60 albo ÷60, bez przesuwania przecinka.</span>
+    <span>Do mniejszej jednostki → przecinek w <strong>PRAWO</strong>. Do większej → w <strong>LEWO</strong>. Pole: ×100 na krok, objętość: ×1000 na krok. 1&nbsp;l = 1&nbsp;dm³. Czas: ×60 / ÷60.</span>
     <button type="button" id="btn-scroll-cheat">Ściągawka</button>
   </div>
 </div>
 <div class="wrap">
   <header class="hero">
     <div>
-      <h1>Trening jednostek miary</h1>
-      <p>Cześć Łucja! Na górze masz przelicznik i ściągawkę — zawsze możesz na nie zerknąć. Poniżej czekają losowe zadania. Odpowiedź możesz pisać z przecinkiem albo z kropką.</p>
+      <h1>Trening z matematyki</h1>
+      <p>Cześć Łucja! Wybierz zakładkę z działem. W każdej masz ściągawkę i zadania: <strong>Ćwiczenia</strong> (z podpowiedziami) albo <strong>Sprawdzian</strong> (bez ściągawki, wynik na końcu). Liczby możesz pisać z przecinkiem albo z kropką.</p>
     </div>
-    <div class="badge-set" aria-hidden="true">
+    <div class="badge-set" id="unit-badges" aria-hidden="true">
       <span class="pill-legend i-len">Długość</span>
       <span class="pill-legend i-mass">Masa</span>
-      <span class="pill-legend i-vol">Objętość</span>
+      <span class="pill-legend i-vol">Pojemność</span>
+      <span class="pill-legend i-area">Pole</span>
+      <span class="pill-legend i-cubic">Objętość</span>
       <span class="pill-legend i-time">Czas</span>
     </div>
   </header>
 
+  <nav class="tabs" role="tablist" aria-label="Działy">
+    <button type="button" role="tab" id="tabbtn-units" aria-selected="true">📏 Jednostki miary</button>
+    <button type="button" role="tab" id="tabbtn-roots" aria-selected="false">√ Własności pierwiastkowania</button>
+  </nav>
+
+  <div id="tab-units">
   <section class="card" id="converter" style="--cc: var(--len);">
     <h2>Przelicznik</h2>
     <p class="lead">Wpisz liczbę, wybierz jednostki i zobacz, jak przesuwa się przecinek (albo przez co mnożyć przy czasie).</p>
     <div class="conv-cats" role="tablist" aria-label="Kategoria przelicznika">
       <button type="button" data-cat="length" aria-pressed="true">Długość</button>
       <button type="button" data-cat="mass" aria-pressed="false">Masa</button>
-      <button type="button" data-cat="volume" aria-pressed="false">Objętość</button>
+      <button type="button" data-cat="volume" aria-pressed="false">Pojemność</button>
+      <button type="button" data-cat="area" aria-pressed="false">Pole</button>
+      <button type="button" data-cat="cubic" aria-pressed="false">Objętość</button>
       <button type="button" data-cat="time" aria-pressed="false">Czas</button>
     </div>
     <div class="conv-row">
@@ -397,6 +522,11 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
         <p>Tu <strong>nie przesuwamy przecinka</strong>. Godziny, minuty i sekundy przeliczamy przez <strong>60</strong> (albo 3600, gdy z godzin od razu na sekundy).</p>
         <p>1&nbsp;h = 60&nbsp;min = 3&nbsp;600&nbsp;s.</p>
       </div>
+      <div class="rule dims">
+        <h3>Pole i objętość</h3>
+        <p>Pole ma <strong>2 wymiary</strong>: krok ×10 w długości to <strong>×100</strong> w polu (dwa zera). Objętość ma <strong>3 wymiary</strong>: <strong>×1000</strong> (trzy zera).</p>
+        <p>1&nbsp;m = 10&nbsp;dm → 1&nbsp;m² = 100&nbsp;dm² → 1&nbsp;m³ = 1&nbsp;000&nbsp;dm³.</p>
+      </div>
     </div>
     <div class="examples">
       <div class="ex">
@@ -410,6 +540,18 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
       <div class="ex">
         <h4>1 h 35 min = ? s</h4>
         <p>Bez przesuwania przecinka: 1&nbsp;h = 3600&nbsp;s, 35&nbsp;min = 35 × 60 = 2100&nbsp;s.<br><strong>3600 + 2100 = 5700&nbsp;s</strong>.</p>
+      </div>
+      <div class="ex">
+        <h4>3,5 m² = ? cm²</h4>
+        <p>Z m na cm są 2 zera w długości, więc w polu 2 × 2 = 4 zera. Przecinek o 4 miejsca w prawo:<br><strong>3,5&nbsp;m² = 35&nbsp;000&nbsp;cm²</strong>.</p>
+      </div>
+      <div class="ex">
+        <h4>2,4 ha = ? m²</h4>
+        <p>1&nbsp;ha = 100&nbsp;a = 10&nbsp;000&nbsp;m² (4 zera). Przecinek o 4 miejsca w prawo:<br><strong>2,4&nbsp;ha = 24&nbsp;000&nbsp;m²</strong>.</p>
+      </div>
+      <div class="ex">
+        <h4>0,75 l = ? cm³</h4>
+        <p>1&nbsp;l = 1&nbsp;dm³ = 1&nbsp;000&nbsp;cm³ (a 1&nbsp;ml = 1&nbsp;cm³). Przecinek o 3 miejsca w prawo:<br><strong>0,75&nbsp;l = 750&nbsp;cm³</strong>.</p>
       </div>
     </div>
   </section>
@@ -438,7 +580,7 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     </section>
 
     <section class="card cat-card" style="--cc: var(--mass); --cb: var(--mass-bg);">
-      <h3>Masa (waga)</h3>
+      <h3>Masa</h3>
       <div class="stair" style="--cc: var(--mass);" aria-label="Drabinka masy">
         <span class="pill-u">g</span>
         <span class="step"><span class="up">×10</span><span class="bar"></span><span class="down">÷10</span></span>
@@ -457,8 +599,8 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     </section>
 
     <section class="card cat-card" style="--cc: var(--vol); --cb: var(--vol-bg);">
-      <h3>Objętość</h3>
-      <div class="stair" style="--cc: var(--vol);" aria-label="Drabinka objętości">
+      <h3>Pojemność (litry)</h3>
+      <div class="stair" style="--cc: var(--vol);" aria-label="Drabinka pojemności">
         <span class="pill-u">ml</span>
         <span class="step"><span class="up">×100</span><span class="bar"></span><span class="down">÷100</span></span>
         <span class="pill-u">dl</span>
@@ -470,6 +612,52 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
         <li><b>1 l</b> = 10 dl = 1&nbsp;000 ml</li>
       </ul>
       <p class="tip-line">Z ml na dl dwa zera (×100), z dl na l jedno zero (×10). W obie strony: 1,5&nbsp;l = 15&nbsp;dl = 1500&nbsp;ml, a 250&nbsp;ml = 2,5&nbsp;dl.</p>
+    </section>
+
+    <section class="card cat-card" style="--cc: var(--area); --cb: var(--area-bg);">
+      <h3>Pole</h3>
+      <div class="stair" style="--cc: var(--area);" aria-label="Drabinka pola">
+        <span class="pill-u">mm²</span>
+        <span class="step"><span class="up">×100</span><span class="bar"></span><span class="down">÷100</span></span>
+        <span class="pill-u">cm²</span>
+        <span class="step"><span class="up">×100</span><span class="bar"></span><span class="down">÷100</span></span>
+        <span class="pill-u">dm²</span>
+        <span class="step"><span class="up">×100</span><span class="bar"></span><span class="down">÷100</span></span>
+        <span class="pill-u">m²</span>
+        <span class="step"><span class="up">×100</span><span class="bar"></span><span class="down">÷100</span></span>
+        <span class="pill-u">a</span>
+        <span class="step"><span class="up">×100</span><span class="bar"></span><span class="down">÷100</span></span>
+        <span class="pill-u">ha</span>
+        <span class="step"><span class="up">×100</span><span class="bar"></span><span class="down">÷100</span></span>
+        <span class="pill-u">km²</span>
+      </div>
+      <ul class="eqs" style="--cc: var(--area);">
+        <li><b>1 cm²</b> = 100 mm²</li>
+        <li><b>1 m²</b> = 100 dm² = 10&nbsp;000 cm²</li>
+        <li><b>1 a</b> = 100 m² (kwadrat 10 m × 10 m)</li>
+        <li><b>1 ha</b> = 100 a = 10&nbsp;000 m² (kwadrat 100 m × 100 m)</li>
+        <li><b>1 km²</b> = 100 ha = 1&nbsp;000&nbsp;000 m²</li>
+      </ul>
+      <p class="tip-line">Każdy krok to dwa zera. Z m² na cm² są cztery zera, nie dwa.</p>
+    </section>
+
+    <section class="card cat-card" style="--cc: var(--cubic); --cb: var(--cubic-bg);">
+      <h3>Objętość</h3>
+      <div class="stair" style="--cc: var(--cubic);" aria-label="Drabinka objętości">
+        <span class="pill-u">mm³</span>
+        <span class="step"><span class="up">×1000</span><span class="bar"></span><span class="down">÷1000</span></span>
+        <span class="pill-u">cm³</span>
+        <span class="step"><span class="up">×1000</span><span class="bar"></span><span class="down">÷1000</span></span>
+        <span class="pill-u">dm³</span>
+        <span class="step"><span class="up">×1000</span><span class="bar"></span><span class="down">÷1000</span></span>
+        <span class="pill-u">m³</span>
+      </div>
+      <ul class="eqs" style="--cc: var(--cubic);">
+        <li><b>1 cm³</b> = 1&nbsp;000 mm³ = <b>1 ml</b></li>
+        <li><b>1 dm³</b> = 1&nbsp;000 cm³ = <b>1 l</b></li>
+        <li><b>1 m³</b> = 1&nbsp;000 dm³ = <b>1&nbsp;000 l</b></li>
+      </ul>
+      <p class="tip-line">Każdy krok to trzy zera. Litr to decymetr sześcienny.</p>
     </section>
 
     <section class="card cat-card" style="--cc: var(--time); --cb: var(--time-bg);">
@@ -491,13 +679,20 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
 
   <section class="card" id="quiz">
     <div class="quiz-head">
-      <h2>Test</h2>
+      <h2>Zadania</h2>
       <div class="scoreline" id="scoreline">Wynik: 0/0 <span>· Seria: 0 · Rekord: 0</span></div>
+      <div id="exam-progress"></div>
+    </div>
+    <div class="seg mode-seg" role="group" aria-label="Tryb">
+      <button type="button" id="mode-practice" aria-pressed="true">Ćwiczenia</button>
+      <button type="button" id="mode-exam" aria-pressed="false">Sprawdzian</button>
     </div>
     <div class="filters">
       <label class="chip"><input type="checkbox" id="cat-length" checked> Długość</label>
       <label class="chip"><input type="checkbox" id="cat-mass" checked> Masa</label>
-      <label class="chip"><input type="checkbox" id="cat-volume" checked> Objętość</label>
+      <label class="chip"><input type="checkbox" id="cat-volume" checked> Pojemność</label>
+      <label class="chip"><input type="checkbox" id="cat-area" checked> Pole</label>
+      <label class="chip"><input type="checkbox" id="cat-cubic" checked> Objętość</label>
       <label class="chip"><input type="checkbox" id="cat-time" checked> Czas</label>
       <div class="seg" role="group" aria-label="Trudność">
         <button type="button" id="diff-easy" aria-pressed="true">Łatwe</button>
@@ -519,6 +714,23 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     <div id="round-bar"><div class="dots" id="round-dots"></div></div>
     <div id="no-cat">Zaznacz chociaż jedną kategorię, żeby dostać pytanie.</div>
 
+    <div id="exam-setup">
+      <div class="box">
+        <h3>Sprawdzian</h3>
+        <p>Zadania biorą się z kategorii i poziomu zaznaczonych wyżej. W trakcie nie ma ściągawki, przelicznika ani podpowiedzi. Wynik i rozwiązania zobaczysz na końcu.</p>
+        <div class="row">
+          <span>Liczba pytań:</span>
+          <button type="button" class="btn btn-ghost count-btn" data-n="10" aria-pressed="false">10</button>
+          <button type="button" class="btn btn-ghost count-btn" data-n="15" aria-pressed="true">15</button>
+          <button type="button" class="btn btn-ghost count-btn" data-n="20" aria-pressed="false">20</button>
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-exam-start">Zaczynam sprawdzian</button>
+        <ol id="exam-history" reversed></ol>
+      </div>
+    </div>
+
+    <div id="exam-summary"><div class="box" id="exam-summary-box"></div></div>
+
     <div id="question-card" data-cat="length">
       <div id="q-cat">Długość</div>
       <p id="q-text">Ładowanie pytania…</p>
@@ -532,11 +744,120 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
         <button type="button" class="btn btn-ghost" id="btn-tip">Podpowiedź</button>
         <button type="button" class="btn btn-ghost no-print" id="btn-round">Runda 10 pytań</button>
         <button type="button" class="btn btn-quiet no-print" id="btn-reset">Wyczyść wyniki</button>
+        <button type="button" class="btn btn-quiet no-print" id="btn-exam-stop">Przerwij sprawdzian</button>
       </div>
       <div id="feedback" role="status"></div>
     </div>
-    <p class="lead" style="margin:12px 0 0;font-size:0.92rem;">Po sprawdzeniu odpowiedzi naciśnij <strong>Enter</strong>, żeby przejść do kolejnego zadania. Podpowiedź pokazuje tylko kierunek i czynnik, nie wynik.</p>
+    <p class="lead quiz-note" style="margin:12px 0 0;font-size:0.92rem;">Po sprawdzeniu odpowiedzi naciśnij <strong>Enter</strong>, żeby przejść do kolejnego zadania. Podpowiedź pokazuje tylko kierunek i czynnik, nie wynik.</p>
   </section>
+
+  </div>
+
+<div id="tab-roots" hidden>
+  <section class="card" id="r-cheat">
+    <h2>Ściągawka — własności pierwiastkowania</h2>
+    <p class="lead">Wszystkie wzory działają dla liczb nieujemnych (a ≥ 0, b ≥ 0; przy dzieleniu b &gt; 0).</p>
+    <div class="rules">
+      <div class="rule r-ok">
+        <h3>Iloczyn i iloraz ✓</h3>
+        <p><span class="rad">√<span class="rr">a · b</span></span> = <span class="rad">√<span class="rr">a</span></span> · <span class="rad">√<span class="rr">b</span></span>
+        &nbsp;&nbsp;&nbsp; <span class="rad">√<span class="rr"><span class="fr"><span class="fn">a</span><span class="fd">b</span></span></span></span> = <span class="fr"><span class="fn"><span class="rad">√<span class="rr">a</span></span></span><span class="fd"><span class="rad">√<span class="rr">b</span></span></span></span></p>
+        <p>Przykład: <span class="rad">√<span class="rr">8</span></span> · <span class="rad">√<span class="rr">18</span></span> = <span class="rad">√<span class="rr">144</span></span> = 12</p>
+      </div>
+      <div class="rule r-bad">
+        <h3>Suma i różnica ✗</h3>
+        <p><span class="rad">√<span class="rr">a + b</span></span> ≠ <span class="rad">√<span class="rr">a</span></span> + <span class="rad">√<span class="rr">b</span></span>. Najpierw licz pod pierwiastkiem!</p>
+        <p><span class="rad">√<span class="rr">16 + 9</span></span> = <span class="rad">√<span class="rr">25</span></span> = 5, a <span class="rad">√<span class="rr">16</span></span> + <span class="rad">√<span class="rr">9</span></span> = 4 + 3 = 7.</p>
+      </div>
+      <div class="rule r-in">
+        <h3>Włączanie pod pierwiastek</h3>
+        <p><strong>a<span class="rad">√<span class="rr">b</span></span> = <span class="rad">√<span class="rr">a² · b</span></span></strong></p>
+        <p>4<span class="rad">√<span class="rr">2</span></span> = <span class="rad">√<span class="rr">16</span></span> · <span class="rad">√<span class="rr">2</span></span> = <span class="rad">√<span class="rr">32</span></span>. Przydaje się do porównywania:<br>3<span class="rad">√<span class="rr">5</span></span> = <span class="rad">√<span class="rr">45</span></span> &lt; <span class="rad">√<span class="rr">75</span></span> = 5<span class="rad">√<span class="rr">3</span></span>.</p>
+      </div>
+      <div class="rule r-out">
+        <h3>Wyłączanie przed pierwiastek</h3>
+        <p><strong><span class="rad">√<span class="rr">a² · b</span></span> = a<span class="rad">√<span class="rr">b</span></span></strong> — szukaj <strong>największego kwadratu</strong>, który dzieli liczbę.</p>
+        <p><span class="rad">√<span class="rr">18</span></span> = <span class="rad">√<span class="rr">9 · 2</span></span> = 3<span class="rad">√<span class="rr">2</span></span>. Pod pierwiastkiem ma zostać najmniejsza liczba: <span class="rad">√<span class="rr">504</span></span> = 6<span class="rad">√<span class="rr">14</span></span>, a nie 2<span class="rad">√<span class="rr">126</span></span>.</p>
+      </div>
+    </div>
+    <div class="examples">
+      <div class="ex">
+        <h4>Dodawanie „jak jabłka”</h4>
+        <p>3<span class="rad">√<span class="rr">2</span></span> + 2<span class="rad">√<span class="rr">2</span></span> = 5<span class="rad">√<span class="rr">2</span></span>. Dodajesz tylko pierwiastki <strong>z tej samej liczby</strong>.</p>
+      </div>
+      <div class="ex">
+        <h4>Najpierw wyłącz, potem dodaj</h4>
+        <p><span class="rad">√<span class="rr">20</span></span> + <span class="rad">√<span class="rr">125</span></span> = 2<span class="rad">√<span class="rr">5</span></span> + 5<span class="rad">√<span class="rr">5</span></span> = <strong>7<span class="rad">√<span class="rr">5</span></span></strong></p>
+      </div>
+      <div class="ex">
+        <h4>Duża liczba? Rozłóż na czynniki</h4>
+        <p>504 = 2·2·2·3·3·7 = 2²·3²·14, więc <span class="rad">√<span class="rr">504</span></span> = 2·3<span class="rad">√<span class="rr">14</span></span> = <strong>6<span class="rad">√<span class="rr">14</span></span></strong></p>
+      </div>
+    </div>
+    <div class="sq-table" aria-label="Tabela kwadratów">
+      <span><b>2²</b>=4</span><span><b>3²</b>=9</span><span><b>4²</b>=16</span><span><b>5²</b>=25</span><span><b>6²</b>=36</span><span><b>7²</b>=49</span><span><b>8²</b>=64</span><span><b>9²</b>=81</span><span><b>10²</b>=100</span><span><b>11²</b>=121</span><span><b>12²</b>=144</span><span><b>13²</b>=169</span><span><b>14²</b>=196</span><span><b>15²</b>=225</span>
+    </div>
+    <p class="lead" style="margin:10px 0 0;font-size:0.92rem;">Jak wpisywać odpowiedzi: ułamek jako <strong>1/6</strong>, ułamek dziesiętny jako <strong>0,5</strong>. Przy wyrażeniu typu 6<span class="rad">√<span class="rr">14</span></span> wpisz 6 w pierwsze pole i 14 w drugie. Puste pierwsze pole oznacza 1, a sam minus oznacza −1.</p>
+  </section>
+
+  <section class="card" id="r-quiz">
+    <div class="quiz-head">
+      <h2>Zadania z pierwiastków</h2>
+      <div class="scoreline" id="r-score">Wynik: 0/0 <span>· Seria: 0 · Rekord: 0</span></div>
+      <div id="r-progress"></div>
+    </div>
+    <div class="seg mode-seg r-lock" role="group" aria-label="Tryb">
+      <button type="button" id="r-mode-practice" aria-pressed="true">Ćwiczenia</button>
+      <button type="button" id="r-mode-exam" aria-pressed="false">Sprawdzian</button>
+    </div>
+    <div class="filters r-lock">
+      <label class="chip"><input type="checkbox" id="r-t-oblicz" checked> Obliczanie</label>
+      <label class="chip"><input type="checkbox" id="r-t-wlacz" checked> Włączanie</label>
+      <label class="chip"><input type="checkbox" id="r-t-wylacz" checked> Wyłączanie</label>
+      <label class="chip"><input type="checkbox" id="r-t-uprosc" checked> Upraszczanie</label>
+      <label class="chip"><input type="checkbox" id="r-t-porownaj" checked> Porównywanie</label>
+      <label class="chip"><input type="checkbox" id="r-t-rownanie" checked> Szukanie x</label>
+      <div class="seg" role="group" aria-label="Trudność">
+        <button type="button" id="r-diff-easy" aria-pressed="true">Łatwe</button>
+        <button type="button" id="r-diff-hard" aria-pressed="false">Trudne</button>
+      </div>
+    </div>
+    <div id="r-no-type" class="r-warn">Zaznacz chociaż jeden typ zadań.</div>
+
+    <div id="r-exam-setup" class="r-panel">
+      <div class="box">
+        <h3>Sprawdzian z pierwiastków</h3>
+        <p>Zadania biorą się z typów i poziomu zaznaczonych wyżej. W trakcie nie ma ściągawki ani podpowiedzi. Wynik i rozwiązania zobaczysz na końcu.</p>
+        <div class="row">
+          <span>Liczba pytań:</span>
+          <button type="button" class="btn btn-ghost r-count-btn" data-n="10" aria-pressed="false">10</button>
+          <button type="button" class="btn btn-ghost r-count-btn" data-n="12" aria-pressed="true">12</button>
+          <button type="button" class="btn btn-ghost r-count-btn" data-n="18" aria-pressed="false">18</button>
+        </div>
+        <button type="button" class="btn btn-primary" id="r-btn-exam-start">Zaczynam sprawdzian</button>
+        <ol id="r-exam-history" class="exam-history" reversed></ol>
+      </div>
+    </div>
+
+    <div id="r-exam-summary" class="r-panel"><div class="box" id="r-summary-box"></div></div>
+
+    <div id="r-card" class="qcard">
+      <div id="r-q-cat" class="qcat">Obliczanie</div>
+      <p id="r-q-instr" class="qinstr"></p>
+      <div id="r-q-expr" class="qexpr"></div>
+      <div id="r-answer-area" class="answer-row"></div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="r-btn-check">Sprawdź</button>
+        <button type="button" class="btn btn-ok" id="r-btn-next" hidden>Następne</button>
+        <button type="button" class="btn btn-ghost" id="r-btn-tip">Podpowiedź</button>
+        <button type="button" class="btn btn-quiet" id="r-btn-reset">Wyczyść wyniki</button>
+        <button type="button" class="btn btn-quiet" id="r-btn-stop">Przerwij sprawdzian</button>
+      </div>
+      <div id="r-feedback" class="fb" role="status"></div>
+    </div>
+    <p class="lead r-note" style="margin:12px 0 0;font-size:0.92rem;">Enter sprawdza odpowiedź i przechodzi do następnego zadania. Zadania są wzorowane na dziale „Własności pierwiastkowania” (Matematyka z kluczem, klasa 7).</p>
+  </section>
+</div>
 
   <footer>
     Strona działa bez internetu — wystarczy otworzyć plik <strong>index.html</strong>. Nadaje się też do publikacji na GitHub Pages.
@@ -676,7 +997,33 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     s: { short: "s", cat: "time", forms: { one: "sekunda", few: "sekundy", many: "sekund", frac: "sekundy" }, ile: "sekund", na: "sekundy", w: "sekundach" },
     min: { short: "min", cat: "time", forms: { one: "minuta", few: "minuty", many: "minut", frac: "minuty" }, ile: "minut", na: "minuty", w: "minutach" },
     h: { short: "h", cat: "time", forms: { one: "godzina", few: "godziny", many: "godzin", frac: "godziny" }, ile: "godzin", na: "godziny", w: "godzinach" },
+    a: { short: "a", cat: "area", forms: { one: "ar", few: "ary", many: "arów", frac: "ara" }, ile: "arów", na: "ary", w: "arach" },
+    ha: { short: "ha", cat: "area", forms: { one: "hektar", few: "hektary", many: "hektarów", frac: "hektara" }, ile: "hektarów", na: "hektary", w: "hektarach" },
   };
+
+  /* Jednostki pola i objętości budujemy z jednostek długości + przymiotnik. */
+  (function addPoweredUnits() {
+    const ADJ = {
+      2: { cat: "area", sup: "\u00B2", one: "kwadratowy", few: "kwadratowe", many: "kwadratowych", frac: "kwadratowego" },
+      3: { cat: "cubic", sup: "\u00B3", one: "sześcienny", few: "sześcienne", many: "sześciennych", frac: "sześciennego" },
+    };
+    ["mm", "cm", "dm", "m", "km"].forEach((base) => {
+      [2, 3].forEach((p) => {
+        if (p === 3 && base === "km") return;
+        const L = UNITS[base], A = ADJ[p];
+        UNITS[base + p] = {
+          short: base + A.sup,
+          cat: A.cat,
+          forms: { one: L.forms.one + " " + A.one, few: L.forms.few + " " + A.few, many: L.forms.many + " " + A.many, frac: L.forms.frac + " " + A.frac },
+          ile: L.ile + " " + A.many,
+          na: L.na + " " + A.few,
+          w: L.w + " " + A.many,
+        };
+      });
+    });
+  })();
+
+  const S = (u) => UNITS[u].short;
 
   const CATS = {
     length: {
@@ -706,7 +1053,7 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     },
     volume: {
       id: "volume",
-      name: "Objętość",
+      name: "Pojemność",
       units: ["ml", "dl", "l"],
       zeros: { ml: 0, dl: 2, l: 3 },
       neighbors: [
@@ -714,6 +1061,35 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
         ["dl", "l"],
       ],
       metric: true,
+    },
+    area: {
+      id: "area",
+      name: "Pole",
+      units: ["mm2", "cm2", "dm2", "m2", "a", "ha", "km2"],
+      zeros: { mm2: 0, cm2: 2, dm2: 4, m2: 6, a: 8, ha: 10, km2: 12 },
+      neighbors: [
+        ["mm2", "cm2"],
+        ["cm2", "dm2"],
+        ["dm2", "m2"],
+        ["m2", "a"],
+        ["a", "ha"],
+        ["ha", "km2"],
+      ],
+      metric: true,
+      maxZeros: 6,
+    },
+    cubic: {
+      id: "cubic",
+      name: "Objętość",
+      units: ["mm3", "cm3", "dm3", "m3"],
+      zeros: { mm3: 0, cm3: 3, dm3: 6, m3: 9 },
+      neighbors: [
+        ["mm3", "cm3"],
+        ["cm3", "dm3"],
+        ["dm3", "m3"],
+      ],
+      metric: true,
+      maxZeros: 6,
     },
     time: {
       id: "time",
@@ -815,15 +1191,17 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
       .map(([a, b]) => {
         const z = Math.abs(zerosBetween(cat, a, b));
         const arrow = zerosBetween(cat, a, b) > 0 ? "×" : "÷";
-        return a + " " + arrow + formatPL(pow10(z), 0) + " → " + b;
+        return S(a) + " " + arrow + formatPL(pow10(z), 0) + " → " + S(b);
       })
       .join(", ");
     const lines = [];
-    lines.push("Z <strong>" + fromU + "</strong> na <strong>" + toU + "</strong> idziesz do <strong>" + kind + "</strong> jednostki, więc <strong>" + op + "</strong>.");
+    lines.push("Z <strong>" + S(fromU) + "</strong> na <strong>" + S(toU) + "</strong> idziesz do <strong>" + kind + "</strong> jednostki, więc <strong>" + op + "</strong>.");
+    if (cat.id === "area") lines.push("<em>Pole ma dwa wymiary, więc każdy krok ×10 w długości daje ×100 w polu (1\u00A0a = 100\u00A0m², 1\u00A0ha = 100\u00A0a).</em>");
+    if (cat.id === "cubic") lines.push("<em>Objętość ma trzy wymiary, więc każdy krok ×10 w długości daje ×1000 w objętości.</em>");
     if (path) lines.push("Droga: " + path + ".");
-    lines.push("Między " + fromU + " a " + toU + " jest <strong>" + zeros + (zeros === 1 ? " zero" : zeros < 5 ? " zera" : " zer") + "</strong> (czynnik " + factor + ").");
+    lines.push("Między " + S(fromU) + " a " + S(toU) + " jest <strong>" + zeros + (zeros === 1 ? " zero" : zeros < 5 ? " zera" : " zer") + "</strong> (czynnik " + factor + ").");
     lines.push("Przecinek przesuwamy o <strong>" + zeros + (zeros === 1 ? " miejsce" : zeros < 5 ? " miejsca" : " miejsc") + " w " + dir + "</strong>.");
-    lines.push("Czyli: " + start + "\u00A0" + fromU + " = <strong>" + end + "\u00A0" + toU + "</strong>.");
+    lines.push("Czyli: " + start + "\u00A0" + S(fromU) + " = <strong>" + end + "\u00A0" + S(toU) + "</strong>.");
     return lines.join(" ");
   }
 
@@ -834,7 +1212,8 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     const dir = toSmaller ? "PRAWO" : "LEWO";
     const op = toSmaller ? "mnożysz" : "dzielisz";
     const kind = toSmaller ? "mniejszej" : "większej";
-    return "Do " + kind + " jednostki — " + op + ". Między " + fromU + " a " + toU + ": przecinek o " + zeros + (zeros === 1 ? " miejsce" : zeros < 5 ? " miejsca" : " miejsc") + " w " + dir + ".";
+    const extra = cat.id === "area" ? " (pole: ×100 na każdy krok długości)" : cat.id === "cubic" ? " (objętość: ×1000 na każdy krok długości)" : "";
+    return "Do " + kind + " jednostki — " + op + extra + ". Między " + S(fromU) + " a " + S(toU) + ": przecinek o " + zeros + (zeros === 1 ? " miejsce" : zeros < 5 ? " miejsca" : " miejsc") + " w " + dir + ".";
   }
 
   function timeHintSimple(val, fromU, toU, result) {
@@ -923,6 +1302,7 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
           // hard: mostly distant, but allow neighbor with decimals / compounds separately
           continue;
         }
+        if (!easy && cat.maxZeros && Math.abs(cat.zeros[us[i]] - cat.zeros[us[j]]) > cat.maxZeros) continue;
         pairs.push([us[i], us[j]]);
       }
     }
@@ -972,6 +1352,7 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
           const d = cat.zeros[from] - cat.zeros[to];
           if (toSmaller && d <= 0) continue;
           if (!toSmaller && d >= 0) continue;
+          if (!easy && cat.maxZeros && Math.abs(d) > cat.maxZeros) continue;
           const neigh = isNeighbor(cat, from, to);
           if (easy && !neigh) continue;
           if (!easy && neighborsMode === "only" && !neigh) continue;
@@ -1101,15 +1482,26 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
       ["dm", "cm"],
       ["cm", "mm"],
       ["dm", "mm"],
-      ["km", "dm"],
     ],
     mass: [
       ["kg", "g"],
       ["kg", "dag"],
       ["t", "kg"],
       ["dag", "g"],
-      ["t", "g"],
-      ["t", "dag"],
+    ],
+    area: [
+      ["m2", "dm2"],
+      ["m2", "cm2"],
+      ["dm2", "cm2"],
+      ["cm2", "mm2"],
+      ["ha", "a"],
+      ["ha", "m2"],
+      ["a", "m2"],
+      ["km2", "ha"],
+    ],
+    cubic: [
+      ["m3", "dm3"],
+      ["dm3", "cm3"],
     ],
     volume: [
       ["l", "dl"],
@@ -1155,7 +1547,7 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
 
     const a = parseIntStr(aN);
     const b = parseIntStr(bN);
-    const smallest = cat.units[0];
+    const smallest = cat.id === "area" || cat.id === "cubic" ? uB : cat.units[0];
 
     function finishCompound(toU, asSimpleFrom) {
       const p1 = convertMetric(a, uA, toU, cat.zeros);
@@ -1186,19 +1578,19 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
           const bIn = convertMetric(b, uB, toU, cat.zeros);
           hint =
             "Najpierw zamień wszystko na " +
-            UNITS[toU].ile +
+            UNITS[toU].na +
             " (mniejsza albo docelowa jednostka). " +
             qtyText(a, uA, true) +
             " = <strong>" +
             formatPL(aIn.coef, aIn.scale) +
             "\u00A0" +
-            toU +
+            S(toU) +
             "</strong>. " +
             qtyText(b, uB, true) +
             " = <strong>" +
             formatPL(bIn.coef, bIn.scale) +
             "\u00A0" +
-            toU +
+            S(toU) +
             "</strong>. " +
             "Razem: " +
             formatPL(aIn.coef, aIn.scale) +
@@ -1207,32 +1599,32 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
             " = <strong>" +
             formatPL(result.coef, result.scale) +
             "\u00A0" +
-            toU +
+            S(toU) +
             "</strong>.";
         } else {
           const inSmall = addR(convertMetric(a, uA, uB, cat.zeros), convertMetric(b, uB, uB, cat.zeros));
           hint =
             "Najpierw zamień na " +
-            UNITS[uB].ile +
+            UNITS[uB].na +
             ": " +
             leftShort +
             " = <strong>" +
             formatPL(inSmall.coef, inSmall.scale) +
             "\u00A0" +
-            uB +
+            S(uB) +
             "</strong>. " +
             metricHint(inSmall, uB, toU, cat, result);
         }
         tip =
           "Zamień " +
-          uA +
+          S(uA) +
           " na " +
-          uB +
+          S(uB) +
           " (przecinek / zera według drabinki) i dodaj " +
           formatPL(b.coef, b.scale) +
           "\u00A0" +
-          uB +
-          (toU === uB ? "." : ", a potem przelicz na " + toU + ".");
+          S(uB) +
+          (toU === uB ? "." : ", a potem przelicz na " + S(toU) + ".");
       }
       const out = {
         type: typ,
@@ -1520,6 +1912,78 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     };
   }
 
+  /* Mostek: litry ↔ jednostki sześcienne (1 ml = 1 cm³, 1 l = 1 dm³, 1 m³ = 1000 l). */
+  const BRIDGE = { mm3: 0, cm3: 3, ml: 3, dl: 5, dm3: 6, l: 6, m3: 9 };
+  const BRIDGE_EASY = [["ml", "cm3"], ["cm3", "ml"], ["l", "dm3"], ["dm3", "l"], ["m3", "l"], ["l", "m3"]];
+  const BRIDGE_HARD = [["m3", "l"], ["l", "m3"], ["cm3", "l"], ["l", "cm3"], ["ml", "dm3"], ["dm3", "ml"], ["dl", "cm3"], ["cm3", "dl"], ["m3", "ml"]];
+
+  function bridgeHint(val, fromU, toU, result) {
+    const d = BRIDGE[fromU] - BRIDGE[toU];
+    const zeros = Math.abs(d);
+    const start = formatPL(val.coef, val.scale);
+    const end = formatPL(result.coef, result.scale);
+    let h = "Pamiętaj: <strong>1 ml = 1 cm³</strong>, <strong>1 l = 1 dm³</strong>, <strong>1 m³ = 1 000 l</strong>. ";
+    if (zeros === 0) {
+      h += S(fromU) + " i " + S(toU) + " to ta sama ilość, więc liczba się nie zmienia. ";
+    } else {
+      const toSmaller = d > 0;
+      h += "Z " + S(fromU) + " na " + S(toU) + " " + (toSmaller ? "mnożymy" : "dzielimy") + " przez " + formatPL(pow10(zeros), 0) + " — przecinek o <strong>" + zeros + (zeros === 1 ? " miejsce" : zeros < 5 ? " miejsca" : " miejsc") + " w " + (toSmaller ? "PRAWO" : "LEWO") + "</strong>. ";
+    }
+    return h + "Czyli: " + start + " " + S(fromU) + " = <strong>" + end + " " + S(toU) + "</strong>.";
+  }
+
+  function bridgeTip(fromU, toU) {
+    const d = BRIDGE[fromU] - BRIDGE[toU];
+    const base = "1 ml = 1 cm³, 1 l = 1 dm³, 1 m³ = 1 000 l. ";
+    if (d === 0) return base + "Tu liczba się nie zmienia.";
+    return base + (d > 0 ? "Mnożysz" : "Dzielisz") + " przez " + formatPL(pow10(Math.abs(d)), 0) + ".";
+  }
+
+  function generateBridge(rng, easy) {
+    const p = pick(rng, easy ? BRIDGE_EASY : BRIDGE_HARD);
+    const fromU = p[0], toU = p[1];
+    const d = BRIDGE[fromU] - BRIDGE[toU];
+    let val;
+    if (d >= 0) {
+      if (!easy && rng() < 0.4) val = parseDecimal(pick(rng, ["0,5", "0,25", "1,5", "2,5", "0,2", "3,5", "0,75"]));
+      else val = parseIntStr(pick(rng, [1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 50, 250, 500]));
+    } else {
+      const k = easy ? pick(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 15]) : pick(rng, [1, 2, 5, 15, 25, 75, 125, 250, 500, 750]);
+      val = canon(BigInt(k) * (easy ? pow10(-d) : pow10(Math.max(0, -d - 1))), 0);
+    }
+    const result = convertMetric(val, fromU, toU, BRIDGE);
+    const word = wordSimple(rng, val, fromU, toU);
+    return {
+      type: "simple",
+      cat: "cubic",
+      bridge: true,
+      difficulty: easy ? "easy" : "hard",
+      fromU,
+      toU,
+      prompt: word.prompt,
+      unitLabel: word.unitLabel,
+      answer: result,
+      answerDisplay: formatPL(result.coef, result.scale),
+      hint: bridgeHint(val, fromU, toU, result),
+      tip: bridgeTip(fromU, toU),
+      startDisplay: formatPL(val.coef, val.scale),
+      decimalStart: !isIntegerRational(val),
+      shift: d,
+    };
+  }
+
+  /* Odrzucamy zadania sztuczne: więcej niż 4 cyfry po przecinku albo wynik ≥ 10 000 000. */
+  const MAX_DECIMALS = 4;
+  const MAX_RESULT = 10000000n;
+  function isReasonable(q) {
+    if (!q) return false;
+    const a = canon(q.answer.coef, q.answer.scale);
+    if (a.scale > MAX_DECIMALS) return false;
+    const abs = a.coef < 0n ? -a.coef : a.coef;
+    if (abs >= MAX_RESULT * pow10(a.scale)) return false;
+    return true;
+  }
+
   const SKILL_BASE = 1;
   const SKILL_MAX = 8;
   const WEAK_DRAW_RATE = 0.55;
@@ -1615,13 +2079,16 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     if (q.decimalStart == null) {
       q.decimalStart = !!(q.startDisplay && String(q.startDisplay).indexOf(",") !== -1);
     }
-    q.skillKey = questionSkill(q);
+    if (q.shift == null && q.type === "simple" && CATS[q.cat].metric && CATS[q.cat].zeros[q.fromU] != null && CATS[q.cat].zeros[q.toU] != null) {
+      q.shift = CATS[q.cat].zeros[q.fromU] - CATS[q.cat].zeros[q.toU];
+    }
+    q.skillKey = q.bridge ? "bridge|" + q.fromU + "|" + q.toU : questionSkill(q);
     return q;
   }
 
   function generateQuestionOnce(opts, rng) {
     const easy = !opts || opts.difficulty !== "hard";
-    let catIds = (opts && opts.categories) || ["length", "mass", "volume", "time"];
+    let catIds = (opts && opts.categories) || ["length", "mass", "volume", "area", "cubic", "time"];
     catIds = catIds.filter((id) => CATS[id]);
     if (!catIds.length) return null;
 
@@ -1643,6 +2110,7 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
       if (wantCompound) return generateTimeCompound(rng);
       return generateTimeSimple(rng, easy, force);
     }
+    if (cat.id === "cubic" && !(force && force.fromU) && rng() < 0.4) return generateBridge(rng, easy);
     if (wantCompound) {
       // If a specific pair was requested, try a few times to match units.
       if (force && force.fromU && force.toU) {
@@ -1660,10 +2128,12 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     const rng = makeRng(opts && opts.rng != null ? opts.rng : opts && opts.seed != null ? opts.seed : null);
     const last = opts && opts.lastPrompt;
     let q = null;
-    for (let attempt = 0; attempt < 16; attempt++) {
-      q = generateQuestionOnce(opts, rng);
-      if (!q) continue;
-      if (last && q.prompt === last && attempt < 14) continue;
+    for (let attempt = 0; attempt < 60; attempt++) {
+      const cand = generateQuestionOnce(opts, rng);
+      if (!cand) continue;
+      if (!isReasonable(cand) && attempt < 58) continue;
+      q = cand;
+      if (last && q.prompt === last && attempt < 56) continue;
       break;
     }
     return finalizeQuestion(q);
@@ -1707,7 +2177,21 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     const uF = UNITS[fromU],
       uT = UNITS[toU];
     if (!uF || !uT) return { ok: false, error: "Nieznana jednostka." };
-    if (uF.cat !== uT.cat) return { ok: false, error: "Jednostki z różnych kategorii." };
+    if (uF.cat !== uT.cat) {
+      if (BRIDGE[fromU] != null && BRIDGE[toU] != null) {
+        const result = convertMetric(val, fromU, toU, BRIDGE);
+        return {
+          ok: true, exact: true, result,
+          display: formatPL(result.coef, result.scale),
+          hint: bridgeHint(val, fromU, toU, result),
+          tip: bridgeTip(fromU, toU),
+          shift: BRIDGE[fromU] - BRIDGE[toU],
+          metric: true,
+          startDisplay: formatPL(val.coef, val.scale),
+        };
+      }
+      return { ok: false, error: "Jednostki z różnych kategorii." };
+    }
     const cat = CATS[uF.cat];
     if (cat.metric) {
       const result = convertMetric(val, fromU, toU, cat.zeros);
@@ -1802,6 +2286,8 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     qtyText,
     makeRng,
     generateQuestion,
+    isReasonable,
+    BRIDGE,
     commaSlip,
     groupThousands,
     isIntegerRational,
@@ -1831,7 +2317,9 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
   const J = window.Jednostki;
   const $ = (id) => document.getElementById(id);
 
-  const CAT_LABEL = { length: "Długość", mass: "Masa", volume: "Objętość", time: "Czas" };
+  const CAT_LABEL = { length: "Długość", mass: "Masa", volume: "Pojemność", area: "Pole", cubic: "Objętość", time: "Czas" };
+  const ALL_CATS = ["length", "mass", "volume", "area", "cubic", "time"];
+  const EXAM_STORAGE = "lucja-jednostki-exams-v1";
   const STORAGE = "lucja-jednostki-stats-v1";
   const PRAISE = [
     "Brawo! Dobrze policzyłaś.",
@@ -1860,7 +2348,7 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
       wrong: 0,
       streak: 0,
       bestStreak: 0,
-      byCat: { length: { c: 0, w: 0 }, mass: { c: 0, w: 0 }, volume: { c: 0, w: 0 }, time: { c: 0, w: 0 } },
+      byCat: { length: { c: 0, w: 0 }, mass: { c: 0, w: 0 }, volume: { c: 0, w: 0 }, area: { c: 0, w: 0 }, cubic: { c: 0, w: 0 }, time: { c: 0, w: 0 } },
       recent: [],
       skills: {},
     };
@@ -1884,12 +2372,7 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
   }
 
   function selectedCats() {
-    const ids = [];
-    if ($("cat-length").checked) ids.push("length");
-    if ($("cat-mass").checked) ids.push("mass");
-    if ($("cat-volume").checked) ids.push("volume");
-    if ($("cat-time").checked) ids.push("time");
-    return ids;
+    return ALL_CATS.filter((c) => $("cat-" + c).checked);
   }
 
   function renderScore() {
@@ -1977,15 +2460,16 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
 
   /* ----- converter ----- */
   let convCat = "length";
-  const convDefaults = { length: ["cm", "km"], mass: ["g", "kg"], volume: ["ml", "dl"], time: ["min", "s"] };
+  const convDefaults = { length: ["cm", "km"], mass: ["g", "kg"], volume: ["ml", "dl"], area: ["ha", "m2"], cubic: ["l", "cm3"], time: ["min", "s"] };
+  const CONV_UNITS = { cubic: ["mm3", "cm3", "ml", "dl", "dm3", "l", "m3"] };
 
   function fillUnitSelect(sel, catId, picked) {
     const cat = J.CATS[catId];
     sel.innerHTML = "";
-    cat.units.forEach((u) => {
+    (CONV_UNITS[catId] || cat.units).forEach((u) => {
       const opt = document.createElement("option");
       opt.value = u;
-      opt.textContent = u + " — " + J.UNITS[u].forms.one;
+      opt.textContent = J.UNITS[u].short + " — " + J.UNITS[u].forms.one;
       if (u === picked) opt.selected = true;
       sel.appendChild(opt);
     });
@@ -1995,7 +2479,7 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     document.querySelectorAll(".conv-cats button").forEach((b) => {
       b.setAttribute("aria-pressed", b.getAttribute("data-cat") === catId ? "true" : "false");
     });
-    $("converter").style.setProperty("--cc", "var(--" + ({ length: "len", mass: "mass", volume: "vol", time: "time" }[catId]) + ")");
+    $("converter").style.setProperty("--cc", "var(--" + ({ length: "len", mass: "mass", volume: "vol", area: "area", cubic: "cubic", time: "time" }[catId]) + ")");
     const d = convDefaults[catId];
     fillUnitSelect($("conv-from"), catId, d[0]);
     fillUnitSelect($("conv-to"), catId, d[1]);
@@ -2003,6 +2487,8 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
       if (catId === "length") $("conv-value").value = "10";
       else if (catId === "mass") $("conv-value").value = "2500";
       else if (catId === "volume") $("conv-value").value = "250";
+      else if (catId === "area") $("conv-value").value = "2,4";
+      else if (catId === "cubic") $("conv-value").value = "0,75";
       else $("conv-value").value = "2";
     }
     updateConverter();
@@ -2024,7 +2510,7 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
       box.innerHTML = '<div class="explain-box">' + res.error + "</div>";
       return;
     }
-    out.innerHTML = res.display + "&nbsp;" + toU;
+    out.innerHTML = res.display + "&nbsp;" + J.UNITS[toU].short;
     let extra = "";
     if (res.metric && res.shift) {
       extra = renderSteps(J.commaSteps(res.startDisplay, res.shift));
@@ -2107,6 +2593,10 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
       $("answer").focus();
       return;
     }
+    if (exam && !exam.done) {
+      examRecord(raw, parsed);
+      return;
+    }
     checked = true;
     const ok = J.rationalsEqual(parsed, current.answer);
     const fb = $("feedback");
@@ -2151,7 +2641,7 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
 
   function extraSteps(q) {
     if (q.type !== "simple" || !J.CATS[q.cat].metric || !q.startDisplay) return "";
-    const shift = J.CATS[q.cat].zeros[q.fromU] - J.CATS[q.cat].zeros[q.toU];
+    const shift = q.shift;
     if (!shift) return "";
     return renderSteps(J.commaSteps(q.startDisplay, shift));
   }
@@ -2226,22 +2716,23 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
     difficulty = "easy";
     $("diff-easy").setAttribute("aria-pressed", "true");
     $("diff-hard").setAttribute("aria-pressed", "false");
-    if (!checked) newQuestion();
+    if (mode === "practice" && !checked) newQuestion();
   });
   $("diff-hard").addEventListener("click", function () {
     difficulty = "hard";
     $("diff-hard").setAttribute("aria-pressed", "true");
     $("diff-easy").setAttribute("aria-pressed", "false");
-    if (!checked) newQuestion();
+    if (mode === "practice" && !checked) newQuestion();
   });
-  ["cat-length", "cat-mass", "cat-volume", "cat-time"].forEach((id) => {
+  ALL_CATS.map((c) => "cat-" + c).forEach((id) => {
     $(id).addEventListener("change", function () {
-      if (!checked) newQuestion();
+      if (mode === "practice" && !checked) newQuestion();
     });
   });
 
   document.addEventListener("keydown", function (e) {
     if (e.key !== "Enter") return;
+    if (document.body.classList.contains("tab-roots")) return;
     const t = e.target;
     if (t && (t.id === "conv-value" || t.id === "conv-from" || t.id === "conv-to")) return;
     if (!current) return;
@@ -2265,12 +2756,1093 @@ footer { margin-top: 10px; color: var(--muted); font-size: 0.9rem; text-align: c
   }
   window.addEventListener("scroll", onScroll, { passive: true });
 
+  /* ----- sprawdzian ----- */
+  let mode = "practice";
+  let exam = null; // {total, qs, answers, i, start, timer, done}
+  let examCount = 15;
+
+  function fmtTime(ms) {
+    const t = Math.round(ms / 1000);
+    return Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0");
+  }
+  function gradeFor(pct) {
+    if (pct >= 96) return "celujący (6)";
+    if (pct >= 85) return "bardzo dobry (5)";
+    if (pct >= 70) return "dobry (4)";
+    if (pct >= 50) return "dostateczny (3)";
+    if (pct >= 30) return "dopuszczający (2)";
+    return "niedostateczny (1)";
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  }
+  function loadExams() {
+    try { return JSON.parse(localStorage.getItem(EXAM_STORAGE) || "[]") || []; } catch (e) { return []; }
+  }
+  function saveExam(entry) {
+    try {
+      const list = loadExams();
+      list.push(entry);
+      localStorage.setItem(EXAM_STORAGE, JSON.stringify(list.slice(-10)));
+    } catch (e) {}
+  }
+  function renderHistory() {
+    const list = loadExams();
+    const el = $("exam-history");
+    if (!list.length) { el.innerHTML = ""; return; }
+    el.innerHTML = list.slice().reverse().map((e) =>
+      "<li>" + esc(e.date) + " — " + e.ok + "/" + e.total + " (" + e.pct + "%), " + esc(e.diff) + ", czas " + esc(e.time) + "</li>"
+    ).join("");
+  }
+
+  function setMode(m) {
+    if (exam && !exam.done) return;
+    mode = m;
+    $("mode-practice").setAttribute("aria-pressed", m === "practice" ? "true" : "false");
+    $("mode-exam").setAttribute("aria-pressed", m === "exam" ? "true" : "false");
+    $("exam-summary").classList.remove("on");
+    exam = null;
+    if (m === "exam") {
+      cancelRound();
+      current = null;
+      $("question-card").style.display = "none";
+      $("exam-setup").classList.add("on");
+      renderHistory();
+    } else {
+      $("exam-setup").classList.remove("on");
+      newQuestion();
+    }
+  }
+
+  function buildExamQuestions(n, cats) {
+    const order = [];
+    while (order.length < n) {
+      const shuffled = cats.slice().sort(() => Math.random() - 0.5);
+      shuffled.forEach((c) => order.push(c));
+    }
+    const qs = [];
+    const seen = new Set();
+    order.slice(0, n).forEach((c) => {
+      let q = null;
+      for (let i = 0; i < 30; i++) {
+        q = J.generateQuestion({ categories: [c], difficulty: difficulty });
+        if (!seen.has(q.prompt)) break;
+      }
+      seen.add(q.prompt);
+      qs.push(q);
+    });
+    return qs;
+  }
+
+  function startExam() {
+    const cats = selectedCats();
+    if (!cats.length) { $("no-cat").classList.add("on"); return; }
+    $("no-cat").classList.remove("on");
+    exam = { total: examCount, qs: buildExamQuestions(examCount, cats), answers: [], i: 0, start: Date.now(), done: false, cats: cats.slice(), diff: difficulty };
+    document.body.classList.add("exam");
+    document.body.classList.remove("sticky-on");
+    $("exam-setup").classList.remove("on");
+    $("question-card").style.display = "";
+    exam.timer = setInterval(updateExamProgress, 1000);
+    window.scrollTo({ top: $("quiz").offsetTop - 10 });
+    showExamQuestion();
+  }
+
+  function updateExamProgress() {
+    if (!exam || exam.done) return;
+    $("exam-progress").textContent = "Pytanie " + (exam.i + 1) + " z " + exam.total + " · " + fmtTime(Date.now() - exam.start);
+  }
+
+  function showExamQuestion() {
+    const q = exam.qs[exam.i];
+    current = q;
+    checked = false;
+    $("q-cat").textContent = CAT_LABEL[q.cat] + (q.type === "compound" ? " · złożone" : "");
+    $("q-text").textContent = q.prompt;
+    $("unit-after").textContent = q.unitLabel;
+    $("question-card").setAttribute("data-cat", q.cat);
+    $("answer").value = "";
+    $("answer").disabled = false;
+    $("btn-check").hidden = false;
+    $("btn-check").disabled = false;
+    $("btn-check").textContent = exam.i === exam.total - 1 ? "Zakończ" : "Dalej";
+    const fb = $("feedback");
+    fb.className = "";
+    fb.innerHTML = "";
+    $("answer").focus();
+    updateExamProgress();
+  }
+
+  function examRecord(raw, parsed) {
+    const q = exam.qs[exam.i];
+    exam.answers.push({ raw: raw.trim(), ok: J.rationalsEqual(parsed, q.answer) });
+    exam.i++;
+    if (exam.i < exam.total) showExamQuestion();
+    else finishExam();
+  }
+
+  function stopExam() {
+    if (!exam || exam.done) return;
+    if (!confirm("Przerwać sprawdzian? Wynik nie zostanie zapisany.")) return;
+    clearInterval(exam.timer);
+    exam = null;
+    document.body.classList.remove("exam");
+    $("btn-check").textContent = "Sprawdź";
+    setMode("exam");
+  }
+
+  function examText(e) {
+    const lines = [
+      "Sprawdzian — jednostki miary",
+      "Data: " + e.date,
+      "Wynik: " + e.ok + "/" + e.total + " (" + e.pct + "%) · ocena orientacyjna: " + e.grade,
+      "Czas: " + e.time + " · poziom: " + e.diff,
+      "Kategorie: " + e.cats,
+    ];
+    if (e.wrong.length) {
+      lines.push("Błędy:");
+      e.wrong.forEach((w) => lines.push("- " + w.q + " → odp.: " + w.a + ", poprawnie: " + w.c));
+    } else {
+      lines.push("Bez błędów!");
+    }
+    return lines.join("\n");
+  }
+
+  function copyText(text, btn) {
+    const done = () => { btn.textContent = "Skopiowano ✓"; setTimeout(() => (btn.textContent = "Kopiuj wynik"), 2000); };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, fallback);
+    } else fallback();
+    function fallback() {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); done(); } catch (e) {}
+      ta.remove();
+    }
+  }
+
+  function finishExam() {
+    clearInterval(exam.timer);
+    exam.done = true;
+    current = null;
+    document.body.classList.remove("exam");
+    $("btn-check").textContent = "Sprawdź";
+    $("question-card").style.display = "none";
+    const ms = Date.now() - exam.start;
+    const ok = exam.answers.filter((a) => a.ok).length;
+    const pct = Math.round((ok / exam.total) * 100);
+    const unitOf = (q) => q.unitLabel;
+    const entry = {
+      date: new Date().toLocaleString("pl-PL", { dateStyle: "short", timeStyle: "short" }),
+      ok, total: exam.total, pct, grade: gradeFor(pct), time: fmtTime(ms),
+      diff: exam.diff === "hard" ? "trudne" : "łatwe",
+      cats: exam.cats.map((c) => CAT_LABEL[c]).join(", "),
+      wrong: [],
+    };
+    const rows = exam.qs.map((q, i) => {
+      const a = exam.answers[i];
+      const correct = q.answerDisplay + " " + unitOf(q);
+      if (!a.ok) entry.wrong.push({ q: q.prompt, a: a.raw + " " + unitOf(q), c: correct.replace(/ /g, " ") });
+      return '<tr class="' + (a.ok ? "ok" : "bad") + '"><td>' + (i + 1) + "</td><td>" + esc(q.prompt) +
+        (a.ok ? "" : "<details><summary>Jak to policzyć</summary>" + q.hint + "</details>") +
+        "</td><td>" + esc(a.raw) + " " + esc(unitOf(q)) + "</td><td>" + correct + '</td><td class="res">' + (a.ok ? "✓" : "✗") + "</td></tr>";
+    }).join("");
+    saveExam(entry);
+    const byCat = {};
+    exam.qs.forEach((q, i) => {
+      byCat[q.cat] = byCat[q.cat] || { ok: 0, n: 0 };
+      byCat[q.cat].n++;
+      if (exam.answers[i].ok) byCat[q.cat].ok++;
+    });
+    const catLine = Object.keys(byCat).map((c) => CAT_LABEL[c] + " " + byCat[c].ok + "/" + byCat[c].n).join(" · ");
+    $("exam-summary-box").innerHTML =
+      '<div class="sum-head"><span class="sum-score">' + ok + "/" + exam.total + "</span><span><strong>" + pct + "%</strong> · ocena orientacyjna: <strong>" + entry.grade +
+      "</strong> · czas " + entry.time + "</span></div>" +
+      '<p class="lead" style="margin:0 0 6px;">' + catLine + '. Skala ocen jest orientacyjna — w Twojej szkole może być inna.</p>' +
+      '<table class="sum-table"><thead><tr><th>#</th><th>Zadanie</th><th>Twoja odpowiedź</th><th>Poprawnie</th><th></th></tr></thead><tbody>' + rows + "</tbody></table>" +
+      '<div class="sum-actions"><button type="button" class="btn btn-primary" id="btn-exam-again">Nowy sprawdzian</button>' +
+      '<button type="button" class="btn btn-ghost" id="btn-exam-copy">Kopiuj wynik</button>' +
+      '<button type="button" class="btn btn-ghost" id="btn-exam-back">Wróć do ćwiczeń</button></div>';
+    $("exam-summary").classList.add("on");
+    $("exam-progress").textContent = "";
+    $("btn-exam-again").addEventListener("click", () => setMode("exam"));
+    $("btn-exam-back").addEventListener("click", () => setMode("practice"));
+    $("btn-exam-copy").addEventListener("click", (ev) => copyText(examText(entry), ev.currentTarget));
+    window.scrollTo({ top: $("quiz").offsetTop - 10 });
+  }
+
+  $("mode-practice").addEventListener("click", () => setMode("practice"));
+  $("mode-exam").addEventListener("click", () => setMode("exam"));
+  $("btn-exam-start").addEventListener("click", startExam);
+  $("btn-exam-stop").addEventListener("click", stopExam);
+  document.querySelectorAll(".count-btn").forEach((b) => {
+    b.addEventListener("click", () => {
+      examCount = Number(b.getAttribute("data-n"));
+      document.querySelectorAll(".count-btn").forEach((x) => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+    });
+  });
+
   setConvCat("length", true);
   $("conv-from").value = "cm";
   $("conv-to").value = "km";
   updateConverter();
   renderScore();
   newQuestion();
+})();
+</script>
+<script id="roots-engine">
+/* Silnik zadań: własności pierwiastkowania (klasa 7). Działa w przeglądarce i w Node. */
+(function (root) {
+  "use strict";
+
+  /* ---------- liczby wymierne {n, d} ---------- */
+  function gcd(a, b) {
+    a = Math.abs(a); b = Math.abs(b);
+    while (b) { const t = a % b; a = b; b = t; }
+    return a || 1;
+  }
+  function rat(n, d) {
+    if (d === undefined) d = 1;
+    if (d < 0) { n = -n; d = -d; }
+    const g = gcd(n, d);
+    return { n: n / g, d: d / g };
+  }
+  const rMul = (a, b) => rat(a.n * b.n, a.d * b.d);
+  const rAdd = (a, b) => rat(a.n * b.d + b.n * a.d, a.d * b.d);
+  const rDiv = (a, b) => rat(a.n * b.d, a.d * b.n);
+  const rEq = (a, b) => a && b && a.n * b.d === b.n * a.d;
+  const isInt = (r) => r.d === 1;
+
+  function onlyTwoFive(d) {
+    while (d % 2 === 0) d /= 2;
+    while (d % 5 === 0) d /= 5;
+    return d === 1;
+  }
+  function decStr(r) {
+    let k = 0;
+    while (Math.pow(10, k) % r.d !== 0 && k < 8) k++;
+    const s = (Math.abs(r.n) / r.d).toFixed(k).replace(".", ",");
+    return (r.n < 0 ? "−" : "") + s;
+  }
+  function intStr(n) {
+    return (n < 0 ? "−" : "") + Math.abs(n);
+  }
+
+  /** "0,48" | "2/3" | "-1,5" | "1.5/2" → {n,d} albo null */
+  function parseRat(str) {
+    if (str == null) return null;
+    let s = String(str).trim().replace(/[\s ]/g, "").replace(/[−–]/g, "-").replace(/:/g, "/");
+    if (!s) return null;
+    if (s.indexOf("/") !== -1) {
+      const p = s.split("/");
+      if (p.length !== 2) return null;
+      const a = parseRat(p[0]), b = parseRat(p[1]);
+      if (!a || !b || b.n === 0) return null;
+      return rDiv(a, b);
+    }
+    if (!/^-?(\d+([.,]\d+)?|[.,]\d+)$/.test(s)) return null;
+    const neg = s[0] === "-";
+    if (neg) s = s.slice(1);
+    s = s.replace(",", ".");
+    if (s[0] === ".") s = "0" + s;
+    const parts = s.split(".");
+    const frac = parts[1] || "";
+    if (frac.length > 9) return null;
+    const n = parseInt(parts[0] + frac, 10);
+    return rat(neg ? -n : n, Math.pow(10, frac.length));
+  }
+
+  /* ---------- zapis HTML ---------- */
+  const R = (inner) => '<span class="rad">√<span class="rr">' + inner + "</span></span>";
+  const F = (a, b) => '<span class="fr"><span class="fn">' + a + '</span><span class="fd">' + b + "</span></span>";
+  const DOT = " · ";
+
+  function ratHTML(r, preferDec) {
+    if (isInt(r)) return intStr(r.n);
+    if (preferDec && onlyTwoFive(r.d)) return decStr(r);
+    return (r.n < 0 ? "−" : "") + F(Math.abs(r.n), r.d);
+  }
+  function ratText(r, preferDec) {
+    if (isInt(r)) return intStr(r.n);
+    if (preferDec && onlyTwoFive(r.d)) return decStr(r);
+    return intStr(r.n) + "/" + r.d;
+  }
+  /** współczynnik przed pierwiastkiem: 1 → "", −1 → "−" */
+  function coefHTML(c, preferDec) {
+    if (rEq(c, rat(1))) return "";
+    if (rEq(c, rat(-1))) return "−";
+    return ratHTML(c, preferDec);
+  }
+  /** a√b jako HTML (b = 1 → sama liczba) */
+  function radTerm(a, b, preferDec) {
+    if (b === 1) return ratHTML(a, preferDec);
+    return coefHTML(a, preferDec) + R(b);
+  }
+  /** suma wyrazów [{sign, html}] */
+  function sumHTML(terms) {
+    return terms
+      .map((t, i) => {
+        if (i === 0) return (t.sign < 0 ? "−" : "") + t.html;
+        return (t.sign < 0 ? " − " : " + ") + t.html;
+      })
+      .join("");
+  }
+
+  /* ---------- arytmetyka pierwiastków ---------- */
+  /** n = k²·m, m bez kwadratów */
+  function splitSquare(n) {
+    for (let k = Math.floor(Math.sqrt(n)); k >= 1; k--) {
+      if (n % (k * k) === 0) return { k, m: n / (k * k) };
+    }
+    return { k: 1, m: n };
+  }
+  const isSquareFree = (n) => splitSquare(n).k === 1;
+  function primeFactors(n) {
+    const out = [];
+    for (let p = 2; p * p <= n; p++) while (n % p === 0) { out.push(p); n /= p; }
+    if (n > 1) out.push(n);
+    return out;
+  }
+
+  /* ---------- losowanie ---------- */
+  function makeRng(seed) {
+    if (seed == null) return Math.random;
+    let a = seed | 0;
+    return function () {
+      a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  const randInt = (rng, a, b) => a + Math.floor(rng() * (b - a + 1));
+  const pick = (rng, arr) => arr[randInt(rng, 0, arr.length - 1)];
+
+  const SQUARES_LINE = "Kwadraty: 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225.";
+
+  /* ======================================================================
+     1. OBLICZ NAJPROSTSZYM SPOSOBEM
+     ====================================================================== */
+  function genOblicz(rng, hard) {
+    const variants = hard ? ["three", "fracsq", "fracprod", "dec", "decquot", "prod", "pyth"] : ["prod", "quot", "squares", "pyth"];
+    const v = pick(rng, variants);
+    let expr, ans, hint, tip, preferDec = false;
+
+    if (v === "prod") {
+      const m = pick(rng, [2, 3, 5, 6, 7]);
+      let p = randInt(rng, 1, 4), q = randInt(rng, 1, 5);
+      if (p === q) q = p + 1;
+      const a = m * p * p, b = m * q * q;
+      expr = R(a) + DOT + R(b);
+      ans = rat(m * p * q);
+      hint = "Pierwiastki z <strong>iloczynu</strong> można połączyć: " + R(a) + DOT + R(b) + " = " + R(a + DOT + b) + " = " + R(a * b) + " = <strong>" + m * p * q + "</strong>.";
+      tip = "Połącz w jeden pierwiastek: √a · √b = √(a · b). Wynik pod pierwiastkiem jest kwadratem.";
+    } else if (v === "quot") {
+      const b = pick(rng, [2, 3, 5, 6, 7, 10]);
+      const k = randInt(rng, 2, 5);
+      const a = b * k * k;
+      expr = F(R(a), R(b));
+      ans = rat(k);
+      hint = "Pierwiastki z <strong>ilorazu</strong> można połączyć: " + F(R(a), R(b)) + " = " + R(F(a, b)) + " = " + R(k * k) + " = <strong>" + k + "</strong>.";
+      tip = "Połącz w jeden pierwiastek: √a : √b = √(a : b).";
+    } else if (v === "squares") {
+      const p = randInt(rng, 2, 9), q = randInt(rng, 2, 12);
+      expr = R(p * p + DOT + q * q);
+      ans = rat(p * q);
+      hint = "Pierwiastek z iloczynu to iloczyn pierwiastków: " + R(p * p + DOT + q * q) + " = " + R(p * p) + DOT + R(q * q) + " = " + p + DOT + q + " = <strong>" + p * q + "</strong>.";
+      tip = "Rozdziel: √(a · b) = √a · √b. Obie liczby są kwadratami.";
+    } else if (v === "pyth") {
+      const t = pick(rng, [[3, 4, 5], [6, 8, 10], [5, 12, 13], [8, 15, 17], [9, 12, 15], [12, 16, 20]]);
+      if (rng() < 0.5) {
+        expr = R(t[0] * t[0] + " + " + t[1] * t[1]);
+        ans = rat(t[2]);
+        hint = "Przy <strong>dodawaniu</strong> nie rozdzielamy pierwiastka! Najpierw działanie pod pierwiastkiem: " + t[0] * t[0] + " + " + t[1] * t[1] + " = " + t[2] * t[2] + ", więc " + R(t[2] * t[2]) + " = <strong>" + t[2] + "</strong>. (Uwaga: " + R(t[0] * t[0]) + " + " + R(t[1] * t[1]) + " = " + (t[0] + t[1]) + " — to inny wynik.)";
+      } else {
+        const sub = pick(rng, [0, 1]);
+        const keep = 1 - sub;
+        expr = R(t[2] * t[2] + " − " + t[sub] * t[sub]);
+        ans = rat(t[keep]);
+        hint = "Przy <strong>odejmowaniu</strong> nie rozdzielamy pierwiastka! Najpierw działanie pod pierwiastkiem: " + t[2] * t[2] + " − " + t[sub] * t[sub] + " = " + t[keep] * t[keep] + ", więc " + R(t[keep] * t[keep]) + " = <strong>" + t[keep] + "</strong>.";
+      }
+      tip = "Przy dodawaniu i odejmowaniu najpierw policz to, co jest pod pierwiastkiem.";
+    } else if (v === "three") {
+      const ps = [pick(rng, [2, 3, 5]), pick(rng, [4, 6, 7, 11]), pick(rng, [2, 3, 10])];
+      expr = R(ps.map((p) => p * p).join(DOT));
+      ans = rat(ps[0] * ps[1] * ps[2]);
+      hint = R(ps.map((p) => p * p).join(DOT)) + " = " + ps.map((p) => R(p * p)).join(DOT) + " = " + ps.join(DOT) + " = <strong>" + ans.n + "</strong>.";
+      tip = "Każdy czynnik pod pierwiastkiem jest kwadratem — rozdziel pierwiastek na trzy.";
+    } else if (v === "fracsq") {
+      let p1 = randInt(rng, 1, 7), q1 = randInt(rng, 2, 9), p2 = randInt(rng, 1, 7), q2 = randInt(rng, 2, 9);
+      if (p1 === q1) q1++;
+      if (p2 === q2) q2++;
+      expr = R(F(p1 * p1, q1 * q1) + DOT + F(p2 * p2, q2 * q2));
+      ans = rat(p1 * p2, q1 * q2);
+      hint = R(F(p1 * p1, q1 * q1) + DOT + F(p2 * p2, q2 * q2)) + " = " + F(p1, q1) + DOT + F(p2, q2) + " = <strong>" + ratHTML(ans) + "</strong>. Wynik możesz wpisać jako ułamek, np. 2/3.";
+      tip = "√(a/b) = √a / √b. Spierwiastkuj osobno liczniki i mianowniki.";
+    } else if (v === "fracprod") {
+      let tries = 0, f1, f2, k;
+      do {
+        f1 = pick(rng, [[8, 5], [2, 3], [3, 2], [5, 2], [3, 5], [2, 7], [7, 2], [12, 5], [5, 3], [6, 5]]);
+        k = randInt(rng, 2, 6);
+        f2 = rat(k * k * f1[1], f1[0]);
+        tries++;
+      } while ((f2.n > 500 || f2.d > 40 || f2.d === 1) && tries < 40);
+      expr = R(F(f1[0], f1[1])) + DOT + R(F(f2.n, f2.d));
+      ans = rat(k);
+      hint = "Połącz: " + R(F(f1[0], f1[1])) + DOT + R(F(f2.n, f2.d)) + " = " + R(F(f1[0], f1[1]) + DOT + F(f2.n, f2.d)) + " = " + R(F(f1[0] * f2.n, f1[1] * f2.d)) + " = " + R(k * k) + " = <strong>" + k + "</strong>.";
+      tip = "Połącz w jeden pierwiastek i skróć ułamki pod pierwiastkiem.";
+    } else if (v === "dec") {
+      const t = pick(rng, [[3, 4, 5], [6, 8, 10], [5, 12, 13], [8, 15, 17]]);
+      const sq = (x) => decStr(rat(x * x, 100));
+      expr = R(sq(t[0]) + " + " + sq(t[1]));
+      ans = rat(t[2], 10);
+      preferDec = true;
+      hint = "Najpierw dodawanie pod pierwiastkiem: " + sq(t[0]) + " + " + sq(t[1]) + " = " + sq(t[2]) + ", a " + R(sq(t[2])) + " = <strong>" + decStr(ans) + "</strong>, bo " + decStr(ans) + DOT + decStr(ans) + " = " + sq(t[2]) + ".";
+      tip = "Najpierw dodaj liczby pod pierwiastkiem. Potem: jaka liczba podniesiona do kwadratu daje wynik?";
+    } else if (v === "decquot") {
+      if (rng() < 0.5) {
+        let p = randInt(rng, 1, 8), q = randInt(rng, 2, 9);
+        if (p === q) q = q === 9 ? 8 : q + 1;
+        const a = decStr(rat(p * p, 100)), b = decStr(rat(q * q, 100));
+        expr = R(F(a, b));
+        ans = rat(p, q);
+        hint = R(F(a, b)) + " = " + R(F(p * p, q * q)) + " = " + F(p, q) + (ans.d !== q ? " = " + ratHTML(ans) : "") + ". Odpowiedź: <strong>" + ratHTML(ans) + "</strong> (wpisz np. " + ratText(ans) + ").";
+        tip = "Pomnóż licznik i mianownik pod pierwiastkiem przez 100 — znikną przecinki.";
+      } else {
+        const k = pick(rng, [2, 3, 4, 5, 6, 7, 8, 9]);
+        const a = decStr(rat(k * k, 10));
+        expr = R(a) + DOT + R(10);
+        ans = rat(k);
+        hint = "Połącz: " + R(a + DOT + "10") + " = " + R(k * k) + " = <strong>" + k + "</strong>.";
+        tip = "√a · √b = √(a · b). Pomnożenie przez 10 usuwa przecinek.";
+      }
+    }
+    return { type: "oblicz", kind: "num", instr: "Oblicz najprostszym sposobem.", exprHTML: expr, prefix: "=", answer: ans, answerHTML: ratHTML(ans, preferDec), answerText: ratText(ans, preferDec), hint, tip };
+  }
+
+  /* ======================================================================
+     2. WŁĄCZ LICZBĘ POD PIERWIASTEK
+     ====================================================================== */
+  function genWlacz(rng, hard) {
+    let a, b, preferDec = false;
+    if (!hard) {
+      a = rat(randInt(rng, 2, 9));
+      b = pick(rng, [2, 3, 5, 6, 7, 10, 11]);
+    } else if (rng() < 0.5) {
+      a = rat(pick(rng, [1, 2, 3, 4, 6, 7, 8, 9]), 10);
+      b = pick(rng, [2, 3, 5, 7, 10, 11, 15]);
+      preferDec = true;
+    } else {
+      const f = pick(rng, [[1, 2], [1, 3], [2, 3], [1, 4], [3, 4], [2, 5], [1, 5]]);
+      a = rat(f[0], f[1]);
+      b = pick(rng, f[1] === 3 ? [18, 27, 6, 12] : f[1] === 2 ? [8, 12, 6, 20] : f[1] === 4 ? [32, 48, 6, 8] : [50, 75, 15, 10]);
+    }
+    const a2 = rMul(a, a);
+    const N = rMul(a2, rat(b));
+    const ex = radTerm(a, b, preferDec);
+    const hint =
+      "Zamień liczbę przed pierwiastkiem na pierwiastek z jej kwadratu: " + ratHTML(a, preferDec) + " = " + R(ratHTML(a2, preferDec)) + ". " +
+      "Potem połącz: " + ex + " = " + R(ratHTML(a2, preferDec)) + DOT + R(b) + " = " + R(ratHTML(a2, preferDec) + DOT + b) + " = <strong>" + R(ratHTML(N, preferDec)) + "</strong>.";
+    const tip = "a√b = √(a² · b). Podnieś liczbę przed pierwiastkiem do kwadratu i pomnóż przez liczbę pod pierwiastkiem.";
+    return { type: "wlacz", kind: "radonly", instr: "Włącz liczbę pod pierwiastek.", exprHTML: ex, prefix: "=", answer: N, answerHTML: R(ratHTML(N, preferDec)), answerText: "√" + ratText(N, preferDec), hint, tip };
+  }
+
+  /* ======================================================================
+     3. WYŁĄCZ LICZBĘ PRZED PIERWIASTEK
+     ====================================================================== */
+  function genWylacz(rng, hard) {
+    let k, m, N, tries = 0;
+    do {
+      if (!hard) { k = randInt(rng, 2, 6); m = pick(rng, [2, 3, 5, 6, 7]); }
+      else { k = randInt(rng, 2, 12); m = pick(rng, [2, 3, 5, 6, 7, 10, 11, 13, 14, 15, 21]); }
+      N = k * k * m;
+      tries++;
+    } while ((hard ? N > 1000 || N < 40 : N > 250) && tries < 50);
+    const factors = primeFactors(N);
+    let hint = "Szukamy <strong>największego kwadratu</strong>, który dzieli " + N + ". ";
+    if (hard || N > 150) hint += "Rozkład na czynniki pierwsze: " + N + " = " + factors.join(DOT) + ". Pary takich samych czynników tworzą kwadrat " + k * k + ". ";
+    hint += N + " = " + k * k + DOT + m + ", więc " + R(N) + " = " + R(k * k) + DOT + R(m) + " = <strong>" + k + R(m) + "</strong>.";
+    const tip = "Zapisz " + N + " jako iloczyn: (największy kwadrat) · (reszta). " + SQUARES_LINE;
+    return {
+      type: "wylacz", kind: "rad", instr: "Wyłącz liczbę przed znak pierwiastka.", exprHTML: R(N), prefix: "=",
+      answer: { a: rat(k), b: m }, value2: rat(N), answerHTML: k + R(m), answerText: k + "√" + m, hint, tip,
+    };
+  }
+
+  /* ======================================================================
+     4. ZAPISZ W PROSTSZEJ POSTACI (dodawanie wyrażeń z pierwiastkami)
+     ====================================================================== */
+  function genUprosc(rng, hard) {
+    let terms, sum, m, tries = 0, hint, tip;
+    do {
+      tries++;
+      if (!hard) {
+        m = pick(rng, [2, 3, 5, 6, 7, 10, 11, 15]);
+        const n = rng() < 0.5 ? 2 : 3;
+        terms = [];
+        for (let i = 0; i < n; i++) {
+          const c = randInt(rng, 1, 9);
+          const sign = i === 0 ? (rng() < 0.15 ? -1 : 1) : rng() < 0.45 ? -1 : 1;
+          terms.push({ c, k: 1, sign });
+        }
+      } else {
+        m = pick(rng, [2, 3, 5, 6, 7]);
+        terms = [];
+        for (let i = 0; i < 3; i++) {
+          const k = randInt(rng, 1, 5);
+          const c = rng() < 0.5 ? 1 : randInt(rng, 2, 5);
+          const sign = i === 0 ? 1 : rng() < 0.45 ? -1 : 1;
+          terms.push({ c, k, sign });
+        }
+      }
+      sum = terms.reduce((s, t) => s + t.sign * t.c * t.k, 0);
+      const bigK = terms.filter((t) => t.k > 1).length;
+      const okHard = !hard || (bigK >= 2 && terms.every((t) => t.k * t.k * m <= 500));
+      if (sum !== 0 && okHard) break;
+    } while (tries < 80);
+
+    const exprTerms = terms.map((t) => ({ sign: t.sign, html: (t.c === 1 ? "" : t.c) + R(t.k * t.k * m) }));
+    const expr = sumHTML(exprTerms);
+    if (!hard) {
+      hint = "Wszystkie składniki mają ten sam pierwiastek " + R(m) + ", więc dodajemy tylko liczby przed nim (jak 2 jabłka + 3 jabłka): " +
+        terms.map((t, i) => (i === 0 ? (t.sign < 0 ? "−" : "") : t.sign < 0 ? " − " : " + ") + t.c).join("") + " = " + sum + ". Wynik: <strong>" + radTerm(rat(sum), m) + "</strong>.";
+      tip = "Pierwiastki z tej samej liczby dodajesz jak „jabłka”: dodaj lub odejmij liczby stojące przed nimi.";
+    } else {
+      const steps = terms
+        .filter((t) => t.k > 1)
+        .map((t) => (t.c === 1 ? "" : t.c) + R(t.k * t.k * m) + " = " + (t.c === 1 ? "" : t.c + DOT) + R(t.k * t.k + DOT + m) + " = " + (t.c === 1 ? "" : t.c + DOT) + t.k + R(m) + (t.c === 1 ? "" : " = " + t.c * t.k + R(m)));
+      const mid = sumHTML(terms.map((t) => ({ sign: t.sign, html: (t.c * t.k === 1 ? "" : t.c * t.k) + R(m) })));
+      hint = "Najpierw wyłącz liczby przed pierwiastek, żeby wszędzie był " + R(m) + ": " + steps.join("; ") + ". Teraz: " + mid + " = <strong>" + radTerm(rat(sum), m) + "</strong>.";
+      tip = "Wyłącz przed pierwiastek w każdym składniku — wszędzie powinien zostać √" + m + ". Potem dodaj liczby przed pierwiastkami.";
+    }
+    return {
+      type: "uprosc", kind: "rad", instr: "Zapisz w prostszej postaci.", exprHTML: expr, prefix: "=",
+      answer: { a: rat(sum), b: m }, answerHTML: radTerm(rat(sum), m), answerText: (sum === 1 ? "" : sum === -1 ? "−" : intStr(sum)) + "√" + m, hint, tip,
+    };
+  }
+
+  /* ======================================================================
+     5. PORÓWNAJ LICZBY
+     ====================================================================== */
+  function cmpSign(x, y) {
+    if (Math.abs(x - y) < 1e-9) return "=";
+    return x < y ? "<" : ">";
+  }
+  function genPorownaj(rng, hard) {
+    const v = hard ? pick(rng, ["ab", "ab", "sum", "diff", "prod", "mix"]) : pick(rng, ["ab", "ab", "ab", "sum"]);
+    let L, Rh, sign, hint;
+    if (v === "ab") {
+      let a, b, c, d, tries = 0;
+      do {
+        a = randInt(rng, 2, hard ? 9 : 5); c = randInt(rng, 2, hard ? 9 : 5);
+        b = pick(rng, [2, 3, 5, 6, 7]); d = pick(rng, [2, 3, 5, 6, 7]);
+        tries++;
+      } while ((b === d || a * a * b === c * c * d || a === c || (a - c) * (b - d) > 0) && tries < 80);
+      L = a + R(b); Rh = c + R(d);
+      sign = cmpSign(a * a * b, c * c * d);
+      hint = "Włącz liczby pod pierwiastek: " + a + R(b) + " = " + R(a * a + DOT + b) + " = " + R(a * a * b) + ", a " + c + R(d) + " = " + R(c * c + DOT + d) + " = " + R(c * c * d) + ". " +
+        "Większa liczba pod pierwiastkiem → większy pierwiastek: " + R(a * a * b) + " " + sign + " " + R(c * c * d) + ", więc <strong>" + L + " " + sign + " " + Rh + "</strong>.";
+    } else if (v === "sum") {
+      const t = pick(rng, [[16, 9], [16, 4], [9, 16], [25, 4], [36, 64], [9, 4], [1, 9]]);
+      const sa = Math.sqrt(t[0]), sb = Math.sqrt(t[1]);
+      L = R(t[0] + " + " + t[1]); Rh = R(t[0]) + " + " + R(t[1]);
+      sign = cmpSign(Math.sqrt(t[0] + t[1]), sa + sb);
+      const sumV = t[0] + t[1];
+      const sumRoot = Number.isInteger(Math.sqrt(sumV)) ? " = " + Math.sqrt(sumV) : "";
+      hint = "Lewa strona: " + R(sumV) + sumRoot + ". Prawa strona: " + sa + " + " + sb + " = " + (sa + sb) + ". " +
+        (sumRoot ? "" : R(sumV) + " < " + R((sa + sb) * (sa + sb)) + " = " + (sa + sb) + ". ") +
+        "Czyli <strong>" + L + " " + sign + " " + Rh + "</strong> — pierwiastka z sumy nie wolno rozdzielać!";
+    } else if (v === "diff") {
+      const t = pick(rng, [[25, 9], [100, 64], [25, 16], [169, 144], [100, 36]]);
+      const sa = Math.sqrt(t[0]), sb = Math.sqrt(t[1]), dv = t[0] - t[1];
+      L = R(t[0] + " − " + t[1]); Rh = R(t[0]) + " − " + R(t[1]);
+      sign = cmpSign(Math.sqrt(dv), sa - sb);
+      const dr = Number.isInteger(Math.sqrt(dv)) ? " = " + Math.sqrt(dv) : "";
+      hint = "Lewa strona: " + R(dv) + dr + ". Prawa strona: " + sa + " − " + sb + " = " + (sa - sb) + ". Czyli <strong>" + L + " " + sign + " " + Rh + "</strong> — przy odejmowaniu też nie rozdzielamy pierwiastka.";
+    } else if (v === "prod") {
+      const a = pick(rng, [2, 3, 5, 7]), b = pick(rng, [6, 10, 11, 13]);
+      L = R(a + DOT + b); Rh = R(a) + DOT + R(b);
+      sign = "=";
+      hint = "Pierwiastek z iloczynu jest równy iloczynowi pierwiastków: " + R("a · b") + " = " + R("a") + DOT + R("b") + ". Czyli <strong>" + L + " = " + Rh + "</strong>.";
+    } else {
+      const m = pick(rng, [2, 3, 5, 7]);
+      const a = randInt(rng, 2, 4);
+      let c = randInt(rng, 2, 9);
+      if (c === a * a) c++;
+      L = a + R(m); Rh = R(c + DOT + m);
+      sign = cmpSign(a * a, c);
+      hint = "Włącz liczbę pod pierwiastek: " + a + R(m) + " = " + R(a * a + DOT + m) + ". Porównujemy " + R(a * a + DOT + m) + " i " + R(c + DOT + m) + ": " + a * a + " " + sign + " " + c + ", więc <strong>" + L + " " + sign + " " + Rh + "</strong>.";
+    }
+    const tip = "Włącz liczbę pod pierwiastek albo policz obie strony. Pamiętaj: pierwiastka z sumy ani z różnicy nie można rozdzielić.";
+    return { type: "porownaj", kind: "cmp", instr: "Porównaj liczby. Wybierz znak <, = albo >.", exprL: L, exprR: Rh, exprHTML: L + ' <span class="cmpq">?</span> ' + Rh, answer: sign, answerHTML: L + " " + sign + " " + Rh, answerText: sign, hint, tip };
+  }
+
+  /* ======================================================================
+     6. DLA JAKIEJ WARTOŚCI x RÓWNOŚĆ JEST PRAWDZIWA?
+     ====================================================================== */
+  function genRownanie(rng, hard) {
+    let m, x, c1, k1, c2, k2, tries = 0;
+    do {
+      tries++;
+      m = pick(rng, [2, 3, 5, 6, 7]);
+      x = randInt(rng, 2, hard ? 9 : 6);
+      if (!hard) { c1 = 1; k1 = 1; c2 = 1; k2 = x; }
+      else {
+        c1 = pick(rng, [1, 2, 3]);
+        k1 = pick(rng, [1, 2, 2, 3]);
+        const total = c1 * k1 * x;
+        const divs = [];
+        for (let d = 2; d <= total; d++) if (total % d === 0 && d * d * m <= 500) divs.push(d);
+        if (!divs.length) continue;
+        const divs2 = divs.filter((d) => d !== k1);
+        if (!divs2.length) continue;
+        k2 = pick(rng, divs2);
+        c2 = total / k2;
+        if (c2 > 6) continue;
+      }
+      if (k2 * k2 * m <= (hard ? 500 : 300)) break;
+    } while (tries < 80);
+    if (!(k2 * k2 * m <= 500) || c2 * k2 !== c1 * k1 * x) { m = 2; x = 3; c1 = 1; k1 = 1; c2 = 1; k2 = 3; }
+    const lhs = (c1 === 1 ? "" : c1) + "x" + R(k1 * k1 * m);
+    const rhs = (c2 === 1 ? "" : c2) + R(k2 * k2 * m);
+    let hint;
+    if (!hard) {
+      hint = "Wyłącz liczbę przed pierwiastek po prawej: " + R(k2 * k2 * m) + " = " + R(k2 * k2 + DOT + m) + " = " + k2 + R(m) + ". Mamy x" + R(m) + " = " + k2 + R(m) + ", więc <strong>x = " + x + "</strong>.";
+    } else {
+      const lPart = k1 === 1 ? (c1 === 1 ? "" : c1) + "x" + R(m) : (c1 === 1 ? "" : c1 + DOT) + "x" + DOT + k1 + R(m) + " = " + c1 * k1 + "x" + R(m);
+      const rPart = (c2 === 1 ? "" : c2 + DOT) + k2 + R(m) + (c2 === 1 ? "" : " = " + c2 * k2 + R(m));
+      hint = "Wyłącz liczby przed pierwiastek, żeby po obu stronach był " + R(m) + ". Lewa strona: " + lPart + ". Prawa strona: " + rPart + ". " +
+        "Czyli " + (c1 * k1 === 1 ? "" : c1 * k1) + "x = " + c2 * k2 + ", a stąd <strong>x = " + x + "</strong>.";
+    }
+    const tip = "Wyłącz liczby przed pierwiastek po obu stronach — powinien zostać ten sam pierwiastek. Potem porównaj liczby przed nim.";
+    return { type: "rownanie", kind: "num", instr: "Dla jakiej wartości x równość jest prawdziwa?", exprHTML: lhs + " = " + rhs, prefix: "x =", answer: rat(x), answerHTML: "x = " + x, answerText: String(x), hint, tip };
+  }
+
+  /* ---------- wspólne ---------- */
+  const TYPES = {
+    oblicz: { label: "Obliczanie", gen: genOblicz },
+    wlacz: { label: "Włączanie pod pierwiastek", gen: genWlacz },
+    wylacz: { label: "Wyłączanie przed pierwiastek", gen: genWylacz },
+    uprosc: { label: "Upraszczanie (dodawanie)", gen: genUprosc },
+    porownaj: { label: "Porównywanie", gen: genPorownaj },
+    rownanie: { label: "Szukanie x", gen: genRownanie },
+  };
+
+  function generate(opts) {
+    const rng = makeRng(opts && opts.seed != null ? opts.seed : null);
+    let types = (opts && opts.types) || Object.keys(TYPES);
+    types = types.filter((t) => TYPES[t]);
+    if (!types.length) return null;
+    const hard = !!(opts && opts.difficulty === "hard");
+    const t = pick(rng, types);
+    const q = TYPES[t].gen(rng, hard);
+    q.difficulty = hard ? "hard" : "easy";
+    q.typeLabel = TYPES[t].label;
+    return q;
+  }
+
+  /**
+   * Sprawdzenie odpowiedzi.
+   * user: num/radonly → string; rad → {a: string, b: string}; cmp → "<" | "=" | ">"
+   * zwraca {ok, valid, note, userText}
+   */
+  function check(q, user) {
+    if (q.kind === "cmp") {
+      if (["<", "=", ">"].indexOf(user) === -1) return { valid: false };
+      return { valid: true, ok: user === q.answer, userText: user };
+    }
+    if (q.kind === "num" || q.kind === "radonly") {
+      const r = parseRat(user);
+      if (!r) return { valid: false };
+      const text = (q.kind === "radonly" ? "√" : q.prefix === "x =" ? "x = " : "") + String(user).trim();
+      return { valid: true, ok: rEq(r, q.answer), userText: text };
+    }
+    // rad: a√b
+    let aStr = String(user.a == null ? "" : user.a).trim().replace(/[−–]/g, "-");
+    const bStr = String(user.b == null ? "" : user.b).trim();
+    if (!bStr) return { valid: false };
+    const a = aStr === "" ? rat(1) : aStr === "-" ? rat(-1) : parseRat(aStr);
+    const bR = parseRat(bStr);
+    if (!a || !bR || !isInt(bR) || bR.n < 1) return { valid: false };
+    const b = bR.n;
+    const userText = (aStr === "" ? "" : aStr) + "√" + b;
+    if (rEq(a, q.answer.a) && b === q.answer.b) return { valid: true, ok: true, userText };
+    // czy wartość się zgadza, ale można jeszcze wyłączyć?
+    const sameSign = (a.n > 0) === (q.answer.a.n > 0);
+    const lhs = rMul(rMul(a, a), rat(b));
+    const rhs = rMul(rMul(q.answer.a, q.answer.a), rat(q.answer.b));
+    if (sameSign && rEq(lhs, rhs)) {
+      return { valid: true, ok: false, userText, note: "Ta równość jest prawdziwa, ale pod pierwiastkiem ma zostać <strong>najmniejsza możliwa liczba</strong>. Wyłącz jeszcze kwadrat z " + b + "." };
+    }
+    return { valid: true, ok: false, userText };
+  }
+
+  const api = { generate, check, parseRat, rat, rEq, splitSquare, isSquareFree, TYPES, R, F };
+  if (typeof module !== "undefined" && module.exports) module.exports = api;
+  root.Pierwiastki = api;
+})(typeof globalThis !== "undefined" ? globalThis : this);
+</script>
+<script id="roots-ui">
+(function () {
+  "use strict";
+  const P = window.Pierwiastki;
+  const $ = (id) => document.getElementById(id);
+  const TYPE_IDS = ["oblicz", "wlacz", "wylacz", "uprosc", "porownaj", "rownanie"];
+  const STORAGE = "lucja-pierwiastki-stats-v1";
+  const EXAM_STORAGE = "lucja-pierwiastki-exams-v1";
+  const PRAISE = ["Brawo! Dobrze policzyłaś.", "Świetnie! Zgadza się.", "Super, poprawna odpowiedź!", "Tak trzymać!", "Doskonale!"];
+
+  /* ---------- zakładki ---------- */
+  const TAB_KEY = "lucja-tab-v1";
+  function setTab(t, push) {
+    if (document.body.classList.contains("exam") || document.body.classList.contains("rexam")) return;
+    const roots = t === "roots";
+    $("tab-units").hidden = roots;
+    $("tab-roots").hidden = !roots;
+    document.body.classList.toggle("tab-roots", roots);
+    $("tabbtn-units").setAttribute("aria-selected", roots ? "false" : "true");
+    $("tabbtn-roots").setAttribute("aria-selected", roots ? "true" : "false");
+    try { localStorage.setItem(TAB_KEY, t); } catch (e) {}
+    if (push) history.replaceState(null, "", roots ? "#pierwiastki" : "#jednostki");
+    if (roots && mode === "practice" && !current) newQuestion();
+  }
+
+  /* ---------- statystyki ---------- */
+  function loadStats() {
+    try {
+      const s = JSON.parse(localStorage.getItem(STORAGE) || "null");
+      if (s && typeof s.correct === "number") return s;
+    } catch (e) {}
+    return { correct: 0, wrong: 0, streak: 0, bestStreak: 0 };
+  }
+  function saveStats() { try { localStorage.setItem(STORAGE, JSON.stringify(stats)); } catch (e) {} }
+  function renderScore() {
+    const total = stats.correct + stats.wrong;
+    $("r-score").innerHTML = "Wynik: " + stats.correct + "/" + total + " <span>· Seria: " + stats.streak + " · Rekord: " + stats.bestStreak + "</span>";
+  }
+
+  let stats = loadStats();
+  let difficulty = "easy";
+  let mode = "practice";
+  let current = null;
+  let checked = false;
+  let cmpChoice = null;
+  let recent = [];
+  let exam = null;
+  let examCount = 12;
+
+  function selectedTypes() { return TYPE_IDS.filter((t) => $("r-t-" + t).checked); }
+
+  /* ---------- pole odpowiedzi ---------- */
+  function renderAnswerArea(q) {
+    const area = $("r-answer-area");
+    cmpChoice = null;
+    if (q.kind === "num") {
+      area.innerHTML = '<span class="r-pre">' + q.prefix + '</span><input class="r-in-num" id="r-in-num" inputmode="text" autocomplete="off" placeholder="np. 4 albo 1/6" aria-label="Twoja odpowiedź">';
+    } else if (q.kind === "radonly") {
+      area.innerHTML = '<span class="r-pre">=</span><span class="r-rootsign">√</span><input class="r-in-num" id="r-in-num" inputmode="text" autocomplete="off" placeholder="liczba pod pierwiastkiem" aria-label="Liczba pod pierwiastkiem">';
+    } else if (q.kind === "rad") {
+      area.innerHTML = '<span class="r-pre">=</span><input class="r-in-a" id="r-in-a" inputmode="text" autocomplete="off" placeholder="" aria-label="Liczba przed pierwiastkiem"><span class="r-rootsign">√</span><input class="r-in-b" id="r-in-b" inputmode="numeric" autocomplete="off" aria-label="Liczba pod pierwiastkiem">';
+    } else {
+      area.innerHTML = ["<", "=", ">"].map((s) => '<button type="button" class="r-cmp-btn" data-s="' + s + '" aria-pressed="false">' + (s === "<" ? "&lt;" : s === ">" ? "&gt;" : "=") + "</button>").join("");
+      area.querySelectorAll(".r-cmp-btn").forEach((b) => {
+        b.addEventListener("click", () => {
+          if (checked) return;
+          cmpChoice = b.getAttribute("data-s");
+          area.querySelectorAll(".r-cmp-btn").forEach((x) => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+          submit();
+        });
+      });
+    }
+    const first = area.querySelector("input");
+    if (first) first.focus();
+  }
+  function readAnswer(q) {
+    if (q.kind === "cmp") return cmpChoice;
+    if (q.kind === "rad") return { a: $("r-in-a").value, b: $("r-in-b").value };
+    return $("r-in-num").value;
+  }
+  function lockAnswer(lock) {
+    $("r-answer-area").querySelectorAll("input,button").forEach((el) => (el.disabled = lock));
+  }
+
+  function showQuestion(q, label) {
+    current = q;
+    checked = false;
+    $("r-card").setAttribute("data-type", q.type);
+    $("r-q-cat").textContent = label;
+    $("r-q-instr").textContent = q.instr;
+    $("r-q-expr").innerHTML = q.exprHTML;
+    renderAnswerArea(q);
+    $("r-btn-check").hidden = q.kind === "cmp";
+    $("r-btn-check").disabled = false;
+    $("r-btn-next").hidden = true;
+    $("r-btn-tip").disabled = false;
+    const fb = $("r-feedback");
+    fb.className = "fb";
+    fb.innerHTML = "";
+  }
+
+  function newQuestion() {
+    const types = selectedTypes();
+    if (!types.length) {
+      $("r-no-type").classList.add("on");
+      $("r-card").style.display = "none";
+      current = null;
+      return;
+    }
+    $("r-no-type").classList.remove("on");
+    $("r-card").style.display = "";
+    let q;
+    for (let i = 0; i < 15; i++) {
+      q = P.generate({ types, difficulty });
+      if (recent.indexOf(q.exprHTML) === -1) break;
+    }
+    recent.push(q.exprHTML);
+    if (recent.length > 15) recent.shift();
+    showQuestion(q, q.typeLabel + (difficulty === "hard" ? " · trudne" : " · łatwe"));
+  }
+
+  function submit() {
+    if (!current || checked) return;
+    const user = readAnswer(current);
+    const res = P.check(current, user);
+    const fb = $("r-feedback");
+    if (!res.valid) {
+      fb.className = "fb show hintonly";
+      fb.innerHTML = '<div class="title">Wpisz odpowiedź</div>' +
+        (current.kind === "rad" ? "Pierwsze pole: liczba przed pierwiastkiem (puste = 1). Drugie pole: liczba naturalna pod pierwiastkiem." : current.kind === "cmp" ? "Wybierz znak." : "Liczba całkowita, dziesiętna (0,5) albo ułamek (2/3).");
+      return;
+    }
+    if (exam && !exam.done) { examRecord(res); return; }
+    checked = true;
+    if (res.ok) {
+      stats.correct++; stats.streak++;
+      if (stats.streak > stats.bestStreak) stats.bestStreak = stats.streak;
+      fb.className = "fb show ok";
+      fb.innerHTML = '<div class="title">' + PRAISE[Math.floor(Math.random() * PRAISE.length)] + "</div>" + current.hint;
+    } else {
+      stats.wrong++; stats.streak = 0;
+      fb.className = "fb show bad";
+      fb.innerHTML = '<div class="title">' + (res.note ? "Prawie! " : "Nie tym razem. ") + "Poprawna odpowiedź: " + current.answerHTML + "</div>" + (res.note ? "<p>" + res.note + "</p>" : "") + current.hint;
+    }
+    saveStats();
+    renderScore();
+    lockAnswer(true);
+    $("r-btn-check").hidden = true;
+    $("r-btn-next").hidden = false;
+    $("r-btn-tip").disabled = true;
+    $("r-btn-next").focus();
+  }
+
+  function showTip() {
+    if (!current || checked) return;
+    const fb = $("r-feedback");
+    fb.className = "fb show hintonly";
+    fb.innerHTML = '<div class="title">Podpowiedź</div>' + current.tip;
+  }
+
+  /* ---------- sprawdzian ---------- */
+  function fmtTime(ms) { const t = Math.round(ms / 1000); return Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0"); }
+  function gradeFor(pct) {
+    if (pct >= 96) return "celujący (6)";
+    if (pct >= 85) return "bardzo dobry (5)";
+    if (pct >= 70) return "dobry (4)";
+    if (pct >= 50) return "dostateczny (3)";
+    if (pct >= 30) return "dopuszczający (2)";
+    return "niedostateczny (1)";
+  }
+  function esc(s) { return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+  function loadExams() { try { return JSON.parse(localStorage.getItem(EXAM_STORAGE) || "[]") || []; } catch (e) { return []; } }
+  function saveExam(e) { try { const l = loadExams(); l.push(e); localStorage.setItem(EXAM_STORAGE, JSON.stringify(l.slice(-10))); } catch (x) {} }
+  function renderHistory() {
+    const l = loadExams();
+    $("r-exam-history").innerHTML = l.slice().reverse().map((e) => "<li>" + esc(e.date) + " — " + e.ok + "/" + e.total + " (" + e.pct + "%), " + esc(e.diff) + ", czas " + esc(e.time) + "</li>").join("");
+  }
+
+  function setMode(m) {
+    if (exam && !exam.done) return;
+    mode = m;
+    exam = null;
+    $("r-mode-practice").setAttribute("aria-pressed", m === "practice" ? "true" : "false");
+    $("r-mode-exam").setAttribute("aria-pressed", m === "exam" ? "true" : "false");
+    $("r-exam-summary").classList.remove("on");
+    if (m === "exam") {
+      current = null;
+      $("r-card").style.display = "none";
+      $("r-exam-setup").classList.add("on");
+      renderHistory();
+    } else {
+      $("r-exam-setup").classList.remove("on");
+      newQuestion();
+    }
+  }
+
+  function buildExam(n, types) {
+    const order = [];
+    while (order.length < n) types.slice().sort(() => Math.random() - 0.5).forEach((t) => order.push(t));
+    const seen = new Set();
+    return order.slice(0, n).map((t) => {
+      let q;
+      for (let i = 0; i < 30; i++) { q = P.generate({ types: [t], difficulty }); if (!seen.has(q.exprHTML)) break; }
+      seen.add(q.exprHTML);
+      return q;
+    });
+  }
+
+  function startExam() {
+    const types = selectedTypes();
+    if (!types.length) { $("r-no-type").classList.add("on"); return; }
+    $("r-no-type").classList.remove("on");
+    exam = { total: examCount, qs: buildExam(examCount, types), answers: [], i: 0, start: Date.now(), done: false, types: types.slice(), diff: difficulty };
+    document.body.classList.add("rexam");
+    $("r-exam-setup").classList.remove("on");
+    $("r-card").style.display = "";
+    exam.timer = setInterval(updateProgress, 1000);
+    window.scrollTo({ top: $("r-quiz").offsetTop - 10 });
+    showExamQ();
+  }
+  function updateProgress() {
+    if (!exam || exam.done) return;
+    $("r-progress").textContent = "Pytanie " + (exam.i + 1) + " z " + exam.total + " · " + fmtTime(Date.now() - exam.start);
+  }
+  function showExamQ() {
+    const q = exam.qs[exam.i];
+    showQuestion(q, q.typeLabel);
+    $("r-btn-check").textContent = exam.i === exam.total - 1 ? "Zakończ" : "Dalej";
+    updateProgress();
+  }
+  function examRecord(res) {
+    exam.answers.push(res);
+    exam.i++;
+    if (exam.i < exam.total) showExamQ();
+    else finishExam();
+  }
+  function stopExam() {
+    if (!exam || exam.done) return;
+    if (!confirm("Przerwać sprawdzian? Wynik nie zostanie zapisany.")) return;
+    clearInterval(exam.timer);
+    exam = null;
+    document.body.classList.remove("rexam");
+    $("r-btn-check").textContent = "Sprawdź";
+    setMode("exam");
+  }
+  function copyText(text, btn) {
+    const done = () => { btn.textContent = "Skopiowano ✓"; setTimeout(() => (btn.textContent = "Kopiuj wynik"), 2000); };
+    const fallback = () => {
+      const ta = document.createElement("textarea");
+      ta.value = text; document.body.appendChild(ta); ta.select();
+      try { document.execCommand("copy"); done(); } catch (e) {}
+      ta.remove();
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback);
+    else fallback();
+  }
+  function htmlToText(h) {
+    const d = document.createElement("div");
+    d.innerHTML = h;
+    d.querySelectorAll(".fr").forEach((f) => { f.textContent = "(" + f.children[0].textContent + ")/(" + f.children[1].textContent + ")"; });
+    d.querySelectorAll(".rad").forEach((r) => { const t = r.querySelector(".rr").textContent; r.textContent = "√" + (/^[\d,]+$/.test(t) ? t : "(" + t + ")"); });
+    return d.textContent.replace(/\s+/g, " ").trim();
+  }
+
+  function finishExam() {
+    clearInterval(exam.timer);
+    exam.done = true;
+    current = null;
+    document.body.classList.remove("rexam");
+    $("r-btn-check").textContent = "Sprawdź";
+    $("r-card").style.display = "none";
+    $("r-progress").textContent = "";
+    const ok = exam.answers.filter((a) => a.ok).length;
+    const pct = Math.round((ok / exam.total) * 100);
+    const entry = {
+      date: new Date().toLocaleString("pl-PL", { dateStyle: "short", timeStyle: "short" }),
+      ok, total: exam.total, pct, grade: gradeFor(pct), time: fmtTime(Date.now() - exam.start),
+      diff: exam.diff === "hard" ? "trudne" : "łatwe",
+    };
+    saveExam(entry);
+    const wrongLines = [];
+    const byType = {};
+    const rows = exam.qs.map((q, i) => {
+      const a = exam.answers[i];
+      byType[q.typeLabel] = byType[q.typeLabel] || { ok: 0, n: 0 };
+      byType[q.typeLabel].n++;
+      if (a.ok) byType[q.typeLabel].ok++;
+      else wrongLines.push("- " + htmlToText(q.exprHTML) + " → odp.: " + a.userText + ", poprawnie: " + htmlToText(q.answerHTML));
+      return '<tr class="' + (a.ok ? "ok" : "bad") + '"><td>' + (i + 1) + "</td><td>" + q.exprHTML +
+        (a.ok ? "" : "<details><summary>Jak to policzyć</summary>" + (a.note ? a.note + " " : "") + q.hint + "</details>") +
+        "</td><td>" + esc(a.userText) + "</td><td>" + q.answerHTML + '</td><td class="res">' + (a.ok ? "✓" : "✗") + "</td></tr>";
+    }).join("");
+    const typeLine = Object.keys(byType).map((t) => t + " " + byType[t].ok + "/" + byType[t].n).join(" · ");
+    const text = ["Sprawdzian — własności pierwiastkowania", "Data: " + entry.date,
+      "Wynik: " + ok + "/" + exam.total + " (" + pct + "%) · ocena orientacyjna: " + entry.grade,
+      "Czas: " + entry.time + " · poziom: " + entry.diff, typeLine].concat(wrongLines.length ? ["Błędy:"].concat(wrongLines) : ["Bez błędów!"]).join("\n");
+    $("r-summary-box").innerHTML =
+      '<div class="sum-head"><span class="sum-score">' + ok + "/" + exam.total + "</span><span><strong>" + pct + "%</strong> · ocena orientacyjna: <strong>" + entry.grade + "</strong> · czas " + entry.time + "</span></div>" +
+      '<p class="lead" style="margin:0 0 6px;">' + esc(typeLine) + ". Skala ocen jest orientacyjna — w Twojej szkole może być inna.</p>" +
+      '<table class="sum-table"><thead><tr><th>#</th><th>Zadanie</th><th>Twoja odpowiedź</th><th>Poprawnie</th><th></th></tr></thead><tbody>' + rows + "</tbody></table>" +
+      '<div class="sum-actions"><button type="button" class="btn btn-primary" id="r-btn-again">Nowy sprawdzian</button>' +
+      '<button type="button" class="btn btn-ghost" id="r-btn-copy">Kopiuj wynik</button>' +
+      '<button type="button" class="btn btn-ghost" id="r-btn-back">Wróć do ćwiczeń</button></div>';
+    $("r-exam-summary").classList.add("on");
+    $("r-btn-again").addEventListener("click", () => setMode("exam"));
+    $("r-btn-back").addEventListener("click", () => setMode("practice"));
+    $("r-btn-copy").addEventListener("click", (ev) => copyText(text, ev.currentTarget));
+    window.scrollTo({ top: $("r-quiz").offsetTop - 10 });
+  }
+
+  /* ---------- zdarzenia ---------- */
+  $("tabbtn-units").addEventListener("click", () => setTab("units", true));
+  $("tabbtn-roots").addEventListener("click", () => setTab("roots", true));
+  $("r-btn-check").addEventListener("click", submit);
+  $("r-btn-next").addEventListener("click", newQuestion);
+  $("r-btn-tip").addEventListener("click", showTip);
+  $("r-btn-stop").addEventListener("click", stopExam);
+  $("r-btn-exam-start").addEventListener("click", startExam);
+  $("r-mode-practice").addEventListener("click", () => setMode("practice"));
+  $("r-mode-exam").addEventListener("click", () => setMode("exam"));
+  $("r-btn-reset").addEventListener("click", () => {
+    if (!confirm("Wyczyścić zapisany wynik i serię?")) return;
+    stats = { correct: 0, wrong: 0, streak: 0, bestStreak: 0 };
+    saveStats(); renderScore();
+  });
+  document.querySelectorAll(".r-count-btn").forEach((b) => b.addEventListener("click", () => {
+    examCount = Number(b.getAttribute("data-n"));
+    document.querySelectorAll(".r-count-btn").forEach((x) => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+  }));
+  function setDiff(d) {
+    difficulty = d;
+    $("r-diff-easy").setAttribute("aria-pressed", d === "easy" ? "true" : "false");
+    $("r-diff-hard").setAttribute("aria-pressed", d === "hard" ? "true" : "false");
+    if (mode === "practice" && !checked) newQuestion();
+  }
+  $("r-diff-easy").addEventListener("click", () => setDiff("easy"));
+  $("r-diff-hard").addEventListener("click", () => setDiff("hard"));
+  TYPE_IDS.forEach((t) => $("r-t-" + t).addEventListener("change", () => { if (mode === "practice" && !checked) newQuestion(); }));
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" || !document.body.classList.contains("tab-roots")) return;
+    if (!current) return;
+    if (e.target && e.target.tagName === "BUTTON") return;
+    e.preventDefault();
+    if (!checked) submit();
+    else if (!$("r-btn-next").hidden) newQuestion();
+  });
+
+  window.addEventListener("hashchange", () => {
+    if (/pierwiast/i.test(location.hash)) setTab("roots", false);
+    else if (/jednost/i.test(location.hash)) setTab("units", false);
+  });
+  renderScore();
+  let start = "units";
+  if (/pierwiast/i.test(location.hash)) start = "roots";
+  else if (/jednost/i.test(location.hash)) start = "units";
+  else { try { start = localStorage.getItem(TAB_KEY) || "units"; } catch (e) {} }
+  newQuestion();
+  setTab(start === "roots" ? "roots" : "units", false);
 })();
 </script>
 </body>
