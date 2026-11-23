@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Trening z matematyki dla klasy 7: jednostki miary (długość, masa, pole, objętość, czas) i własności pierwiastkowania. Ściągawki, ćwiczenia i sprawdziany.">
-  <title>Trening z matematyki — jednostki miary i pierwiastki</title>
+  <meta name="description" content="Trening dla klasy 7: jednostki miary, własności pierwiastkowania i biologia – układ pokarmowy. Ściągawki, ćwiczenia i sprawdziany.">
+  <title>Trening dla klasy 7 — matematyka i biologia</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='14' font-size='14'%3E📏%3C/text%3E%3C/svg%3E">
   <style>
 :root {
@@ -442,6 +442,77 @@ body.rexam .r-lock { pointer-events: none; opacity: 0.45; }
   .qexpr { font-size: 1.4rem; }
   .r-in-num { width: 100%; }
 }
+
+/* ---------- biologia ---------- */
+body.tab-bio .sticky-bar, body.tab-bio #unit-badges { display: none !important; }
+body.tab-bio { padding-top: 0 !important; }
+body.bexam .tabs { pointer-events: none; opacity: 0.45; }
+.bsec { border: 1px solid var(--line); border-radius: 12px; margin: 10px 0; background: #fff; }
+.bsec > summary { cursor: pointer; padding: 12px 14px; font-weight: 800; color: var(--navy); list-style: none; display: block; text-align: left; }
+.bsec > summary::-webkit-details-marker { display: none; }
+.bsec > summary::before { content: "▸"; margin-right: 6px; }
+.bsec[open] > summary::before { content: "▾"; }
+.bsec > summary .pg { float: right; font-weight: 600; color: var(--muted); font-size: 0.85rem; margin-left: 10px; }
+.bsec > *:not(summary) { margin-left: 14px; margin-right: 14px; }
+.bsec > :last-child { margin-bottom: 14px; }
+.btab { width: calc(100% - 28px); border-collapse: collapse; font-size: 0.93rem; margin: 6px 14px 10px; }
+.btab th { background: #f3ead8; text-align: left; padding: 7px 8px; border: 1px solid var(--line); }
+.btab td { padding: 7px 8px; border: 1px solid var(--line); vertical-align: top; }
+.blist { padding-left: 20px; }
+.blist li { margin: 6px 0; }
+.bgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 6px; margin: 8px 14px 14px; font-size: 0.93rem; }
+.bgrid > div { background: #f7f4ee; border-radius: 8px; padding: 6px 8px; }
+.bgrid > div:first-child { grid-column: 1 / -1; background: none; padding: 0; }
+.small { font-size: 0.9rem; color: var(--muted); }
+.b-lstats { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; font-size: 0.86rem; }
+.b-lstats span { background: #f3ead8; border-radius: 999px; padding: 3px 10px; }
+.b-qtext { font-size: 1.22rem; font-weight: 700; line-height: 1.45; margin: 2px 0 14px; }
+.b-opts { display: grid; gap: 8px; }
+.b-opt { text-align: left; border: 1.5px solid var(--line); background: #fff; border-radius: 12px; padding: 11px 14px; font-size: 1.02rem; min-height: 48px; display: flex; gap: 10px; align-items: flex-start; color: var(--ink); }
+.b-opt .lt { font-weight: 800; color: var(--navy); min-width: 1.3em; }
+.b-opt:hover:not(:disabled) { border-color: var(--navy-2); }
+.b-opt.sel { border-color: var(--navy); background: #eef3fb; }
+.b-opt.right { border-color: var(--ok); background: var(--ok-bg); }
+.b-opt.wrong { border-color: var(--bad); background: var(--bad-bg); }
+.b-opt input { margin-top: 4px; width: 18px; height: 18px; }
+.b-tf { display: flex; gap: 10px; }
+.b-tf .b-opt { flex: 1; justify-content: center; font-weight: 800; font-size: 1.1rem; }
+.b-match { width: 100%; border-collapse: collapse; }
+.b-match td { padding: 6px 4px; vertical-align: middle; border-bottom: 1px solid var(--line); }
+.b-match td:first-child { font-weight: 700; width: 36%; }
+.b-match select { width: 100%; min-height: 44px; border: 1.5px solid #cfc6b6; border-radius: 10px; padding: 6px 8px; font-size: 0.98rem; background: #fff; }
+.b-match tr.right td { background: var(--ok-bg); }
+.b-match tr.wrong td { background: var(--bad-bg); }
+.b-order-pool, .b-order-chosen { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0; min-height: 48px; }
+.b-order-chosen { border: 2px dashed var(--line); border-radius: 12px; padding: 8px; background: #fff; }
+.b-order-chosen:empty::before { content: "Klikaj elementy po kolei – pojawią się tutaj."; color: var(--muted); font-size: 0.92rem; }
+.b-chip { border: 1.5px solid var(--line); background: #fff; border-radius: 999px; padding: 8px 14px; font-size: 0.98rem; min-height: 42px; color: var(--ink); }
+.b-chip .n { font-weight: 800; color: var(--navy); margin-right: 4px; }
+.b-order-chosen .b-chip { background: #eef3fb; border-color: var(--navy-2); }
+.b-num { display: flex; gap: 8px; align-items: center; margin-top: 10px; }
+.b-num input { width: 9rem; border: 1.5px solid #cfc6b6; border-radius: 10px; padding: 10px 12px; font-size: 1.2rem; font-weight: 700; }
+.b-pg { display: inline-block; margin-top: 6px; font-size: 0.88rem; color: var(--muted); }
+.fcard { margin-top: 14px; padding: 22px 18px; border-radius: 14px; background: #f7f4ee; border: 1px solid var(--line); border-left: 8px solid var(--navy-2); min-height: 140px; }
+.fc-front { font-size: 1.5rem; font-weight: 800; color: var(--navy); }
+.fc-back { margin-top: 12px; font-size: 1.05rem; line-height: 1.6; border-top: 1px dashed var(--line); padding-top: 12px; }
+#b-progress { display: none; font-weight: 700; color: var(--navy); }
+#b-btn-stop { display: none; }
+body.bexam #b-progress { display: inline; }
+body.bexam #b-btn-stop { display: inline-flex; }
+body.bexam #b-cheat, body.bexam #b-btn-reset, body.bexam #b-btn-next, body.bexam #b-score, body.bexam .b-note, body.bexam #b-lesson-stats { display: none !important; }
+body.bexam .b-lock { pointer-events: none; opacity: 0.45; }
+@media (max-width: 860px) {
+  .bsec > *:not(summary) { margin-left: 8px; margin-right: 8px; }
+  .btab { width: calc(100% - 16px); margin: 6px 8px 10px; table-layout: fixed; word-break: break-word; hyphens: auto; }
+  .btab th, .btab td { padding: 5px 4px; }
+  .bgrid { margin: 8px; grid-template-columns: 1fr; }
+  #b-quiz .mode-seg { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+  #b-quiz .mode-seg button { padding: 8px 6px; }
+  .b-match tr, .b-match td { display: block; width: 100% !important; }
+  .b-match td:first-child { padding-bottom: 0; border-bottom: none; }
+  .btab { font-size: 0.86rem; }
+  .b-qtext { font-size: 1.1rem; }
+}
   </style>
 </head>
 <body>
@@ -454,7 +525,7 @@ body.rexam .r-lock { pointer-events: none; opacity: 0.45; }
 <div class="wrap">
   <header class="hero">
     <div>
-      <h1>Trening z matematyki</h1>
+      <h1>Trening dla klasy 7</h1>
       <p>Cześć Łucja! Wybierz zakładkę z działem. W każdej masz ściągawkę i zadania: <strong>Ćwiczenia</strong> (z podpowiedziami) albo <strong>Sprawdzian</strong> (bez ściągawki, wynik na końcu). Liczby możesz pisać z przecinkiem albo z kropką.</p>
     </div>
     <div class="badge-set" id="unit-badges" aria-hidden="true">
@@ -470,6 +541,7 @@ body.rexam .r-lock { pointer-events: none; opacity: 0.45; }
   <nav class="tabs" role="tablist" aria-label="Działy">
     <button type="button" role="tab" id="tabbtn-units" aria-selected="true">📏 Jednostki miary</button>
     <button type="button" role="tab" id="tabbtn-roots" aria-selected="false">√ Własności pierwiastkowania</button>
+    <button type="button" role="tab" id="tabbtn-bio" aria-selected="false">🧬 Biologia: układ pokarmowy</button>
   </nav>
 
   <div id="tab-units">
@@ -856,6 +928,187 @@ body.rexam .r-lock { pointer-events: none; opacity: 0.45; }
       <div id="r-feedback" class="fb" role="status"></div>
     </div>
     <p class="lead r-note" style="margin:12px 0 0;font-size:0.92rem;">Enter sprawdza odpowiedź i przechodzi do następnego zadania. Zadania są wzorowane na dziale „Własności pierwiastkowania” (Matematyka z kluczem, klasa 7).</p>
+  </section>
+</div>
+
+<div id="tab-bio" hidden>
+  <section class="card" id="b-cheat">
+    <h2>Ściągawka — układ pokarmowy</h2>
+    <p class="lead">Podręcznik „Puls życia 7”, rozdział III, s. 57–82. Kliknij temat, żeby go rozwinąć. Przy każdym temacie jest numer strony.</p>
+
+    <details class="bsec" open>
+      <summary>Składniki pokarmowe <span class="pg">s. 59–62, 79</span></summary>
+      <table class="btab">
+        <thead><tr><th>Składnik</th><th>Funkcje</th><th>Występowanie</th></tr></thead>
+        <tbody>
+          <tr><td><b>Białka</b><br>z aminokwasów</td><td>budulcowa, odpornościowa, transportująca, regulacyjna</td><td>mięso, ryby, jaja, przetwory mleczne, nasiona zbóż i roślin strączkowych</td></tr>
+          <tr><td><b>Cukry</b><br>(węglowodany)</td><td>energetyczna, zapasowa</td><td>kasza, makaron, pieczywo, ziemniaki</td></tr>
+          <tr><td><b>Tłuszcze</b></td><td>energetyczna, zapasowa, ochronna, termoregulacyjna</td><td>oleje roślinne, tłuszcze zwierzęce</td></tr>
+        </tbody>
+      </table>
+      <ul class="blist">
+        <li><b>Aminokwasy egzogenne</b>: organizm ich nie wytwarza, więc musi je dostać z pożywienia. <b>Pokarmy pełnowartościowe</b> mają wszystkie, to pokarmy zwierzęce: mięso, jaja, mleko, sery. <b>Niepełnowartościowe</b> to najczęściej pokarmy roślinne.</li>
+        <li><b>Glukoza</b> to cukier prosty i główne źródło energii. Cukry zapasowe to <b>glikogen</b> u zwierząt (w wątrobie) i <b>skrobia</b> u roślin.</li>
+        <li><b>Słodycze</b>: cukry proste od razu trafiają do krwi i szybko się zużywają, więc szybko wraca głód. Nadmiar cukrów zamienia się w tłuszcz.</li>
+        <li><b>Błonnik</b> (głównie celuloza): nie trawimy go i nie ma wartości odżywczych. Wchłania wodę i ułatwia przesuwanie pokarmu w jelitach.</li>
+        <li><b>Tłuszcze</b> to związki wysokoenergetyczne: z 1 g jest <b>2× więcej energii</b> niż z cukru lub białka. Roślinne są w olejach, nasionach i orzechach. Zwierzęce są w maśle i tłustym mięsie i w nadmiarze szkodzą. Tłuszcze z ryb są zawsze korzystne.</li>
+      </ul>
+      <div class="bgrid">
+        <div><b>Grupy białek</b> (s. 60)</div>
+        <div>budulcowe → kolagen</div><div>motoryczne → aktyna i miozyna</div><div>transportowe → hemoglobina</div><div>obronne → przeciwciała</div><div>receptorowe → rodopsyna (oko)</div><div>sygnałowe → hormony trzustki</div><div>enzymatyczne → enzymy trawienne</div>
+      </div>
+    </details>
+
+    <details class="bsec">
+      <summary>Witaminy <span class="pg">s. 63–64</span></summary>
+      <p>Witaminy rozpuszczalne <b>w wodzie</b> (C, B6, B9, B12) nie są magazynowane, więc groźny jest tylko ich niedobór. Witaminy rozpuszczalne <b>w tłuszczach</b> (A, D, E, K) są magazynowane, a ich nadmiar może powodować zatrucia i uszkodzenia wątroby. W skórze pod wpływem słońca powstaje witamina D. Bakterie jelita grubego wytwarzają witaminy z grupy B i K.</p>
+      <table class="btab" id="b-vit-table"></table>
+    </details>
+
+    <details class="bsec">
+      <summary>Sole mineralne i woda <span class="pg">s. 65–66</span></summary>
+      <p><b>Makroelementy</b> (fosfor, wapń, magnez) to więcej niż 0,01% suchej masy organizmu i materiał budulcowy. <b>Mikroelementy</b> (żelazo, jod, fluor) to najwyżej 0,01%. Wchodzą w skład enzymów.</p>
+      <table class="btab" id="b-min-table"></table>
+      <p><b>Woda</b> stanowi około 70% masy ciała, a pić trzeba około 2 l na dobę. Jest środowiskiem reakcji chemicznych i rozpuszczalnikiem, dzięki czemu możliwy jest transport substancji. Reguluje temperaturę: jako składnik krwi rozprowadza ciepło, a parując z potem chroni przed przegrzaniem. Usuwa też szkodliwe produkty przemiany materii. Bez wody można przeżyć 2–4 dni, bez jedzenia nawet miesiąc. Najmniej wody zawierają kości (około 25%).</p>
+      <p><b>Bilans wodny</b>: woda pobrana (napoje + pokarm + woda metaboliczna) = woda wydalona (skóra + płuca + mocz + kał).</p>
+    </details>
+
+    <details class="bsec">
+      <summary>Droga pokarmu i enzymy <span class="pg">s. 68–69, 79</span></summary>
+      <p><b>Przewód pokarmowy</b>: jama ustna → gardło → przełyk → żołądek → jelito cienkie (zaczyna się od dwunastnicy) → jelito grube → odbyt. <b>Gruczoły trawienne</b>: ślinianki, wątroba, trzustka.</p>
+      <table class="btab" id="b-seg-table"></table>
+      <ul class="blist">
+        <li><b>Ślinianki</b> (3 pary) wytwarzają ślinę. Ślina nawilża pokarm, działa bakteriobójczo i zawiera amylazę ślinową.</li>
+        <li><b>Żołądek</b>: pepsynę aktywuje kwas solny, który działa też bakteriobójczo. Ścianę żołądka chroni śluz.</li>
+        <li><b>Wątroba</b> wytwarza żółć, unieszkodliwia toksyny, wytwarza ponad 90% białek osocza i magazynuje glikogen. <b>Żółć</b> to nie enzym. Rozbija krople tłuszczu i gromadzi się w pęcherzyku żółciowym.</li>
+        <li><b>Trzustka</b> wydziela do dwunastnicy trypsynę, amylazę trzustkową i lipazę. Wytwarza też hormony regulujące poziom glukozy we krwi.</li>
+      </ul>
+    </details>
+
+    <details class="bsec">
+      <summary>Trawienie i wchłanianie <span class="pg">s. 70</span></summary>
+      <table class="btab">
+        <thead><tr><th>Składnik</th><th>Gdzie się zaczyna</th><th>Przebieg</th><th>Produkt końcowy</th></tr></thead>
+        <tbody>
+          <tr><td>cukry złożone</td><td>jama ustna</td><td>amylazy → dwucukry → enzymy jelitowe</td><td><b>cukry proste</b></td></tr>
+          <tr><td>białka</td><td>żołądek</td><td>pepsyna → krótkie łańcuchy → enzymy jelitowe</td><td><b>aminokwasy</b></td></tr>
+          <tr><td>tłuszcze</td><td>jelito cienkie</td><td>żółć rozbija krople, lipazy rozkładają</td><td><b>glicerol i kwasy tłuszczowe</b></td></tr>
+        </tbody>
+      </table>
+      <p>Wchłanianie odbywa się w <b>jelicie cienkim</b>. Produkty trawienia białek i cukrów trafiają do krwi, a kwasy tłuszczowe najpierw do <b>limfy</b>. Fałdy jelita pokrywają <b>kosmki</b> z naczyniami krwionośnymi i limfatycznymi. Jelito cienkie ma do 6 m długości, a ponad 10 mln kosmków daje powierzchnię chłonną około 200 m².</p>
+    </details>
+
+    <details class="bsec">
+      <summary>Zęby <span class="pg">s. 67</span></summary>
+      <p>Człowiek ma <b>20 zębów mlecznych</b> (bez przedtrzonowych i ostatnich trzonowych), a potem <b>32 zęby stałe</b>. <b>Siekacze</b> odgryzają kawałki jedzenia, <b>kły</b> pomagają je rozgryzać, a <b>przedtrzonowe i trzonowe</b> rozcierają pokarm.</p>
+      <p><b>Budowa zęba</b>: korona, szyjka i korzeń, którym ząb jest osadzony w szczęce lub żuchwie. Warstwy od zewnątrz: <b>szkliwo → zębina → miazga</b>. W miazdze są naczynia krwionośne i nerw.</p>
+    </details>
+
+    <details class="bsec">
+      <summary>Doświadczenia <span class="pg">s. 62, 63, 71</span></summary>
+      <table class="btab">
+        <thead><tr><th>Doświadczenie</th><th>Próba badawcza</th><th>Próba kontrolna</th><th>Wynik</th></tr></thead>
+        <tbody>
+          <tr><td>Wykrywanie skrobi</td><td>banan, ziemniak i jajko zakroplone jodyną</td><td>zawiesina skrobi z jodyną</td><td>granatowo barwią się produkty roślinne (ziemniak, banan)</td></tr>
+          <tr><td>Witamina C w soku z cytryny</td><td>woda + kleik + jodyna + sok z cytryny</td><td>woda + kleik + jodyna</td><td>witamina C odbarwia granatowy roztwór</td></tr>
+          <tr><td>Ślina a trawienie skrobi</td><td>woda + kleik + ślina, po 30 min jodyna</td><td>woda + kleik, po 30 min jodyna</td><td>ze śliną nie ma granatowej barwy, bo skrobia została rozłożona</td></tr>
+        </tbody>
+      </table>
+      <p class="small">Zasada: jodyna + skrobia = <b>granatowa barwa</b>. Próba kontrolna różni się od badawczej tylko brakiem badanego czynnika.</p>
+    </details>
+
+    <details class="bsec">
+      <summary>Zdrowe odżywianie <span class="pg">s. 72–74, 78</span></summary>
+      <p><b>Piramida</b> od podstawy: aktywność fizyczna → warzywa i owoce → produkty zbożowe (pełnoziarniste) → mleko i produkty mleczne → mięso, ryby, strączki → tłuszcze. Im wyżej, tym rzadziej jemy. Do tego: ograniczać sól i cukier, pić około 2 l płynów, spać 8–10 godzin, przy ekranie spędzać najwyżej 2 godziny dziennie, myć zęby i kontrolować masę ciała.</p>
+      <p><b>Energia</b>: 1 kcal = 1000 cal. Zapotrzebowanie zależy od wieku, płci, pracy i trybu życia. Najwięcej energii potrzebują mężczyźni przy ciężkiej pracy (3500–4000 kcal). Dodatki do żywności oznacza się literą <b>E</b> i liczbą.</p>
+      <p><b>Higiena</b>: myć ręce, warzywa, owoce i jajka. Utrzymywać w czystości narzędzia kuchenne. Nie zamrażać ponownie rozmrożonego jedzenia. Sprawdzać termin przydatności. Jeść produkty ze sprawdzonych źródeł, posiłki regularnie, bez pośpiechu i 5 razy dziennie. Dieta wegetariańska polega na wyłączeniu mięsa. Białko pełnowartościowe daje wtedy połączenie strączków ze zbożami.</p>
+      <p><b>Zaburzenia</b>: nadmiar kalorii prowadzi do nadwagi i otyłości, a otyłość może powodować cukrzycę (zwiększone stężenie glukozy we krwi). BMI = masa (kg) / (wzrost w m)². Najczęstsze zaburzenia odżywiania to anoreksja (jadłowstręt psychiczny) i bulimia. Obie wymagają szybkiego leczenia.</p>
+    </details>
+
+    <details class="bsec">
+      <summary>Choroby układu pokarmowego <span class="pg">s. 75–77, 80</span></summary>
+      <table class="btab" id="b-dis-table"></table>
+      <table class="btab">
+        <thead><tr><th>WZW</th><th>Droga zakażenia</th><th>Szczepienie</th></tr></thead>
+        <tbody>
+          <tr><td>typ A (HAV)</td><td>pokarmowa (brudna woda, nieumyte owoce i warzywa)</td><td>tak</td></tr>
+          <tr><td>typ B (HBV)</td><td>krew, kontakty seksualne</td><td>tak</td></tr>
+          <tr><td>typ C (HCV)</td><td>krew, kontakty seksualne</td><td>nie</td></tr>
+        </tbody>
+      </table>
+      <ul class="blist">
+        <li><b>Próchnica</b>: bakterie rozkładają cukier na zębach, a powstający kwas niszczy szkliwo. Etapy: czarna plama → bakterie w miazdze (silny ból) → bakterie w naczyniach krwionośnych. Zapobieganie: wapń, fosfor, fluor, witamina D, mycie zębów i stomatolog co najmniej 2 razy w roku.</li>
+        <li><b>Choroba wrzodowa</b> jest leczona antybiotykami i dietą. <b>Rak jelita grubego</b> długo nie daje objawów. Leczy się go operacją, a przy przerzutach także chemioterapią. <b>Zatrucia</b> leczy się antybiotykami i dietą.</li>
+        <li><b>Laseczka jadu kiełbasianego</b> żyje bez tlenu, w przetworach i konserwach. Jej toksyna atakuje układ nerwowy. <b>Metale ciężkie</b> powodują krzywicę i uszkadzają słuch, wzrok i układ nerwowy.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section class="card" id="b-quiz">
+    <div class="quiz-head">
+      <h2>Zadania z biologii</h2>
+      <div class="scoreline" id="b-score">Wynik: 0/0</div>
+      <div id="b-progress"></div>
+    </div>
+    <div class="seg mode-seg b-lock" role="group" aria-label="Tryb">
+      <button type="button" id="b-mode-practice" aria-pressed="true">Ćwiczenia</button>
+      <button type="button" id="b-mode-review" aria-pressed="false">Powtórka błędów <span id="b-wrong-count"></span></button>
+      <button type="button" id="b-mode-cards" aria-pressed="false">Fiszki</button>
+      <button type="button" id="b-mode-exam" aria-pressed="false">Sprawdzian</button>
+    </div>
+    <div class="filters b-lock">
+      <label class="chip"><input type="checkbox" id="b-l1" checked> 1. Pokarm</label>
+      <label class="chip"><input type="checkbox" id="b-l2" checked> 2. Witaminy, sole, woda</label>
+      <label class="chip"><input type="checkbox" id="b-l3" checked> 3. Budowa układu</label>
+      <label class="chip"><input type="checkbox" id="b-l4" checked> 4. Higiena i choroby</label>
+    </div>
+    <div id="b-lesson-stats" class="b-lstats"></div>
+    <div id="b-warn" class="r-warn"></div>
+
+    <div id="b-exam-setup" class="r-panel">
+      <div class="box">
+        <h3>Sprawdzian z układu pokarmowego</h3>
+        <p>Pytania biorą się z lekcji zaznaczonych wyżej. W trakcie nie ma ściągawki ani wyjaśnień. Zadania z przyporządkowaniem i kolejnością są warte 2 punkty, tak jak w podręczniku. Za jeden błąd dostajesz 1 punkt. Wynik i rozwiązania zobaczysz na końcu.</p>
+        <div class="row">
+          <span>Liczba pytań:</span>
+          <button type="button" class="btn btn-ghost b-count-btn" data-n="10" aria-pressed="false">10</button>
+          <button type="button" class="btn btn-ghost b-count-btn" data-n="15" aria-pressed="true">15</button>
+          <button type="button" class="btn btn-ghost b-count-btn" data-n="25" aria-pressed="false">25</button>
+        </div>
+        <button type="button" class="btn btn-primary" id="b-btn-exam-start">Zaczynam sprawdzian</button>
+        <ol id="b-exam-history" class="exam-history" reversed></ol>
+      </div>
+    </div>
+
+    <div id="b-exam-summary" class="r-panel"><div class="box" id="b-summary-box"></div></div>
+
+    <div id="b-cards" class="r-panel">
+      <div class="fcard" id="b-fcard">
+        <div class="qcat" id="b-fc-meta"></div>
+        <div class="fc-front" id="b-fc-front"></div>
+        <div class="fc-back" id="b-fc-back" hidden></div>
+      </div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="b-fc-show">Pokaż odpowiedź</button>
+        <button type="button" class="btn btn-ok" id="b-fc-know" hidden>Umiem ✓</button>
+        <button type="button" class="btn btn-ghost" id="b-fc-again" hidden>Jeszcze nie</button>
+      </div>
+      <p class="lead" id="b-fc-progress" style="margin-top:8px;"></p>
+    </div>
+
+    <div id="b-card" class="qcard">
+      <div class="qcat" id="b-q-cat"></div>
+      <p id="b-q-text" class="b-qtext"></p>
+      <div id="b-answer-area"></div>
+      <div class="actions">
+        <button type="button" class="btn btn-primary" id="b-btn-check">Sprawdź</button>
+        <button type="button" class="btn btn-ok" id="b-btn-next" hidden>Następne</button>
+        <button type="button" class="btn btn-quiet" id="b-btn-reset">Wyczyść wyniki</button>
+        <button type="button" class="btn btn-quiet" id="b-btn-stop">Przerwij sprawdzian</button>
+      </div>
+      <div id="b-feedback" class="fb" role="status"></div>
+    </div>
+    <p class="lead b-note" style="margin:12px 0 0;font-size:0.92rem;">Zadania są wzorowane na podręczniku „Puls życia 7” (Nowa Era), rozdział III. Pod każdym wyjaśnieniem jest numer strony, na której można to doczytać. Błędne odpowiedzi trafiają do „Powtórki błędów” i znikają z niej po poprawnej odpowiedzi.</p>
   </section>
 </div>
 
@@ -2732,7 +2985,7 @@ body.rexam .r-lock { pointer-events: none; opacity: 0.45; }
 
   document.addEventListener("keydown", function (e) {
     if (e.key !== "Enter") return;
-    if (document.body.classList.contains("tab-roots")) return;
+    if (document.body.classList.contains("tab-roots") || document.body.classList.contains("tab-bio")) return;
     const t = e.target;
     if (t && (t.id === "conv-value" || t.id === "conv-from" || t.id === "conv-to")) return;
     if (!current) return;
@@ -3496,17 +3749,22 @@ body.rexam .r-lock { pointer-events: none; opacity: 0.45; }
 
   /* ---------- zakładki ---------- */
   const TAB_KEY = "lucja-tab-v1";
+  const TAB_HASH = { units: "#jednostki", roots: "#pierwiastki", bio: "#biologia" };
   function setTab(t, push) {
-    if (document.body.classList.contains("exam") || document.body.classList.contains("rexam")) return;
-    const roots = t === "roots";
-    $("tab-units").hidden = roots;
-    $("tab-roots").hidden = !roots;
-    document.body.classList.toggle("tab-roots", roots);
-    $("tabbtn-units").setAttribute("aria-selected", roots ? "false" : "true");
-    $("tabbtn-roots").setAttribute("aria-selected", roots ? "true" : "false");
+    const b = document.body.classList;
+    if (b.contains("exam") || b.contains("rexam") || b.contains("bexam")) return;
+    if (!TAB_HASH[t]) t = "units";
+    ["units", "roots", "bio"].forEach((x) => {
+      $("tab-" + x).hidden = x !== t;
+      $("tabbtn-" + x).setAttribute("aria-selected", x === t ? "true" : "false");
+    });
+    b.toggle("tab-roots", t === "roots");
+    b.toggle("tab-bio", t === "bio");
     try { localStorage.setItem(TAB_KEY, t); } catch (e) {}
-    if (push) history.replaceState(null, "", roots ? "#pierwiastki" : "#jednostki");
-    if (roots && mode === "practice" && !current) newQuestion();
+    if (push) history.replaceState(null, "", TAB_HASH[t]);
+    if (t === "roots" && mode === "practice" && !current) newQuestion();
+    document.dispatchEvent(new CustomEvent("tabchange", { detail: t }));
+    if (push) window.scrollTo({ top: 0 });
   }
 
   /* ---------- statystyki ---------- */
@@ -3797,6 +4055,7 @@ body.rexam .r-lock { pointer-events: none; opacity: 0.45; }
   /* ---------- zdarzenia ---------- */
   $("tabbtn-units").addEventListener("click", () => setTab("units", true));
   $("tabbtn-roots").addEventListener("click", () => setTab("roots", true));
+  $("tabbtn-bio").addEventListener("click", () => setTab("bio", true));
   $("r-btn-check").addEventListener("click", submit);
   $("r-btn-next").addEventListener("click", newQuestion);
   $("r-btn-tip").addEventListener("click", showTip);
@@ -3834,15 +4093,916 @@ body.rexam .r-lock { pointer-events: none; opacity: 0.45; }
 
   window.addEventListener("hashchange", () => {
     if (/pierwiast/i.test(location.hash)) setTab("roots", false);
+    else if (/biolog/i.test(location.hash)) setTab("bio", false);
     else if (/jednost/i.test(location.hash)) setTab("units", false);
   });
   renderScore();
   let start = "units";
   if (/pierwiast/i.test(location.hash)) start = "roots";
+  else if (/biolog/i.test(location.hash)) start = "bio";
   else if (/jednost/i.test(location.hash)) start = "units";
   else { try { start = localStorage.getItem(TAB_KEY) || "units"; } catch (e) {} }
   newQuestion();
-  setTab(start === "roots" ? "roots" : "units", false);
+  setTab(start, false);
+})();
+</script>
+<script id="bio-data">
+/* Bank pytań: Puls życia 7 (Nowa Era), rozdział III „Układ pokarmowy”, s. 57–82.
+   Format:
+   single: o[0] = poprawna, reszta = dystraktory (kolejność losowana)
+   tf: a = true/false
+   multi: o = [[tekst, czyPoprawna], ...]
+   order: items w poprawnej kolejności
+   match: pairs [[lewa, prawa]], extra = dodatkowe (błędne) prawe opcje
+*/
+(function (root) {
+  "use strict";
+  const LESSONS = {
+    1: "Pokarm – budulec i źródło energii",
+    2: "Witaminy, sole mineralne, woda",
+    3: "Budowa i rola układu pokarmowego",
+    4: "Higiena i choroby układu pokarmowego",
+  };
+
+  const Q = [
+    /* ---------------- LEKCJA 1 ---------------- */
+    { id: "1-01", l: 1, p: 58, t: "single", q: "Rozkład składników pokarmowych na mniejsze cząsteczki, które łatwo przenikają przez błony komórkowe, to:", o: ["trawienie", "wchłanianie", "defekacja", "połykanie"], ex: "Procesy rozkładu pokarmu na małe cząsteczki to trawienie. Zachodzą w przewodzie pokarmowym." },
+    { id: "1-02", l: 1, p: 62, t: "multi", q: "Zaznacz podstawowe substancje odżywcze (dostarczające budulca i energii).", o: [["białka", true], ["węglowodany (cukry)", true], ["tłuszcze", true], ["witaminy", false], ["błonnik", false]], ex: "Do podstawowych substancji odżywczych należą białka, węglowodany i tłuszcze. Witaminy regulują procesy, a błonnik nie ma wartości odżywczych." },
+    { id: "1-03", l: 1, p: 59, t: "single", q: "Białka są zbudowane z:", o: ["aminokwasów", "cukrów prostych", "glicerolu i kwasów tłuszczowych", "celulozy"], ex: "Białka powstają przez połączenie setek, a nawet tysięcy aminokwasów." },
+    { id: "1-04", l: 1, p: 59, t: "single", q: "Aminokwasy egzogenne to aminokwasy, które:", o: ["organizm musi pobrać z pożywienia, bo nie potrafi ich wytworzyć", "organizm wytwarza sam w wątrobie", "powstają w jelicie grubym dzięki bakteriom", "występują tylko w roślinach"], ex: "Aminokwasów egzogennych nasz organizm nie potrafi wytworzyć, dlatego pobiera je z pożywienia." },
+    { id: "1-05", l: 1, p: 59, t: "tf", q: "Pokarmy pełnowartościowe zawierają wszystkie aminokwasy egzogenne.", a: true, ex: "Tak. Pokarmy pełnowartościowe to głównie pokarmy pochodzenia zwierzęcego: mięso, jaja, mleko i sery." },
+    { id: "1-06", l: 1, p: 59, t: "tf", q: "Pokarmy niepełnowartościowe to najczęściej pokarmy pochodzenia zwierzęcego.", a: false, ex: "Fałsz. Pokarmy niepełnowartościowe to najczęściej pokarmy pochodzenia roślinnego." },
+    { id: "1-07", l: 1, p: 59, t: "multi", q: "Zaznacz pokarmy pełnowartościowe.", o: [["mięso", true], ["jaja", true], ["mleko", true], ["sery", true], ["kasza gryczana", false], ["płatki owsiane", false]], ex: "Pokarmy pełnowartościowe to pokarmy pochodzenia zwierzęcego: mięso, jaja, mleko i sery." },
+    { id: "1-08", l: 1, p: 59, t: "single", q: "Według wykresu zawartości białka w 100 g produktu najwięcej białka zawiera:", o: ["soja suszona", "mleko", "jaja kurze", "groszek zielony"], ex: "Na wykresie najwyższy słupek ma soja suszona (ponad 30 g białka w 100 g). Najniższy ma mleko." },
+    { id: "1-09", l: 1, p: 59, t: "single", q: "Białka, węglowodany i tłuszcze to związki pierwiastka, który uważa się za najważniejszy dla życia na Ziemi. Jest to:", o: ["węgiel", "żelazo", "wapń", "jod"], ex: "Podstawowe substancje odżywcze są związkami węgla." },
+    { id: "1-10", l: 1, p: 59, t: "tf", q: "Białka uczestniczą w obronie organizmu przed drobnoustrojami chorobotwórczymi.", a: true, ex: "Tak. Pełnią to zadanie np. przeciwciała, czyli białka obronne." },
+    { id: "1-11", l: 1, p: 61, t: "single", q: "Organizmy dostarczają energii głównie cukrem prostym, którym jest:", o: ["glukoza", "skrobia", "glikogen", "celuloza"], ex: "Energię dostarczają cukry proste, głównie glukoza." },
+    { id: "1-12", l: 1, p: 61, t: "single", q: "U zwierząt (także u człowieka) cukrem zapasowym jest:", o: ["glikogen magazynowany w wątrobie", "skrobia w bulwach", "celuloza w kościach", "glukoza w ślinie"], ex: "U zwierząt cukrem złożonym jest glikogen magazynowany w wątrobie, a u roślin skrobia." },
+    { id: "1-13", l: 1, p: 61, t: "single", q: "U roślin cukrem zapasowym jest:", o: ["skrobia", "glikogen", "pepsyna", "kolagen"], ex: "Skrobia występuje np. w bulwach ziemniaków." },
+    { id: "1-14", l: 1, p: 61, t: "single", q: "Dlaczego niedługo po zjedzeniu słodyczy znowu czujemy się głodni?", o: ["Cukry proste od razu trafiają do krwi i są szybko zużywane, więc stężenie glukozy szybko spada.", "Słodycze zawierają dużo błonnika.", "Słodycze trawione są dopiero w jelicie grubym.", "Słodycze zawierają aminokwasy egzogenne."], ex: "Mózg reaguje uczuciem głodu na niskie stężenie glukozy. Po słodyczach rośnie ono szybko, ale też szybko spada. Cukry złożone rozkładają się powoli." },
+    { id: "1-15", l: 1, p: 61, t: "tf", q: "Gdy organizm otrzymuje więcej cukrów, niż potrzebuje, przekształca je w tłuszcz, co może prowadzić do otyłości.", a: true, ex: "Tak, nadmiar cukrów jest zamieniany w tłuszcz." },
+    { id: "1-16", l: 1, p: 61, t: "single", q: "Błonnik pokarmowy to:", o: ["materiał budujący ściany komórek roślinnych, którego nie trawimy", "cukier zapasowy zwierząt", "enzym trawiący cukry", "białko obronne"], ex: "Błonnik buduje ściany komórek roślinnych. W jego skład wchodzi głównie celuloza." },
+    { id: "1-17", l: 1, p: 61, t: "single", q: "Jaką rolę pełni błonnik w układzie pokarmowym?", o: ["Wchłania dużo wody i ułatwia przesuwanie się pokarmu w jelitach.", "Dostarcza najwięcej energii.", "Jest głównym budulcem mięśni.", "Transportuje tlen do komórek."], ex: "Celuloza wchłania dużo wody, co ułatwia przesuwanie się pożywienia w jelitach." },
+    { id: "1-18", l: 1, p: 62, t: "tf", q: "Błonnik pokarmowy ma dużą wartość odżywczą.", a: false, ex: "Fałsz. Błonnik nie ma wartości odżywczych, ale ułatwia przesuwanie się pokarmu w jelitach." },
+    { id: "1-19", l: 1, p: 61, t: "single", q: "W skład błonnika wchodzi głównie:", o: ["celuloza", "glikogen", "kolagen", "hemoglobina"], ex: "W skład błonnika wchodzi głównie celuloza." },
+    { id: "1-20", l: 1, p: 61, t: "single", q: "Z 1 grama tłuszczu powstaje w porównaniu z 1 gramem cukru lub białka:", o: ["około dwa razy więcej energii", "tyle samo energii", "dwa razy mniej energii", "dziesięć razy więcej energii"], ex: "Z 1 g tłuszczu powstaje dwa razy więcej energii niż z tej samej ilości cukru lub białka. Dlatego tłuszcze nazywamy związkami wysokoenergetycznymi." },
+    { id: "1-21", l: 1, p: 79, t: "multi", q: "Zaznacz funkcje tłuszczów.", o: [["energetyczna", true], ["zapasowa", true], ["ochronna", true], ["termoregulacyjna", true], ["transport tlenu", false], ["odbieranie informacji z otoczenia", false]], ex: "Tłuszcze pełnią funkcje energetyczną, zapasową, ochronną i termoregulacyjną. Tkanka tłuszczowa chroni narządy przed urazami i utratą ciepła." },
+    { id: "1-22", l: 1, p: 61, t: "tf", q: "Tłuszcze zawarte w rybach mają zawsze pozytywny wpływ na organizm.", a: true, ex: "Tak. Tylko tłuszczów z ryb nie musimy ograniczać." },
+    { id: "1-23", l: 1, p: 61, t: "single", q: "Tłuszcze roślinne znajdują się głównie w:", o: ["olejach, nasionach i orzechach", "maśle i tłustym mięsie", "mleku i serach", "owocach cytrusowych"], ex: "Tłuszcze roślinne są w olejach, nasionach i orzechach. Masło i tłuste mięso zawierają tłuszcze zwierzęce." },
+    { id: "1-24", l: 1, p: 61, t: "tf", q: "Tłuszcze zwierzęce (np. w maśle czy tłustym mięsie) spożywane w nadmiarze są szkodliwe dla zdrowia.", a: true, ex: "Tak, w nadmiarze są szkodliwe." },
+    { id: "1-25", l: 1, p: 62, t: "single", q: "W doświadczeniu „Wykrywanie skrobi” próbą kontrolną jest:", o: ["talerzyk z zawiesiną skrobi zakroploną jodyną", "plaster banana zakroplony jodyną", "plaster ziemniaka bez jodyny", "połówka jajka zakroplona jodyną"], ex: "Próba kontrolna zawiera na pewno skrobię i jodynę. Z nią porównuje się zabarwienie badanych produktów." },
+    { id: "1-26", l: 1, p: 63, t: "single", q: "Jodyna w obecności skrobi zmienia barwę na:", o: ["granatową", "czerwoną", "zieloną", "nie zmienia barwy"], ex: "Skrobia z jodyną daje granatowe zabarwienie." },
+    { id: "1-27", l: 1, p: 62, t: "single", q: "Które produkty z doświadczenia „Wykrywanie skrobi” zabarwią się na granatowo po zakropleniu jodyną?", o: ["ziemniak i banan", "tylko jajko", "wszystkie trzy", "żaden"], ex: "Skrobię zawierają produkty pochodzenia roślinnego, czyli ziemniak i banan. Jajko jest pochodzenia zwierzęcego." },
+    { id: "1-28", l: 1, p: 79, t: "multi", q: "Zaznacz funkcje cukrów (węglowodanów) według podsumowania rozdziału.", o: [["energetyczna", true], ["zapasowa", true], ["odpornościowa", false], ["transportująca", false]], ex: "Cukry pełnią funkcję energetyczną i zapasową (glikogen, skrobia)." },
+    { id: "1-29", l: 1, p: 79, t: "single", q: "Najlepszym źródłem cukrów złożonych są:", o: ["kasza, makaron, pieczywo, ziemniaki", "mięso, ryby, jaja", "oleje roślinne i masło", "mleko i jogurt"], ex: "Według podsumowania cukry występują w kaszy, makaronie, pieczywie i ziemniakach." },
+
+    /* ---------------- LEKCJA 2 ---------------- */
+    { id: "2-01", l: 2, p: 63, t: "single", q: "Woda stanowi około … masy ciała człowieka.", o: ["70%", "30%", "50%", "90%"], ex: "Woda stanowi około 70% masy naszego ciała." },
+    { id: "2-02", l: 2, p: 63, t: "single", q: "Witaminy rozpuszczalne w tłuszczach to:", o: ["A, D, E, K", "C i witaminy z grupy B", "A, C, D", "B6, B9, B12, K"], ex: "Witaminy A, D, E i K rozpuszczają się w tłuszczach, a C oraz B6, B9 i B12 w wodzie." },
+    { id: "2-03", l: 2, p: 63, t: "single", q: "Które witaminy są magazynowane w organizmie, a ich nadmiar może powodować groźne zatrucia i uszkodzenia wątroby?", o: ["rozpuszczalne w tłuszczach", "rozpuszczalne w wodzie", "wszystkie witaminy", "żadne witaminy"], ex: "Witaminy rozpuszczalne w tłuszczach są magazynowane w organizmie. Te rozpuszczalne w wodzie nie są magazynowane, więc ich nadmiar nie jest groźny." },
+    { id: "2-04", l: 2, p: 63, t: "tf", q: "Nadmiar witaminy C jest dla organizmu bardzo groźny.", a: false, ex: "Fałsz. Witamina C rozpuszcza się w wodzie i nie jest magazynowana. Groźny jest tylko jej niedobór." },
+    { id: "2-05", l: 2, p: 63, t: "single", q: "Witaminy regulują pracę organizmu, ponieważ:", o: ["wchodzą w skład enzymów wpływających na reakcje chemiczne w komórkach", "są głównym budulcem komórek", "dostarczają najwięcej energii", "transportują tlen"], ex: "Witaminy wchodzą w skład enzymów, które wpływają na przebieg reakcji chemicznych." },
+    { id: "2-06", l: 2, p: 64, t: "single", q: "W skórze pod wpływem promieniowania słonecznego powstaje witamina:", o: ["D", "C", "K", "A"], ex: "Pod wpływem słońca w skórze powstaje witamina D." },
+    { id: "2-07", l: 2, p: 64, t: "multi", q: "Bakterie zasiedlające jelito grube wytwarzają witaminy:", o: [["z grupy B", true], ["K", true], ["C", false], ["D", false], ["A", false]], ex: "Bakterie jelita grubego wytwarzają witaminy z grupy B oraz witaminę K." },
+    { id: "2-08", l: 2, p: 63, t: "single", q: "W doświadczeniu „Wykrywanie witaminy C” po dodaniu soku z cytryny granatowy roztwór skrobi z jodyną:", o: ["odbarwia się, co świadczy o obecności witaminy C", "staje się jeszcze ciemniejszy", "nie zmienia barwy", "zmienia barwę na czerwoną"], ex: "Witamina C odbarwia roztwór skrobi z jodyną. Odbarwienie potwierdza hipotezę." },
+    { id: "2-09", l: 2, p: 63, t: "single", q: "Próbą kontrolną w doświadczeniu „Wykrywanie witaminy C” jest szklanka z:", o: ["wodą, kleikiem skrobiowym i jodyną", "wodą, kleikiem skrobiowym, jodyną i sokiem z cytryny", "samym sokiem z cytryny", "wodą i sokiem z cytryny"], ex: "Próba kontrolna różni się od badawczej tylko brakiem badanego czynnika, czyli soku z cytryny." },
+    { id: "2-10", l: 2, p: 65, t: "single", q: "Makroelementy to pierwiastki, których ilość w organizmie:", o: ["przekracza 0,01% suchej masy", "nie przekracza 0,01% suchej masy", "przekracza 70% masy ciała", "jest bardzo mała i nieistotna"], ex: "Makroelementy przekraczają 0,01% suchej masy i są materiałem budulcowym. Mikroelementy tego progu nie przekraczają." },
+    { id: "2-11", l: 2, p: 79, t: "multi", q: "Zaznacz makroelementy.", o: [["fosfor", true], ["wapń", true], ["magnez", true], ["żelazo", false], ["jod", false], ["fluor", false]], ex: "Makroelementy to fosfor, wapń i magnez. Żelazo, jod i fluor to mikroelementy." },
+    { id: "2-12", l: 2, p: 65, t: "tf", q: "Żelazo, jod i fluor należą do mikroelementów.", a: true, ex: "Tak, występują w organizmie w małej ilości." },
+    { id: "2-13", l: 2, p: 65, t: "single", q: "Sucha masa to:", o: ["masa substancji pozbawionej wody", "masa samej wody w organizmie", "masa kości", "masa tłuszczu"], ex: "Sucha masa to masa substancji pozbawionej wody." },
+    { id: "2-14", l: 2, p: 65, t: "single", q: "Mikroelementy:", o: ["wchodzą w skład enzymów i wpływają na przebieg wielu reakcji chemicznych", "stanowią główny materiał budulcowy kości", "dostarczają najwięcej energii", "są tym samym co witaminy"], ex: "Mikroelementy wchodzą w skład enzymów, a makroelementy są materiałem budulcowym." },
+    { id: "2-15", l: 2, p: 66, t: "multi", q: "Zaznacz funkcje wody w organizmie.", o: [["jest środowiskiem wielu reakcji chemicznych", true], ["jako rozpuszczalnik umożliwia transport substancji", true], ["bierze udział w regulacji temperatury ciała", true], ["umożliwia usuwanie szkodliwych produktów przemiany materii", true], ["jest głównym źródłem energii", false], ["buduje szkliwo zębów", false]], ex: "Woda jest środowiskiem reakcji i rozpuszczalnikiem, bierze udział w termoregulacji i umożliwia usuwanie szkodliwych substancji. Energii nie dostarcza." },
+    { id: "2-16", l: 2, p: 66, t: "single", q: "Dziennie należy spożywać około:", o: ["2 l wody", "0,5 l wody", "5 l wody", "10 l wody"], ex: "Źródłem wody są płyny i pokarm, np. świeże owoce i warzywa." },
+    { id: "2-17", l: 2, p: 66, t: "single", q: "Według wykresu „Zawartość wody w wybranych narządach” najmniej wody zawiera:", o: ["kość", "mózg", "nerka", "płuca"], ex: "Kość zawiera około 25% wody. Pozostałe narządy mają jej znacznie więcej, około 65–80%." },
+    { id: "2-18", l: 2, p: 66, t: "single", q: "Bez wody człowiek może przeżyć przeciętnie:", o: ["od dwóch do czterech dni", "około miesiąca", "kilka godzin", "kilka miesięcy"], ex: "Bez wody 2–4 dni, a bez pokarmu nawet miesiąc, dzięki zapasom zgromadzonym w organizmie." },
+    { id: "2-19", l: 2, p: 66, t: "single", q: "W jaki sposób woda zapobiega przegrzaniu organizmu?", o: ["Jako składnik potu pochłania ciepło podczas parowania.", "Wytwarza ciepło w mięśniach.", "Zamienia się w tłuszcz.", "Zwiększa stężenie glukozy we krwi."], ex: "Woda w pocie pochłania ciepło, gdy paruje. Jako składnik krwi rozprowadza ciepło po organizmie." },
+    { id: "2-20", l: 2, p: 66, t: "tf", q: "Zapotrzebowanie na wodę zależy m.in. od temperatury otoczenia, wykonywanej pracy i diety.", a: true, ex: "Tak, przy upale i dużym wysiłku trzeba też uzupełniać sole mineralne." },
+    { id: "2-21", l: 2, p: 65, t: "tf", q: "Uzupełnianie soli mineralnych jest trudne, bo występują tylko w nielicznych pokarmach.", a: false, ex: "Fałsz. Sole mineralne są niemal w każdym pokarmie. Wystarczy, że posiłki są urozmaicone." },
+    { id: "2-22", l: 2, p: 82, t: "single", q: "Skłonność do krwawień, zaburzenia krzepnięcia krwi i krwotoki to objawy niedoboru witaminy:", o: ["K", "A", "C", "E"], ex: "Niedobór witaminy K powoduje zaburzenia krzepnięcia krwi i skłonność do krwawień." },
+
+    /* ---------------- LEKCJA 3 ---------------- */
+    { id: "3-01", l: 3, p: 67, t: "single", q: "W dzieciństwie człowiek ma … zębów mlecznych, a później wyrasta … zębów stałych.", o: ["20 i 32", "32 i 20", "24 i 28", "20 i 28"], ex: "Zębów mlecznych jest 20, a stałych 32." },
+    { id: "3-02", l: 3, p: 67, t: "single", q: "Wśród zębów mlecznych nie ma:", o: ["zębów przedtrzonowych i ostatnich zębów trzonowych", "siekaczy", "kłów", "żadnego rodzaju – są wszystkie"], ex: "Uzębienie mleczne nie ma zębów przedtrzonowych ani ostatnich trzonowych." },
+    { id: "3-03", l: 3, p: 67, t: "match", q: "Przyporządkuj rodzaj zębów do ich funkcji.", pairs: [["siekacze", "odgryzanie kawałków jedzenia"], ["kły", "pomagają w rozgryzaniu kawałków"], ["przedtrzonowe i trzonowe", "rozcieranie pokarmu"]], extra: ["nawilżanie pokarmu"], ex: "Siekacze odgryzają, kły pomagają rozgryzać, a przedtrzonowe i trzonowe rozcierają pokarm." },
+    { id: "3-04", l: 3, p: 67, t: "single", q: "Część zęba wystająca na zewnątrz, oddzielona od korzenia szyjką, to:", o: ["korona", "miazga", "zębina", "dziąsło"], ex: "Ząb dzieli się na koronę, szyjkę i korzeń." },
+    { id: "3-05", l: 3, p: 67, t: "order", q: "Ułóż warstwy zęba od zewnątrz do środka.", items: ["szkliwo", "zębina", "miazga"], ex: "Koronę pokrywa twarde szkliwo, pod nim jest zębina, a zębina otacza miazgę." },
+    { id: "3-06", l: 3, p: 67, t: "single", q: "W miazdze zęba przebiegają:", o: ["naczynia krwionośne i nerw", "przewody ślinianek", "kosmki", "włókna celulozy"], ex: "W miazdze są naczynia krwionośne i nerw, dlatego próchnica, która do niej dotrze, boli." },
+    { id: "3-07", l: 3, p: 67, t: "single", q: "Zęby są osadzone w szczękach i żuchwie za pomocą:", o: ["korzeni", "koron", "szkliwa", "szyjek"], ex: "Zęby są osadzone za pomocą korzeni." },
+    { id: "3-08", l: 3, p: 68, t: "order", q: "Ułóż odcinki przewodu pokarmowego w kolejności, w jakiej przechodzi przez nie pokarm.", items: ["jama ustna", "gardło", "przełyk", "żołądek", "jelito cienkie", "jelito grube"], ex: "Kolejność jest taka: jama ustna, gardło, przełyk, żołądek, jelito cienkie i jelito grube. Kał jest usuwany przez odbyt." },
+    { id: "3-09", l: 3, p: 68, t: "multi", q: "Zaznacz gruczoły trawienne.", o: [["ślinianki", true], ["wątroba", true], ["trzustka", true], ["żołądek", false], ["przełyk", false], ["jelito grube", false]], ex: "Gruczoły trawienne to ślinianki, wątroba i trzustka. Pozostałe narządy z listy to odcinki przewodu pokarmowego." },
+    { id: "3-10", l: 3, p: 67, t: "multi", q: "Zaznacz procesy, które zachodzą w układzie pokarmowym.", o: [["rozdrabnianie i nawilżanie pokarmu", true], ["trawienie", true], ["wchłanianie do krwi", true], ["defekacja", true], ["wytwarzanie przeciwciał", false]], ex: "W układzie pokarmowym zachodzą rozdrabnianie i nawilżanie, trawienie, wchłanianie i defekacja." },
+    { id: "3-11", l: 3, p: 67, t: "single", q: "Defekacja to:", o: ["usuwanie niestrawionych resztek pożywienia w postaci kału", "wchłanianie wody w jelicie grubym", "rozkład białek w żołądku", "połykanie pokarmu"], ex: "Defekacja to usuwanie niestrawionych resztek pokarmu w postaci kału." },
+    { id: "3-12", l: 3, p: 69, t: "single", q: "Do jamy ustnej uchodzą przewody:", o: ["trzech par ślinianek", "dwóch par ślinianek", "jednej pary ślinianek", "wątroby i trzustki"], ex: "Do jamy ustnej uchodzą przewody trzech par ślinianek." },
+    { id: "3-13", l: 3, p: 68, t: "multi", q: "Ślina:", o: [["nawilża pokarm", true], ["działa bakteriobójczo", true], ["zawiera enzymy trawiące cukry złożone", true], ["zawiera pepsynę", false], ["rozbija krople tłuszczu", false]], ex: "Ślina nawilża pokarm, działa bakteriobójczo i zawiera amylazę ślinową. Pepsyna działa w żołądku, a krople tłuszczu rozbija żółć." },
+    { id: "3-14", l: 3, p: 69, t: "single", q: "Pepsyna staje się aktywna pod wpływem:", o: ["kwasu solnego", "żółci", "śliny", "soku jelitowego"], ex: "Pepsyna częściowo trawi białka. Aktywuje ją kwas solny, który działa też bakteriobójczo." },
+    { id: "3-15", l: 3, p: 69, t: "single", q: "Wnętrze żołądka przed działaniem kwasu solnego chroni:", o: ["śluz", "żółć", "szkliwo", "błonnik"], ex: "Wnętrze żołądka pokrywa śluz chroniący przed kwasem solnym." },
+    { id: "3-16", l: 3, p: 69, t: "single", q: "Początkowym odcinkiem jelita cienkiego jest:", o: ["dwunastnica", "przełyk", "żołądek", "odbyt"], ex: "Do dwunastnicy uchodzą przewody trzustki i wątroby." },
+    { id: "3-17", l: 3, p: 82, t: "tf", q: "Dwunastnica jest początkowym odcinkiem jelita grubego.", a: false, ex: "Fałsz. Dwunastnica to początkowy odcinek jelita cienkiego." },
+    { id: "3-18", l: 3, p: 69, t: "single", q: "Żółć:", o: ["rozbija krople tłuszczu na mniejsze cząsteczki, co umożliwia ich rozkład przez enzymy trzustki", "rozkłada białka na aminokwasy", "jest enzymem trawiącym skrobię", "jest wytwarzana przez trzustkę"], ex: "Żółć wytwarza wątroba. To nie enzym, tylko substancja rozbijająca krople tłuszczu." },
+    { id: "3-19", l: 3, p: 69, t: "single", q: "Żółć powstaje w … i gromadzi się w …", o: ["wątrobie / pęcherzyku żółciowym", "trzustce / dwunastnicy", "żołądku / wątrobie", "śliniankach / jamie ustnej"], ex: "Powstająca w wątrobie żółć gromadzi się w pęcherzyku żółciowym." },
+    { id: "3-20", l: 3, p: 68, t: "multi", q: "Zaznacz funkcje wątroby.", o: [["wytwarza żółć", true], ["unieszkodliwia substancje toksyczne", true], ["magazynuje glukozę w postaci glikogenu", true], ["wytwarza ponad 90% białek osocza krwi", true], ["wytwarza pepsynę", false], ["wydziela amylazę ślinową", false]], ex: "Wątroba wytwarza żółć i białka osocza, unieszkodliwia toksyny i magazynuje glikogen." },
+    { id: "3-21", l: 3, p: 82, t: "tf", q: "W trzustce są produkowane enzymy trawienne oraz hormony regulujące poziom glukozy we krwi.", a: true, ex: "Tak, trzustka wydziela enzymy do dwunastnicy i wytwarza hormony." },
+    { id: "3-22", l: 3, p: 82, t: "tf", q: "Wątroba przekształca trujące substancje w nieszkodliwe związki.", a: true, ex: "Tak, wątroba unieszkodliwia substancje toksyczne." },
+    { id: "3-23", l: 3, p: 69, t: "multi", q: "Zaznacz enzymy, które znajdują się w soku trzustkowym.", o: [["trypsyna", true], ["amylaza trzustkowa", true], ["lipaza trzustkowa", true], ["pepsyna", false], ["amylaza ślinowa", false]], ex: "Sok trzustkowy zawiera trypsynę (białka), amylazę trzustkową (cukry złożone) i lipazę (tłuszcze)." },
+    { id: "3-24", l: 3, p: 79, t: "match", q: "Przyporządkuj składnik pokarmowy do produktów jego trawienia.", pairs: [["cukry złożone", "cukry proste"], ["białka", "aminokwasy"], ["tłuszcze", "glicerol i kwasy tłuszczowe"]], extra: ["witaminy"], ex: "Z cukrów powstają cukry proste, z białek aminokwasy, a z tłuszczów glicerol i kwasy tłuszczowe." },
+    { id: "3-25", l: 3, p: 70, t: "order", q: "Ułóż etapy trawienia cukrów złożonych.", items: ["cukier złożony", "dwucukry", "cukry proste"], ex: "Amylazy rozkładają cukry złożone na dwucukry, a enzymy jelitowe dwucukry na cukry proste." },
+    { id: "3-26", l: 3, p: 70, t: "order", q: "Ułóż etapy trawienia białek.", items: ["białko", "krótkie łańcuchy aminokwasów", "aminokwasy"], ex: "Pepsyna w żołądku tnie białka na krótsze łańcuchy. Enzymy jelitowe rozkładają je na pojedyncze aminokwasy." },
+    { id: "3-27", l: 3, p: 70, t: "single", q: "Trawienie białek rozpoczyna się w:", o: ["żołądku", "jamie ustnej", "jelicie grubym", "przełyku"], ex: "Trawienie białek zaczyna się w żołądku i jest kontynuowane w jelicie cienkim." },
+    { id: "3-28", l: 3, p: 70, t: "single", q: "Trawienie cukrów rozpoczyna się w:", o: ["jamie ustnej", "żołądku", "jelicie grubym", "przełyku"], ex: "Trawienie cukrów zaczyna się w jamie ustnej, a dalej przebiega w jelicie cienkim." },
+    { id: "3-29", l: 3, p: 70, t: "single", q: "Trawienie tłuszczów zachodzi w:", o: ["jelicie cienkim", "jamie ustnej", "żołądku", "jelicie grubym"], ex: "Tłuszcze trawione są w jelicie cienkim na glicerol i kwasy tłuszczowe." },
+    { id: "3-30", l: 3, p: 70, t: "single", q: "Które produkty trawienia są wchłaniane najpierw do limfy, a dopiero potem do krwi?", o: ["kwasy tłuszczowe (produkty trawienia tłuszczów)", "aminokwasy", "cukry proste", "wszystkie produkty trawienia"], ex: "Produkty trawienia białek i cukrów trafiają do krwi. Do limfy trafiają najpierw kwasy tłuszczowe." },
+    { id: "3-31", l: 3, p: 70, t: "single", q: "Powierzchnię wchłaniania w jelicie cienkim znacznie zwiększają:", o: ["kosmki jelitowe", "zęby trzonowe", "ślinianki", "pęcherzyk żółciowy"], ex: "Fałdy błony śluzowej jelita są pokryte licznymi kosmkami." },
+    { id: "3-32", l: 3, p: 70, t: "single", q: "W kosmkach jelitowych znajdują się:", o: ["naczynia krwionośne i limfatyczne", "ślinianki", "zęby", "pęcherzyki żółciowe"], ex: "Do naczyń w kosmkach trafiają substancje odżywcze ze strawionego pokarmu." },
+    { id: "3-33", l: 3, p: 71, t: "single", q: "Jelito cienkie może osiągać długość około:", o: ["6 m", "60 cm", "1 m", "20 m"], ex: "Jelito cienkie może mieć 6 m długości." },
+    { id: "3-34", l: 3, p: 71, t: "single", q: "Dzięki kosmkom powierzchnia chłonna jelit wynosi około:", o: ["200 m²", "2 m²", "20 cm²", "2000 km²"], ex: "Ponad 10 mln kosmków daje powierzchnię około 200 m²." },
+    { id: "3-35", l: 3, p: 71, t: "single", q: "W doświadczeniu badającym wpływ śliny na trawienie skrobi próbą badawczą jest szklanka z:", o: ["wodą, kleikiem skrobiowym, śliną i jodyną", "wodą, kleikiem skrobiowym i jodyną", "wodą i śliną", "samą jodyną"], ex: "Próba badawcza zawiera badany czynnik, czyli ślinę. Kontrolna różni się tylko brakiem śliny." },
+    { id: "3-36", l: 3, p: 71, t: "single", q: "Który wynik doświadczenia potwierdza, że enzymy śliny rozkładają skrobię?", o: ["W próbie badawczej roztwór nie zabarwia się na granatowo, a w kontrolnej zabarwia się na granatowo.", "Obie próby zabarwiają się na granatowo.", "Próba badawcza zabarwia się na granatowo, a kontrolna nie.", "Obie próby zabarwiają się na czerwono."], ex: "Jodyna barwi skrobię na granatowo. Brak barwy w próbie ze śliną oznacza, że skrobia została rozłożona." },
+    { id: "3-37", l: 3, p: 71, t: "single", q: "Dlaczego w doświadczeniu ze śliną szklanki zostawia się na pół godziny w temperaturze pokojowej?", o: ["Żeby enzymy śliny zdążyły rozłożyć skrobię.", "Żeby woda wyparowała.", "Żeby jodyna straciła barwę.", "Żeby skrobia zamieniła się w białko."], ex: "Enzymy potrzebują czasu, żeby rozłożyć skrobię." },
+    { id: "3-38", l: 3, p: 82, t: "tf", q: "W jelicie cienkim odbywa się wchłanianie strawionego pokarmu.", a: true, ex: "Tak, produkty trawienia wchłaniają się do krwi i limfy w jelicie cienkim." },
+    { id: "3-39", l: 3, p: 79, t: "tf", q: "W przełyku działają enzymy trawiące białka.", a: false, ex: "Fałsz. W przełyku nie działają żadne enzymy. Przełyk tylko przesuwa pokarm do żołądka." },
+    { id: "3-40", l: 3, p: 79, t: "tf", q: "W jelicie grubym zachodzi wchłanianie wody i soli mineralnych oraz formowanie się kału.", a: true, ex: "Tak, w jelicie grubym nie działają enzymy trawienne." },
+    { id: "3-41", l: 3, p: 82, t: "match", q: "Przyporządkuj odcinkom przewodu pokarmowego odpowiednie opisy.", pairs: [["jama ustna", "Są tu wstępnie trawione cukry."], ["żołądek", "Są tu wstępnie trawione białka."], ["dwunastnica", "Uchodzą tu przewody wątroby i trzustki."], ["jelito grube", "Wchłania się tu woda i formuje się kał."]], extra: ["Kieruje pokarm do przełyku."], ex: "To wersja zadania 6 ze strony 82. Gardło kieruje pokarm do przełyku, więc ten opis nie pasuje do żadnego odcinka z listy." },
+    { id: "3-42", l: 3, p: 68, t: "single", q: "Trzustka wydziela swoje enzymy do:", o: ["dwunastnicy", "żołądka", "jamy ustnej", "jelita grubego"], ex: "Trzustka wydziela do dwunastnicy enzymy rozkładające białka, cukry i tłuszcze." },
+
+    /* ---------------- LEKCJA 4 ---------------- */
+    { id: "4-01", l: 4, p: 72, t: "single", q: "1 kcal (kilokaloria) to:", o: ["1000 cal", "100 cal", "10 cal", "10 000 cal"], ex: "1 kcal = 1000 cal." },
+    { id: "4-02", l: 4, p: 72, t: "single", q: "Wartość energetyczna pokarmu określa:", o: ["ilość energii, jaką uzyskamy z danego pokarmu", "ilość witamin w pokarmie", "masę pokarmu", "ilość wody w pokarmie"], ex: "Wartość energetyczną zwykle podaje się w kilokaloriach." },
+    { id: "4-03", l: 4, p: 72, t: "single", q: "Według tabeli zapotrzebowania energetycznego najwięcej energii na dobę potrzebują:", o: ["mężczyźni wykonujący ciężką pracę", "dzieci w wieku 1–9 lat", "kobiety wykonujące lekką pracę", "dziewczęta powyżej 12. roku życia"], ex: "Mężczyźni przy ciężkiej pracy potrzebują 3500–4000 kcal na dobę." },
+    { id: "4-04", l: 4, p: 72, t: "tf", q: "Zapotrzebowanie na energię zależy m.in. od wieku, płci, wykonywanej pracy i trybu życia.", a: true, ex: "Tak. Największe zapotrzebowanie mają osoby młode w okresie dojrzewania i osoby pracujące fizycznie." },
+    { id: "4-05", l: 4, p: 72, t: "single", q: "Dodatki do żywności są oznaczane na opakowaniach:", o: ["literą E i liczbą", "literą K i liczbą", "gwiazdką", "czerwonym kolorem"], ex: "Dodatki do żywności oznacza się literą E i liczbą. Niektóre są szkodliwe np. dla alergików." },
+    { id: "4-06", l: 4, p: 73, t: "single", q: "Podstawą piramidy zdrowego żywienia i stylu życia jest:", o: ["regularna aktywność fizyczna", "warzywa i owoce", "produkty zbożowe", "mleko i produkty mleczne"], ex: "Podstawą zdrowia i dobrego samopoczucia jest regularna aktywność fizyczna." },
+    { id: "4-07", l: 4, p: 73, t: "single", q: "Największą ilość pożywienia powinny stanowić:", o: ["warzywa i owoce", "produkty zbożowe", "mięso", "tłuszcze"], ex: "W piramidzie tuż nad aktywnością fizyczną są warzywa i owoce." },
+    { id: "4-08", l: 4, p: 73, t: "order", q: "Ułóż piętra piramidy zdrowego żywienia od podstawy do szczytu.", items: ["aktywność fizyczna", "warzywa i owoce", "produkty zbożowe", "mleko i produkty mleczne", "mięso, ryby, nasiona roślin strączkowych", "tłuszcze"], ex: "Im wyżej w piramidzie jest dany pokarm, tym mniej należy go jeść." },
+    { id: "4-09", l: 4, p: 73, t: "single", q: "Produkty zbożowe najlepiej wybierać:", o: ["pełnoziarniste", "z dodatkiem cukru", "z białej mąki", "smażone"], ex: "Najlepiej wybierać produkty zbożowe pełnoziarniste." },
+    { id: "4-10", l: 4, p: 73, t: "single", q: "Sól i cukier w diecie należy:", o: ["ograniczać i zastępować przyprawami ziołowymi", "jeść bez ograniczeń", "zastępować tłuszczami zwierzęcymi", "jeść tylko wieczorem"], ex: "Sól i cukier należy ograniczać i zastępować przyprawami ziołowymi." },
+    { id: "4-11", l: 4, p: 73, t: "single", q: "Mięso, zwłaszcza czerwone, należy ograniczać. Można je zastępować:", o: ["rybami i nasionami roślin strączkowych", "słodyczami", "masłem", "chipsami"], ex: "Mięso można zastępować rybami i nasionami roślin strączkowych." },
+    { id: "4-12", l: 4, p: 73, t: "single", q: "Dzieci i młodzież powinny spać na dobę około:", o: ["8–10 godzin", "5–6 godzin", "6–7 godzin", "12–14 godzin"], ex: "Odpowiednia ilość snu dla dzieci i młodzieży to około 8–10 godzin." },
+    { id: "4-13", l: 4, p: 73, t: "single", q: "Czas oglądania telewizji i korzystania z komputera należy ograniczyć do:", o: ["2 godzin na dobę", "5 godzin na dobę", "30 minut w tygodniu", "nie trzeba go ograniczać"], ex: "To jedna z zasad zdrowego stylu życia." },
+    { id: "4-14", l: 4, p: 73, t: "multi", q: "Zaznacz zasady zdrowego stylu życia z piramidy.", o: [["regularna aktywność fizyczna", true], ["odpowiednia ilość snu", true], ["regularne mycie zębów", true], ["kontrolowanie masy ciała", true], ["picie około 2 l płynów dziennie", true], ["jedzenie słodyczy zamiast owoców", false]], ex: "Wszystkie zasady z wyjątkiem słodyczy pochodzą z piramidy zdrowego żywienia i stylu życia." },
+    { id: "4-15", l: 4, p: 74, t: "single", q: "Dieta wegetariańska polega na:", o: ["wyłączeniu z posiłków produktów mięsnych", "jedzeniu wyłącznie mięsa", "jedzeniu jednego posiłku dziennie", "piciu tylko wody"], ex: "W niektórych odmianach wegetarianizmu rezygnuje się też z jaj i produktów mlecznych." },
+    { id: "4-16", l: 4, p: 74, t: "single", q: "Wegetarianie muszą starannie komponować posiłki. Dobrym tego przykładem jest łączenie:", o: ["nasion roślin strączkowych z produktami zbożowymi", "słodyczy z owocami", "masła z olejem", "wody z sokiem"], ex: "W pokarmach roślinnych często brakuje niektórych aminokwasów. Łączenie strączków ze zbożami daje pełnowartościowe białko." },
+    { id: "4-17", l: 4, p: 74, t: "multi", q: "Zaznacz zasady higieny odżywiania się.", o: [["myć ręce przed przygotowaniem posiłku i po jedzeniu oraz po wyjściu z toalety", true], ["nie zamrażać ponownie rozmrożonego pożywienia", true], ["spożywać posiłki regularnie i bez pośpiechu", true], ["sprawdzać termin przydatności do spożycia", true], ["jeść mięso z niesprawdzonego źródła", false], ["jeść jeden duży posiłek dziennie", false]], ex: "Do zasad należy też jedzenie pięciu posiłków dziennie i staranne mycie warzyw i owoców." },
+    { id: "4-18", l: 4, p: 74, t: "single", q: "Dlaczego nie należy ponownie zamrażać rozmrożonego pożywienia?", o: ["W rozmrożonym jedzeniu mogą się namnożyć chorobotwórcze bakterie.", "Traci cały smak.", "Zamienia się w tłuszcz.", "Staje się zbyt twarde do pogryzienia."], ex: "Po rozmrożeniu jedzenie trzeba od razu spożyć, bo mogą się w nim namnożyć bakterie." },
+    { id: "4-19", l: 4, p: 74, t: "single", q: "Produkty uzupełniające florę jelitową to np.:", o: ["kefir i jogurt", "chipsy i paluszki", "cukierki", "napoje gazowane"], ex: "Kefir i jogurt uzupełniają florę jelitową." },
+    { id: "4-20", l: 4, p: 74, t: "single", q: "Dlaczego nie należy jeść zbyt szybko ani nieregularnie?", o: ["Może to zakłócać pracę układu pokarmowego.", "Pokarm traci witaminy.", "Zęby szybciej rosną.", "Wtedy nie działa wątroba."], ex: "Zbyt szybkie lub nieregularne jedzenie może zakłócać pracę układu pokarmowego." },
+    { id: "4-21", l: 4, p: 75, t: "single", q: "Do najgroźniejszych pasożytów układu pokarmowego należą:", o: ["tasiemce, glista ludzka i włosień kręty", "salmonella i gronkowiec złocisty", "wirusy HAV, HBV i HCV", "Helicobacter pylori"], ex: "Częstym pasożytem jest też owsik ludzki. Salmonella i gronkowiec to bakterie." },
+    { id: "4-22", l: 4, p: 75, t: "tf", q: "Owsik ludzki to bakteria wywołująca zatrucia pokarmowe.", a: false, ex: "Fałsz. Owsik ludzki to pasożyt." },
+    { id: "4-23", l: 4, p: 75, t: "single", q: "Metale ciężkie (np. ze spalania benzyny) mogą powodować:", o: ["krzywicę oraz uszkodzenia słuchu, wzroku i układu nerwowego", "próchnicę i wypadanie włosów", "kurzą ślepotę", "szkorbut"], ex: "Aby uniknąć zatruć metalami ciężkimi, trzeba dokładnie myć warzywa i owoce." },
+    { id: "4-24", l: 4, p: 75, t: "single", q: "Palenie papierosów może się przyczynić do:", o: ["raka jelita grubego i choroby wrzodowej", "wirusowego zapalenia wątroby typu A", "próchnicy mlecznych zębów", "kurzej ślepoty"], ex: "Szczególnie niebezpieczne jest stosowanie używek, np. palenie papierosów." },
+    { id: "4-25", l: 4, p: 75, t: "single", q: "Próchnica zębów powstaje, gdy bakterie rozkładają cukier na powierzchni zębów i tworzy się:", o: ["kwas uszkadzający szkliwo", "żółć", "tłuszcz", "śluz ochronny"], ex: "Kwas tworzący się podczas tej reakcji uszkadza szkliwo." },
+    { id: "4-26", l: 4, p: 75, t: "multi", q: "Zaznacz, co pomaga zapobiegać próchnicy.", o: [["jedzenie produktów bogatych w wapń, fosfor, fluor i witaminę D", true], ["regularne mycie zębów", true], ["kontrola u stomatologa co najmniej dwa razy w roku", true], ["częste jedzenie słodyczy", false], ["unikanie produktów z wapniem", false]], ex: "Zapobieganie próchnicy to dieta z wapniem, fosforem, fluorem i witaminą D, mycie zębów i wizyty u stomatologa." },
+    { id: "4-27", l: 4, p: 75, t: "order", q: "Ułóż etapy rozwoju próchnicy.", items: ["czarna plama na powierzchni zęba – łatwa do wyleczenia", "bakterie docierają do miazgi – silny ból", "bakterie przedostają się do naczyń krwionośnych i uszkadzają inne narządy"], ex: "Próchnica może być też przyczyną chorób kości, serca i nerek." },
+    { id: "4-28", l: 4, p: 76, t: "single", q: "Główną przyczyną powstawania wrzodów żołądka i dwunastnicy są bakterie:", o: ["Helicobacter pylori", "Salmonella", "gronkowce złociste", "laseczki jadu kiełbasianego"], ex: "Choroba wrzodowa ma też inne przyczyny: stres, palenie papierosów i niektóre leki." },
+    { id: "4-29", l: 4, p: 76, t: "single", q: "W chorobie wrzodowej czynniki niszczą warstwę chroniącą błonę śluzową żołądka przed działaniem:", o: ["kwasu solnego", "żółci", "śliny", "witaminy C"], ex: "Prowadzi to do stanu zapalnego i powstawania ran, czyli owrzodzeń." },
+    { id: "4-30", l: 4, p: 76, t: "single", q: "Leczenie choroby wrzodowej obejmuje:", o: ["podawanie antybiotyków i odpowiednią dietę", "chirurgiczne wycięcie jelita grubego", "leki przeciwwirusowe", "wyłącznie szczepienie"], ex: "Leczenie wrzodów to antybiotyki i dieta." },
+    { id: "4-31", l: 4, p: 76, t: "single", q: "Profilaktyka choroby wrzodowej polega m.in. na:", o: ["unikaniu jedzenia i picia ze wspólnych naczyń, stresu i palenia papierosów", "jedzeniu dużej ilości słodyczy", "piciu nieprzegotowanej wody", "częstym przyjmowaniu leków przeciwbólowych"], ex: "Trzeba też unikać nadmiernego przyjmowania leków przeciwbólowych, przeciwzapalnych i przeciwgorączkowych." },
+    { id: "4-32", l: 4, p: 76, t: "tf", q: "Rak jelita grubego może przez długi czas rozwijać się bezobjawowo.", a: true, ex: "Tak, dlatego po wystąpieniu niepokojących objawów trzeba od razu iść do lekarza." },
+    { id: "4-33", l: 4, p: 76, t: "single", q: "Rozwojowi raka jelita grubego pozwala zapobiec m.in.:", o: ["dieta bogata w błonnik, niepalenie i prawidłowa masa ciała", "picie mleka", "unikanie warzyw", "szczepienie przeciw WZW"], ex: "Profilaktyka to niepalenie, dużo błonnika, prawidłowa masa ciała i zdrowy tryb życia." },
+    { id: "4-34", l: 4, p: 76, t: "single", q: "Leczenie raka jelita grubego to:", o: ["chirurgiczne wycięcie chorych tkanek, a przy przerzutach także chemioterapia", "antybiotyki i dieta", "gotowanie wody", "leki przeciwpasożytnicze"], ex: "Leczy się go chirurgicznie, a przy przerzutach stosuje się chemioterapię." },
+    { id: "4-35", l: 4, p: 77, t: "single", q: "Wirusowym zapaleniem wątroby typu A zakażamy się głównie:", o: ["drogą pokarmową", "przez krew", "przez kontakty seksualne", "przez ukąszenie komara"], ex: "WZW A szerzy się drogą pokarmową, a WZW B i C przez krew i kontakty seksualne." },
+    { id: "4-36", l: 4, p: 80, t: "single", q: "Szczepienia chronią przed wirusowym zapaleniem wątroby typu:", o: ["A i B", "tylko C", "A, B i C", "żadnego typu"], ex: "W tabeli profilaktyki szczepienie jest podane przy WZW A i WZW B." },
+    { id: "4-37", l: 4, p: 77, t: "single", q: "Zakażenia wirusami HBV i HCV mogą prowadzić do:", o: ["marskości i raka wątroby", "próchnicy", "kurzej ślepoty", "krzywicy"], ex: "Marskość to stwardnienie i uszkodzenie wątroby." },
+    { id: "4-38", l: 4, p: 77, t: "single", q: "Profilaktyka WZW typu A to:", o: ["gotowanie wody przed wypiciem, mycie owoców i warzyw, szczepienie", "unikanie słońca", "jedzenie dużej ilości tłuszczu", "unikanie aktywności fizycznej"], ex: "WZW A szerzy się drogą pokarmową, dlatego chroni przed nim higiena jedzenia i picia." },
+    { id: "4-39", l: 4, p: 77, t: "single", q: "Laseczki jadu kiełbasianego występują najczęściej w przetworach i konserwach, ponieważ:", o: ["żyją w środowisku beztlenowym", "potrzebują dużo światła", "żywią się cukrem", "nie znoszą soli"], ex: "Wydzielają śmiertelnie groźną toksynę, która atakuje układ nerwowy." },
+    { id: "4-40", l: 4, p: 77, t: "multi", q: "Zaznacz bakterie wywołujące zatrucia pokarmowe.", o: [["salmonella", true], ["gronkowiec złocisty", true], ["laseczka jadu kiełbasianego", true], ["glista ludzka", false], ["włosień kręty", false], ["wirus HAV", false]], ex: "Glista i włosień to pasożyty, a HAV to wirus." },
+    { id: "4-41", l: 4, p: 77, t: "single", q: "Objawy zatrucia pokarmowego to:", o: ["gorączka, silne bóle brzucha, biegunka, nudności, wymioty", "żółty odcień skóry i świąd", "kurza ślepota", "drgawki i depresja"], ex: "Leczy się je antybiotykami i odpowiednią dietą." },
+    { id: "4-42", l: 4, p: 82, t: "single", q: "Bakterie powodują:", o: ["zatrucia pokarmowe", "anoreksję", "bulimię", "glistnicę"], ex: "To zadanie 4 ze strony 82. Glistnicę wywołuje pasożyt, a anoreksja i bulimia to zaburzenia odżywiania." },
+    { id: "4-43", l: 4, p: 78, t: "single", q: "Gdy ilość dostarczanych kalorii przekracza zapotrzebowanie organizmu, nadmiar gromadzi się w postaci tłuszczu i może prowadzić do:", o: ["nadwagi, a następnie otyłości", "niedokrwistości", "szkorbutu", "krzywicy"], ex: "Otyłość źle wpływa na naczynia krwionośne i serce. Może też powodować cukrzycę oraz choroby stawów i kręgosłupa." },
+    { id: "4-44", l: 4, p: 78, t: "single", q: "Cukrzyca to choroba, której skutkiem jest:", o: ["zwiększenie stężenia glukozy we krwi", "brak żółci", "niedobór witaminy C", "zakażenie wirusem"], ex: "Cukrzyca może być skutkiem otyłości." },
+    { id: "4-45", l: 4, p: 78, t: "single", q: "Wskaźnik masy ciała (BMI) pokazuje zależność między:", o: ["masą ciała a wzrostem", "wzrostem a wiekiem", "masą ciała a ilością snu", "ilością wody a ilością tłuszczu"], ex: "BMI = masa ciała w kg podzielona przez kwadrat wzrostu w metrach." },
+    { id: "4-46", l: 4, p: 78, t: "single", q: "Najczęściej występujące zaburzenia odżywiania to:", o: ["anoreksja i bulimia", "próchnica i choroba wrzodowa", "WZW A i WZW B", "krzywica i szkorbut"], ex: "W obu chorobach ważne jest szybkie podjęcie leczenia." },
+    { id: "4-47", l: 4, p: 78, t: "single", q: "Anoreksja to inaczej:", o: ["jadłowstręt psychiczny", "zatrucie pokarmowe", "niedobór witaminy C", "choroba wrzodowa"], ex: "To zaburzenie odżywiania, które wymaga szybkiego leczenia." },
+    { id: "4-48", l: 4, p: 80, t: "multi", q: "Zaznacz sposoby zapobiegania chorobom układu pokarmowego.", o: [["przestrzeganie zasad higieny przy przygotowywaniu posiłków", true], ["mycie rąk przed posiłkami", true], ["odpowiednie przechowywanie żywności", true], ["jedzenie mięsa ze sprawdzonego źródła", true], ["picie wody z nieznanego źródła", false]], ex: "To punkt 9 podsumowania na stronie 80." },
+  ];
+
+  /* ---------- Tabele do generowania zadań i fiszek ---------- */
+  const VIT = [
+    { n: "C", group: "w wodzie", def: "zmniejszona odporność, owrzodzenie dziąseł i wypadanie zębów (szkorbut)", src: "owoce cytrusowe, pietruszka, truskawki, porzeczki, kapusta" },
+    { n: "B6", group: "w wodzie", def: "nadmierna pobudliwość, drgawki, depresja, choroby skóry, niedokrwistość", src: "wątroba, drożdże, fasola, orzechy, soja" },
+    { n: "B9", group: "w wodzie", def: "zahamowanie wzrostu, niedokrwistość, u kobiet zwiększone ryzyko urodzenia dziecka z wadami układu nerwowego", src: "warzywa liściaste, drożdże, orzechy, wątroba" },
+    { n: "B12", group: "w wodzie", def: "zaburzenia funkcjonowania układu nerwowego, niedokrwistość, zaburzenia wzrostu", src: "wątroba, mięso, jaja, mleko, ryby" },
+    { n: "A", group: "w tłuszczach", def: "zahamowanie wzrostu, choroby skóry, kurza ślepota", src: "żółte owoce i warzywa, masło, jaja, mleko, tran, mięso" },
+    { n: "D", group: "w tłuszczach", def: "osteoporoza, krzywica, zmniejszona odporność", src: "wątroba, ryby, jaja, masło, mleko, tran" },
+    { n: "E", group: "w tłuszczach", def: "osłabienie i zanik mięśni, niedokrwistość, oznaki starzenia się skóry, zmniejszona odporność", src: "oleje roślinne, mleko, kiełki zbóż, jaja" },
+    { n: "K", group: "w tłuszczach", def: "zaburzenia krzepnięcia krwi, skłonność do krwawień", src: "zielone warzywa liściaste, orzechy, jaja, wątroba" },
+  ];
+  /* krótkie, jednoznaczne wskazówki do zadań (bez nakładania się objawów) */
+  const VIT_CUE = { C: "szkorbut (owrzodzenie dziąseł, wypadanie zębów)", B6: "drgawki i nadmierna pobudliwość", B9: "u kobiet ryzyko urodzenia dziecka z wadami układu nerwowego", B12: "zaburzenia funkcjonowania układu nerwowego, niedokrwistość, zaburzenia wzrostu", A: "kurza ślepota", D: "krzywica i osteoporoza", E: "osłabienie i zanik mięśni, oznaki starzenia się skóry", K: "zaburzenia krzepnięcia krwi, skłonność do krwawień" };
+  const VIT_SRC_CUE = { C: "owoce cytrusowe, truskawki, porzeczki, kapusta", A: "żółte owoce i warzywa, masło, tran", E: "oleje roślinne, kiełki zbóż", K: "zielone warzywa liściaste, orzechy", B6: "drożdże, fasola, soja" };
+
+  const MIN = [
+    { n: "fosfor", kind: "makroelement", def: "krzywica, próchnica, bóle mięśni", src: "większość produktów spożywczych, np. ziarna słonecznika, sery" },
+    { n: "wapń", kind: "makroelement", def: "próchnica zębów, osłabienie kości, zaburzenia pracy serca", src: "mleko, sery, jaja" },
+    { n: "magnez", kind: "makroelement", def: "nieprawidłowa praca mięśnia sercowego i innych mięśni", src: "orzechy, kakao, pestki z dyni, otręby, kasza gryczana" },
+    { n: "żelazo", kind: "mikroelement", def: "niedokrwistość, osłabienie, zawroty głowy", src: "mięso, wątroba, ryby, jaja, zielone warzywa, rośliny strączkowe" },
+    { n: "jod", kind: "mikroelement", def: "zaburzenia wzrostu, choroby układu nerwowego", src: "ryby morskie, owoce morza" },
+    { n: "fluor", kind: "mikroelement", def: "próchnica zębów", src: "ryby morskie, nasiona roślin strączkowych, herbata" },
+  ];
+  const MIN_CUE = { fosfor: "krzywica, próchnica, bóle mięśni", wapń: "osłabienie kości, zaburzenia pracy serca", magnez: "nieprawidłowa praca mięśnia sercowego i innych mięśni", żelazo: "niedokrwistość, osłabienie, zawroty głowy", jod: "zaburzenia wzrostu, choroby układu nerwowego" };
+  const MIN_SRC_CUE = { wapń: "mleko, sery, jaja", magnez: "orzechy, kakao, pestki z dyni, kasza gryczana", jod: "ryby morskie, owoce morza", fluor: "herbata, nasiona roślin strączkowych", żelazo: "mięso, wątroba, zielone warzywa, rośliny strączkowe" };
+
+  const PROT = [
+    ["rodopsyna w komórkach oka", "receptorowe"],
+    ["aktyna i miozyna w mięśniach", "motoryczne"],
+    ["hemoglobina w krwinkach czerwonych", "transportowe"],
+    ["kolagen w skórze, kościach i stawach", "budulcowe"],
+    ["przeciwciała we krwi", "obronne"],
+    ["hormony trzustki", "sygnałowe"],
+    ["enzymy trawienne", "enzymatyczne"],
+  ];
+
+  const SEG = [
+    { n: "jama ustna", f: "obróbka mechaniczna pokarmu i wstępne trawienie cukrów", enz: "amylaza ślinowa – rozkłada cukry złożone" },
+    { n: "gardło", f: "połykanie pokarmu", enz: "brak" },
+    { n: "przełyk", f: "przesuwanie pokarmu do żołądka", enz: "brak" },
+    { n: "żołądek", f: "rozdrabnianie i mieszanie pokarmu z sokiem żołądkowym, wstępne trawienie białek", enz: "pepsyna – rozkłada białka" },
+    { n: "dwunastnica", f: "trawienie białek, cukrów i tłuszczów oraz wchłanianie produktów trawienia do krwi", enz: "trypsyna (białka), amylaza trzustkowa (cukry złożone), lipaza (tłuszcze)" },
+    { n: "dalsze odcinki jelita cienkiego", f: "trawienie oraz wchłanianie produktów trawienia do krwi i limfy", enz: "enzymy soku jelitowego – rozkładają białka, cukry i tłuszcze" },
+    { n: "jelito grube", f: "wchłanianie wody i soli mineralnych, formowanie kału", enz: "brak" },
+  ];
+
+  const ENZ = [
+    { n: "amylaza ślinowa", where: "jama ustna", what: "cukry złożone", from: "ślinianki" },
+    { n: "pepsyna", where: "żołądek", what: "białka", from: "żołądek" },
+    { n: "trypsyna", where: "dwunastnica", what: "białka", from: "trzustka" },
+    { n: "amylaza trzustkowa", where: "dwunastnica", what: "cukry złożone", from: "trzustka" },
+    { n: "lipaza trzustkowa", where: "dwunastnica", what: "tłuszcze", from: "trzustka" },
+  ];
+
+  const DIS = [
+    { n: "choroba wrzodowa żołądka i dwunastnicy", cause: "zakażenie Helicobacter pylori, stres, palenie papierosów, niektóre leki", prev: "unikanie jedzenia i picia ze wspólnych naczyń, stresu, nadmiaru leków przeciwbólowych i palenia" },
+    { n: "rak jelita grubego", cause: "zmiany w materiale genetycznym komórek błony śluzowej jelita, nieprawidłowa dieta, palenie papierosów", prev: "niepalenie, dieta bogata w błonnik, prawidłowa masa ciała, zdrowy tryb życia" },
+    { n: "wirusowe zapalenie wątroby (WZW)", cause: "zakażenie wirusem HAV, HBV lub HCV", prev: "unikanie kontaktu z krwią osoby zakażonej, szczepienia (A i B), gotowanie wody, mycie owoców i warzyw (A)" },
+    { n: "zatrucia pokarmowe", cause: "bakterie (np. salmonella, gronkowiec złocisty, laseczka jadu kiełbasianego) lub ich toksyny", prev: "obróbka termiczna pokarmów, prawidłowe przechowywanie żywności, higiena" },
+    { n: "choroby pasożytnicze", cause: "pasożyty: tasiemce, glista ludzka, włosień kręty, owsik ludzki", prev: "obróbka termiczna pokarmów, prawidłowe przechowywanie żywności, higiena" },
+  ];
+
+  const TERMS = [
+    ["aminokwasy egzogenne", "aminokwasy, których organizm nie potrafi wytworzyć – musi je pobrać z pożywienia", 59],
+    ["pokarmy pełnowartościowe", "zawierają wszystkie aminokwasy egzogenne; pochodzenia zwierzęcego (mięso, jaja, mleko, sery)", 59],
+    ["pokarmy niepełnowartościowe", "nie zawierają wszystkich niezbędnych aminokwasów; najczęściej roślinne", 59],
+    ["glukoza", "cukier prosty – główne źródło energii", 61],
+    ["glikogen", "cukier złożony – zapas glukozy u zwierząt, magazynowany w wątrobie", 61],
+    ["skrobia", "cukier złożony – zapas u roślin, np. w bulwach ziemniaków", 61],
+    ["błonnik pokarmowy", "materiał ścian komórek roślinnych (głównie celuloza); nie trawimy go, wchłania wodę i ułatwia przesuwanie pokarmu w jelitach", 61],
+    ["tłuszcze", "związki wysokoenergetyczne: z 1 g – 2× więcej energii niż z cukru lub białka", 61],
+    ["makroelementy", "pierwiastki > 0,01% suchej masy: fosfor, wapń, magnez; materiał budulcowy", 65],
+    ["mikroelementy", "pierwiastki ≤ 0,01% suchej masy: żelazo, jod, fluor; wchodzą w skład enzymów", 65],
+    ["sucha masa", "masa substancji pozbawionej wody", 65],
+    ["trawienie", "rozkład substancji odżywczych na związki o prostszej budowie", 67],
+    ["wchłanianie", "przenikanie produktów trawienia do krwi (i limfy)", 67],
+    ["defekacja", "usuwanie niestrawionych resztek pożywienia w postaci kału", 67],
+    ["żółć", "wytwarzana w wątrobie, gromadzi się w pęcherzyku żółciowym; rozbija krople tłuszczu", 69],
+    ["kosmki jelitowe", "wyrostki błony śluzowej jelita cienkiego z naczyniami krwionośnymi i limfatycznymi; zwiększają powierzchnię wchłaniania (~200 m²)", 70],
+    ["dwunastnica", "początkowy odcinek jelita cienkiego; uchodzą do niej przewody trzustki i wątroby", 69],
+    ["szkliwo / zębina / miazga", "warstwy zęba od zewnątrz: twarde szkliwo, zębina, miazga z naczyniami i nerwem", 67],
+    ["kilokaloria", "1 kcal = 1000 cal; jednostka wartości energetycznej pokarmu", 72],
+    ["dieta wegetariańska", "wyłączenie z posiłków produktów mięsnych", 74],
+    ["BMI", "wskaźnik masy ciała: masa (kg) / (wzrost w m)²", 78],
+  ];
+
+  const api = { LESSONS, Q, VIT, VIT_CUE, VIT_SRC_CUE, MIN, MIN_CUE, MIN_SRC_CUE, PROT, SEG, ENZ, DIS, TERMS };
+  if (typeof module !== "undefined" && module.exports) module.exports = api;
+  root.BioData = api;
+})(typeof globalThis !== "undefined" ? globalThis : this);
+</script>
+<script id="bio-engine">
+(function (root) {
+  "use strict";
+  const D = root.BioData || (typeof require !== "undefined" ? require("./bio_data.js") : null);
+
+  function makeRng(seed) {
+    if (seed == null) return Math.random;
+    let a = seed | 0;
+    return function () {
+      a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  const pick = (rng, arr) => arr[Math.floor(rng() * arr.length)];
+  function shuffle(rng, arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(rng() * (i + 1));
+      const t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function sample(rng, arr, n) { return shuffle(rng, arr).slice(0, n); }
+
+  /* ---------- normalizacja pytań statycznych ---------- */
+  function fromStatic(src, rng) {
+    const q = { key: src.id, l: src.l, p: src.p, t: src.t, q: src.q, ex: src.ex };
+    if (src.t === "single") {
+      q.opts = shuffle(rng, src.o.map((text, i) => ({ text, ok: i === 0 })));
+    } else if (src.t === "multi") {
+      q.opts = shuffle(rng, src.o.map((o) => ({ text: o[0], ok: o[1] })));
+    } else if (src.t === "tf") {
+      q.a = src.a;
+    } else if (src.t === "order") {
+      q.items = src.items.slice();
+      q.shuffled = shuffleNotIdentity(rng, src.items.map((_, i) => i));
+    } else if (src.t === "match") {
+      q.left = src.pairs.map((p) => p[0]);
+      q.right = shuffle(rng, src.pairs.map((p) => p[1]).concat(src.extra || []));
+      q.answer = src.pairs.map((p) => q.right.indexOf(p[1]));
+    }
+    return q;
+  }
+  function shuffleNotIdentity(rng, idx) {
+    for (let i = 0; i < 20; i++) {
+      const s = shuffle(rng, idx);
+      if (s.some((v, k) => v !== k)) return s;
+    }
+    return idx.slice().reverse();
+  }
+  function single(key, l, p, qtext, correct, wrongs, ex, rng) {
+    return { key, l, p, t: "single", q: qtext, ex, opts: shuffle(rng, [{ text: correct, ok: true }].concat(wrongs.map((w) => ({ text: w, ok: false })))) };
+  }
+  function match(key, l, p, qtext, pairs, ex, rng, extra) {
+    const right = shuffle(rng, pairs.map((x) => x[1]).concat(extra || []));
+    return { key, l, p, t: "match", q: qtext, ex, left: pairs.map((x) => x[0]), right, answer: pairs.map((x) => right.indexOf(x[1])) };
+  }
+
+  /* ---------- generatory z tabel ---------- */
+  const GEN = [
+    { id: "vitSym", l: 2, w: 3, fn(rng) {
+      const names = Object.keys(D.VIT_CUE);
+      if (rng() < 0.5) {
+        const v = pick(rng, names);
+        const wr = sample(rng, names.filter((x) => x !== v), 3);
+        return single("vitSym:" + v, 2, 64, "Objaw niedoboru: „" + D.VIT_CUE[v] + "”. Niedobór której witaminy go powoduje?", v, wr, "Witamina " + v + " – skutki niedoboru: " + D.VIT.find((x) => x.n === v).def + ".", rng);
+      }
+      const vs = sample(rng, names, 4);
+      return match("vitSymM:" + vs.join(","), 2, 64, "Przyporządkuj witaminę do objawu jej niedoboru.", vs.map((v) => [v, D.VIT_CUE[v]]), "Skutki niedoboru witamin znajdziesz w tabeli w ściągawce „Witaminy”.", rng);
+    } },
+    { id: "vitSrc", l: 2, w: 2, fn(rng) {
+      const names = Object.keys(D.VIT_SRC_CUE);
+      const v = pick(rng, names);
+      const wr = sample(rng, names.filter((x) => x !== v), 3);
+      return single("vitSrc:" + v, 2, 64, "Gdzie występuje dużo witaminy " + v + "?", D.VIT_SRC_CUE[v], wr.map((x) => D.VIT_SRC_CUE[x]), "Witamina " + v + " występuje m.in. w: " + D.VIT.find((x) => x.n === v).src + ".", rng);
+    } },
+    { id: "vitGroup", l: 2, w: 2, fn(rng) {
+      const v = pick(rng, D.VIT);
+      const sayWater = rng() < 0.5;
+      const truth = (v.group === "w wodzie") === sayWater;
+      return { key: "vitGroup:" + v.n + ":" + sayWater, l: 2, p: 63, t: "tf", q: "Witamina " + v.n + " rozpuszcza się " + (sayWater ? "w wodzie" : "w tłuszczach") + ".", a: truth, ex: "Rozpuszczalne w wodzie: C, B6, B9, B12. Rozpuszczalne w tłuszczach: A, D, E, K. Witamina " + v.n + " rozpuszcza się " + v.group + "." };
+    } },
+    { id: "minSym", l: 2, w: 2, fn(rng) {
+      const names = Object.keys(D.MIN_CUE);
+      if (rng() < 0.55) {
+        const m = pick(rng, names);
+        return single("minSym:" + m, 2, 65, "Skutki niedoboru: „" + D.MIN_CUE[m] + "”. Którego pierwiastka brakuje?", m, sample(rng, D.MIN.map((x) => x.n).filter((x) => x !== m && x !== "fluor"), 3), m[0].toUpperCase() + m.slice(1) + " – skutki niedoboru: " + D.MIN.find((x) => x.n === m).def + ".", rng);
+      }
+      const ms = sample(rng, names, 4);
+      return match("minSymM:" + ms.join(","), 2, 65, "Przyporządkuj pierwiastek do skutków jego niedoboru.", ms.map((m) => [m, D.MIN_CUE[m]]), "Pierwiastki i skutki ich niedoboru znajdziesz w tabeli w ściągawce „Sole mineralne i woda”.", rng);
+    } },
+    { id: "minSrc", l: 2, w: 2, fn(rng) {
+      const names = Object.keys(D.MIN_SRC_CUE);
+      const m = pick(rng, names);
+      return single("minSrc:" + m, 2, 65, "Który pierwiastek występuje m.in. w: " + D.MIN_SRC_CUE[m] + "?", m, sample(rng, names.filter((x) => x !== m), 3), m[0].toUpperCase() + m.slice(1) + " występuje w: " + D.MIN.find((x) => x.n === m).src + ".", rng);
+    } },
+    { id: "minKind", l: 2, w: 1, fn(rng) {
+      const m = pick(rng, D.MIN);
+      const sayMacro = rng() < 0.5;
+      const truth = (m.kind === "makroelement") === sayMacro;
+      return { key: "minKind:" + m.n + ":" + sayMacro, l: 2, p: 65, t: "tf", q: m.n[0].toUpperCase() + m.n.slice(1) + " jest " + (sayMacro ? "makroelementem" : "mikroelementem") + ".", a: truth, ex: "Makroelementy: fosfor, wapń, magnez. Mikroelementy: żelazo, jod, fluor. " + m.n[0].toUpperCase() + m.n.slice(1) + " to " + m.kind + "." };
+    } },
+    { id: "prot", l: 1, w: 2, fn(rng) {
+      if (rng() < 0.5) {
+        const pr = pick(rng, D.PROT);
+        const wr = sample(rng, D.PROT.filter((x) => x !== pr).map((x) => x[1]), 3);
+        return single("prot:" + pr[1], 1, 60, "Do której grupy białek należą: " + pr[0] + "?", "białka " + pr[1], wr.map((w) => "białka " + w), "Przykłady grup białek: " + D.PROT.map((x) => x[0] + " – " + x[1]).join("; ") + ".", rng);
+      }
+      const ps = sample(rng, D.PROT, 4);
+      return match("protM:" + ps.map((x) => x[1]).join(","), 1, 60, "Przyporządkuj przykład do grupy białek.", ps.map((x) => [x[0], "białka " + x[1]]), "Grupy białek i ich przykłady znajdziesz w ściągawce „Składniki pokarmowe”.", rng);
+    } },
+    { id: "seg", l: 3, w: 3, fn(rng) {
+      const segs = D.SEG.filter((s) => s.n !== "dalsze odcinki jelita cienkiego");
+      if (rng() < 0.45) {
+        const s = pick(rng, segs);
+        const wr = sample(rng, segs.filter((x) => x !== s).map((x) => x.n), 3);
+        return single("seg:" + s.n, 3, 79, "W którym odcinku przewodu pokarmowego zachodzi: " + s.f + "?", s.n, wr, s.n[0].toUpperCase() + s.n.slice(1) + ": " + s.f + ". Enzymy: " + s.enz + ".", rng);
+      }
+      const ss = sample(rng, segs, 4);
+      return match("segM:" + ss.map((x) => x.n).join(","), 3, 79, "Przyporządkuj odcinek przewodu pokarmowego do jego funkcji.", ss.map((x) => [x.n, x.f]), "Funkcje odcinków przewodu pokarmowego są w tabeli w ściągawce „Droga pokarmu i enzymy”.", rng);
+    } },
+    { id: "enz", l: 3, w: 3, fn(rng) {
+      const e = pick(rng, D.ENZ);
+      const r = rng();
+      if (r < 0.4) {
+        return single("enzWhat:" + e.n, 3, 79, e.n[0].toUpperCase() + e.n.slice(1) + " rozkłada:", e.what, ["białka", "cukry złożone", "tłuszcze", "witaminy"].filter((x) => x !== e.what).slice(0, 3), e.n + " (" + e.from + ") rozkłada " + e.what + " w miejscu: " + e.where + ".", rng);
+      }
+      if (r < 0.75) {
+        return single("enzWhere:" + e.n, 3, 79, "Gdzie działa " + e.n + "?", e.where, ["jama ustna", "żołądek", "dwunastnica", "jelito grube"].filter((x) => x !== e.where), e.n + " działa w miejscu: " + e.where + ". Wytwarza ją: " + e.from + ".", rng);
+      }
+      return single("enzFrom:" + e.n, 3, 69, "Który narząd wytwarza enzym: " + e.n + "?", e.from, ["ślinianki", "żołądek", "trzustka", "wątroba"].filter((x) => x !== e.from).slice(0, 3), "Wątroba nie wytwarza enzymów trawiennych, tylko żółć. " + e.n + " wytwarza: " + e.from + ".", rng);
+    } },
+    { id: "dis", l: 4, w: 2, fn(rng) {
+      if (rng() < 0.5) {
+        const d = pick(rng, D.DIS);
+        return single("dis:" + d.n, 4, 80, "Przyczyna: „" + d.cause + "”. Jaka to choroba?", d.n, sample(rng, D.DIS.filter((x) => x !== d).map((x) => x.n), 3), d.n[0].toUpperCase() + d.n.slice(1) + " – profilaktyka: " + d.prev + ".", rng);
+      }
+      const ds = sample(rng, D.DIS, 4);
+      return match("disM:" + ds.map((x) => x.n).join(","), 4, 80, "Przyporządkuj chorobę do jej przyczyny.", ds.map((x) => [x.n, x.cause]), "Przyczyny chorób są w tabeli w ściągawce „Choroby układu pokarmowego”.", rng);
+    } },
+    { id: "bilans", l: 2, w: 1, fn(rng) {
+      const skin = pick(rng, [400, 450, 500, 600]), lungs = pick(rng, [350, 400, 500, 550]), urine = pick(rng, [1200, 1300, 1400, 1500]), feces = pick(rng, [100, 150, 200]);
+      const food = pick(rng, [600, 700, 800, 900]), metab = pick(rng, [200, 250, 300]);
+      const out = skin + lungs + urine + feces;
+      const x = out - food - metab;
+      return {
+        key: "bilans:" + [skin, lungs, urine, feces, food, metab].join(","), l: 2, p: 82, t: "num",
+        q: "Dobowy bilans wodny to różnica między ilością wody pobranej a wydalonej w ciągu doby. Prawidłowy bilans wynosi 0. Oblicz X, czyli ilość wody z napojów.",
+        table: [["Pobieranie wody (ml)", "Wydalanie wody (ml)"], ["z napojami – X", "przez skórę – " + skin], ["z pokarmem – " + food, "przez płuca – " + lungs], ["woda metaboliczna – " + metab, "z moczem – " + urine], ["", "z kałem – " + feces]],
+        unit: "ml", a: x,
+        ex: "Wydalanie: " + skin + " + " + lungs + " + " + urine + " + " + feces + " = " + out + " ml. Pobieranie musi być równe: X + " + food + " + " + metab + " = " + out + ", więc X = " + out + " − " + (food + metab) + " = " + x + " ml.",
+      };
+    } },
+  ];
+
+  /* ---------- wybór pytania ---------- */
+  function generate(opts) {
+    const rng = makeRng(opts && opts.seed != null ? opts.seed : null);
+    const lessons = (opts && opts.lessons) || [1, 2, 3, 4];
+    const statics = D.Q.filter((q) => lessons.indexOf(q.l) !== -1);
+    const gens = GEN.filter((g) => lessons.indexOf(g.l) !== -1);
+    const genWeight = gens.reduce((s, g) => s + g.w, 0);
+    const total = statics.length + genWeight * 4;
+    if (!total) return null;
+    let r = rng() * total;
+    if (r < statics.length || !gens.length) {
+      return fromStatic(statics[Math.floor(rng() * statics.length)], rng);
+    }
+    r = (r - statics.length) / 4;
+    for (const g of gens) {
+      if (r < g.w) return g.fn(rng);
+      r -= g.w;
+    }
+    return gens[gens.length - 1].fn(rng);
+  }
+
+  function byKind(t) { return D.Q.filter((q) => q.t === t); }
+
+  /* ---------- ocena ---------- */
+  function maxPoints(q) { return q.t === "match" || q.t === "order" ? 2 : 1; }
+
+  /** user: single → index opts; tf → bool; multi → array of indices; order → array of item indices in chosen order; match → array of right indices; num → string */
+  function check(q, user) {
+    const max = maxPoints(q);
+    if (q.t === "single") {
+      if (user == null || !q.opts[user]) return { valid: false };
+      const ok = !!q.opts[user].ok;
+      return { valid: true, ok, points: ok ? 1 : 0, max, userText: q.opts[user].text };
+    }
+    if (q.t === "tf") {
+      if (user !== true && user !== false) return { valid: false };
+      const ok = user === q.a;
+      return { valid: true, ok, points: ok ? 1 : 0, max, userText: user ? "Prawda" : "Fałsz" };
+    }
+    if (q.t === "multi") {
+      if (!Array.isArray(user) || !user.length) return { valid: false };
+      const want = q.opts.map((o, i) => (o.ok ? i : -1)).filter((i) => i >= 0).sort().join(",");
+      const got = user.slice().sort().join(",");
+      const ok = want === got;
+      return { valid: true, ok, points: ok ? 1 : 0, max, userText: user.map((i) => q.opts[i].text).join("; ") };
+    }
+    if (q.t === "order") {
+      if (!Array.isArray(user) || user.length !== q.items.length) return { valid: false };
+      const good = user.filter((v, i) => v === i).length;
+      const ok = good === q.items.length;
+      const points = ok ? 2 : good >= q.items.length - 2 && q.items.length >= 3 ? 1 : 0;
+      return { valid: true, ok, points, max, userText: user.map((i) => q.items[i]).join(" → ") };
+    }
+    if (q.t === "match") {
+      if (!Array.isArray(user) || user.length !== q.left.length || user.some((v) => v == null || v < 0)) return { valid: false };
+      const good = user.filter((v, i) => v === q.answer[i]).length;
+      const ok = good === q.left.length;
+      const points = ok ? 2 : good === q.left.length - 1 ? 1 : 0;
+      return { valid: true, ok, points, max, good, userText: q.left.map((l, i) => l + " – " + q.right[user[i]]).join("; ") };
+    }
+    if (q.t === "num") {
+      const s = String(user == null ? "" : user).replace(/\s/g, "").replace(",", ".");
+      if (!/^-?\d+(\.\d+)?$/.test(s)) return { valid: false };
+      const ok = Number(s) === q.a;
+      return { valid: true, ok, points: ok ? 1 : 0, max, userText: s + " " + (q.unit || "") };
+    }
+    return { valid: false };
+  }
+
+  function answerText(q) {
+    if (q.t === "single") return q.opts.find((o) => o.ok).text;
+    if (q.t === "tf") return q.a ? "Prawda" : "Fałsz";
+    if (q.t === "multi") return q.opts.filter((o) => o.ok).map((o) => o.text).join("; ");
+    if (q.t === "order") return q.items.join(" → ");
+    if (q.t === "match") return q.left.map((l, i) => l + " – " + q.right[q.answer[i]]).join("; ");
+    if (q.t === "num") return q.a + " " + (q.unit || "");
+    return "";
+  }
+
+  /* ---------- fiszki ---------- */
+  function flashcards(lessons) {
+    const out = [];
+    const add = (l, p, front, back) => { if (lessons.indexOf(l) !== -1) out.push({ key: "fc:" + front, l, p, front, back }); };
+    D.TERMS.forEach((t) => add(t[2] <= 62 ? 1 : t[2] <= 66 ? 2 : t[2] <= 71 ? 3 : 4, t[2], t[0], t[1]));
+    D.VIT.forEach((v) => add(2, 64, "Witamina " + v.n, "Rozpuszczalna " + v.group + ".<br><b>Niedobór:</b> " + v.def + ".<br><b>Występowanie:</b> " + v.src + "."));
+    D.MIN.forEach((m) => add(2, 65, m.n[0].toUpperCase() + m.n.slice(1), m.kind[0].toUpperCase() + m.kind.slice(1) + ".<br><b>Niedobór:</b> " + m.def + ".<br><b>Występowanie:</b> " + m.src + "."));
+    D.PROT.forEach((p) => add(1, 60, "Białka " + p[1], "Przykład: " + p[0] + "."));
+    D.SEG.forEach((s) => add(3, 79, s.n[0].toUpperCase() + s.n.slice(1), "<b>Funkcje:</b> " + s.f + ".<br><b>Enzymy:</b> " + s.enz + "."));
+    D.ENZ.forEach((e) => add(3, 79, e.n[0].toUpperCase() + e.n.slice(1), "Wytwarza: " + e.from + ". Działa: " + e.where + ". Rozkłada: " + e.what + "."));
+    D.DIS.forEach((d) => add(4, 80, d.n[0].toUpperCase() + d.n.slice(1), "<b>Przyczyna:</b> " + d.cause + ".<br><b>Profilaktyka:</b> " + d.prev + "."));
+    return out;
+  }
+
+  const api = { generate, check, maxPoints, answerText, flashcards, GEN, fromStatic, byKind, makeRng, shuffle };
+  if (typeof module !== "undefined" && module.exports) module.exports = api;
+  root.BioEngine = api;
+})(typeof globalThis !== "undefined" ? globalThis : this);
+</script>
+<script id="bio-ui">
+(function () {
+  "use strict";
+  const E = window.BioEngine, D = window.BioData;
+  const $ = (id) => document.getElementById(id);
+  const STATS = "lucja-bio-stats-v1", WRONG = "lucja-bio-wrong-v1", EXAMS = "lucja-bio-exams-v1", CARDS = "lucja-bio-cards-v1";
+  const LETTERS = "ABCDEFGH";
+  const PRAISE = ["Brawo, dobrze!", "Świetnie, zgadza się!", "Super, poprawna odpowiedź!", "Tak trzymać!", "Doskonale!"];
+
+  function load(k, def) { try { const v = JSON.parse(localStorage.getItem(k) || "null"); return v == null ? def : v; } catch (e) { return def; } }
+  function save(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function esc(s) { return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+  let stats = load(STATS, { c: 0, w: 0, byL: {} });
+  let wrong = load(WRONG, []); // pełne obiekty pytań
+  let mode = "practice";
+  let current = null, checked = false, sel = null, recent = [];
+  let exam = null, examCount = 15;
+  let deck = [], deckIdx = 0, known = load(CARDS, {});
+
+  function lessons() { return [1, 2, 3, 4].filter((l) => $("b-l" + l).checked); }
+
+  /* ---------- tabele ściągawki ---------- */
+  function fillCheat() {
+    $("b-vit-table").innerHTML = "<thead><tr><th>Witamina</th><th>Skutki niedoboru</th><th>Występowanie</th></tr></thead><tbody>" +
+      D.VIT.map((v) => "<tr><td><b>" + v.n + "</b><br><span class='small'>" + v.group + "</span></td><td>" + v.def + "</td><td>" + v.src + "</td></tr>").join("") + "</tbody>";
+    $("b-min-table").innerHTML = "<thead><tr><th>Pierwiastek</th><th>Skutki niedoboru</th><th>Występowanie</th></tr></thead><tbody>" +
+      D.MIN.map((m) => "<tr><td><b>" + m.n + "</b><br><span class='small'>" + m.kind + "</span></td><td>" + m.def + "</td><td>" + m.src + "</td></tr>").join("") + "</tbody>";
+    $("b-seg-table").innerHTML = "<thead><tr><th>Odcinek</th><th>Funkcje</th><th>Enzymy</th></tr></thead><tbody>" +
+      D.SEG.map((s) => "<tr><td><b>" + s.n + "</b></td><td>" + s.f + "</td><td>" + s.enz + "</td></tr>").join("") + "</tbody>";
+    $("b-dis-table").innerHTML = "<thead><tr><th>Choroba</th><th>Przyczyna</th><th>Profilaktyka</th></tr></thead><tbody>" +
+      D.DIS.map((d) => "<tr><td><b>" + d.n + "</b></td><td>" + d.cause + "</td><td>" + d.prev + "</td></tr>").join("") + "</tbody>";
+  }
+
+  /* ---------- statystyki ---------- */
+  function renderStats() {
+    const t = stats.c + stats.w;
+    $("b-score").innerHTML = "Wynik: " + stats.c + "/" + t + (t ? " <span>· " + Math.round((stats.c / t) * 100) + "%</span>" : "");
+    $("b-lesson-stats").innerHTML = [1, 2, 3, 4].map((l) => {
+      const s = stats.byL[l];
+      if (!s || !(s.c + s.w)) return "";
+      return "<span>Lekcja " + l + ": " + Math.round((s.c / (s.c + s.w)) * 100) + "% (" + s.c + "/" + (s.c + s.w) + ")</span>";
+    }).join("");
+    $("b-wrong-count").textContent = wrong.length ? "(" + wrong.length + ")" : "";
+  }
+  function record(q, ok) {
+    stats[ok ? "c" : "w"]++;
+    stats.byL[q.l] = stats.byL[q.l] || { c: 0, w: 0 };
+    stats.byL[q.l][ok ? "c" : "w"]++;
+    save(STATS, stats);
+    const i = wrong.findIndex((x) => x.key === q.key);
+    if (ok && i !== -1) wrong.splice(i, 1);
+    if (!ok && i === -1) { wrong.push(q); if (wrong.length > 60) wrong.shift(); }
+    save(WRONG, wrong);
+    renderStats();
+  }
+
+  /* ---------- rysowanie pytania ---------- */
+  function typeLabel(q) {
+    return { single: "Wybierz jedną odpowiedź", tf: "Prawda czy fałsz?", multi: "Zaznacz wszystkie poprawne", order: "Ustal kolejność", match: "Przyporządkuj", num: "Oblicz" }[q.t];
+  }
+
+  function render(q, label) {
+    current = q; checked = false;
+    sel = q.t === "multi" ? [] : q.t === "order" ? [] : q.t === "match" ? q.left.map(() => -1) : null;
+    $("b-card").style.display = "";
+    $("b-q-cat").textContent = label;
+    $("b-q-text").textContent = q.q;
+    const area = $("b-answer-area");
+    let h = "";
+    if (q.t === "single") {
+      h = '<div class="b-opts">' + q.opts.map((o, i) => '<button type="button" class="b-opt" data-i="' + i + '"><span class="lt">' + LETTERS[i] + ".</span><span>" + esc(o.text) + "</span></button>").join("") + "</div>";
+    } else if (q.t === "tf") {
+      h = '<div class="b-tf"><button type="button" class="b-opt" data-v="1">P – prawda</button><button type="button" class="b-opt" data-v="0">F – fałsz</button></div>';
+    } else if (q.t === "multi") {
+      h = '<div class="b-opts">' + q.opts.map((o, i) => '<label class="b-opt" data-i="' + i + '"><input type="checkbox" data-i="' + i + '"><span>' + esc(o.text) + "</span></label>").join("") + "</div>";
+    } else if (q.t === "order") {
+      h = '<div class="small">Klikaj w kolejności. Kliknięcie wybranego elementu cofa go.</div><div class="b-order-chosen" id="b-ord-chosen"></div><div class="b-order-pool" id="b-ord-pool"></div>';
+    } else if (q.t === "match") {
+      h = '<table class="b-match"><tbody>' + q.left.map((l, i) => '<tr data-i="' + i + '"><td>' + esc(l) + '</td><td><select data-i="' + i + '" aria-label="' + esc(l) + '"><option value="-1">— wybierz —</option>' +
+        q.right.map((r, j) => '<option value="' + j + '">' + esc(r) + "</option>").join("") + "</select></td></tr>").join("") + "</tbody></table>";
+    } else if (q.t === "num") {
+      h = '<table class="btab" style="margin:0 0 6px;width:100%;"><thead><tr><th>' + q.table[0][0] + "</th><th>" + q.table[0][1] + "</th></tr></thead><tbody>" +
+        q.table.slice(1).map((r) => "<tr><td>" + r[0] + "</td><td>" + r[1] + "</td></tr>").join("") + "</tbody></table>" +
+        '<div class="b-num"><b>X =</b><input id="b-num-in" inputmode="numeric" autocomplete="off" aria-label="Wartość X"><span>' + q.unit + "</span></div>";
+    }
+    area.innerHTML = h;
+    // zdarzenia
+    if (q.t === "single") area.querySelectorAll(".b-opt").forEach((b) => b.addEventListener("click", () => { if (checked) return; sel = Number(b.dataset.i); submit(); }));
+    if (q.t === "tf") area.querySelectorAll(".b-opt").forEach((b) => b.addEventListener("click", () => { if (checked) return; sel = b.dataset.v === "1"; submit(); }));
+    if (q.t === "multi") area.querySelectorAll("input").forEach((c) => c.addEventListener("change", () => {
+      const i = Number(c.dataset.i);
+      sel = sel.filter((x) => x !== i); if (c.checked) sel.push(i);
+      c.closest(".b-opt").classList.toggle("sel", c.checked);
+    }));
+    if (q.t === "order") drawOrder();
+    if (q.t === "match") area.querySelectorAll("select").forEach((s) => s.addEventListener("change", () => { sel[Number(s.dataset.i)] = Number(s.value); }));
+    $("b-btn-check").hidden = q.t === "single" || q.t === "tf";
+    $("b-btn-check").disabled = false;
+    $("b-btn-next").hidden = true;
+    const fb = $("b-feedback"); fb.className = "fb"; fb.innerHTML = "";
+    const first = area.querySelector("input,select,button"); if (first && q.t === "num") first.focus();
+  }
+
+  function drawOrder() {
+    const q = current;
+    const chosen = $("b-ord-chosen"), pool = $("b-ord-pool");
+    chosen.innerHTML = sel.map((i, k) => '<button type="button" class="b-chip" data-i="' + i + '"><span class="n">' + (k + 1) + ".</span>" + esc(q.items[i]) + "</button>").join("");
+    pool.innerHTML = q.shuffled.filter((i) => sel.indexOf(i) === -1).map((i) => '<button type="button" class="b-chip" data-i="' + i + '">' + esc(q.items[i]) + "</button>").join("");
+    chosen.querySelectorAll(".b-chip").forEach((b) => b.addEventListener("click", () => { if (checked) return; sel = sel.filter((x) => x !== Number(b.dataset.i)); drawOrder(); }));
+    pool.querySelectorAll(".b-chip").forEach((b) => b.addEventListener("click", () => { if (checked) return; sel.push(Number(b.dataset.i)); drawOrder(); }));
+  }
+
+  function readUser() {
+    if (current.t === "num") return $("b-num-in").value;
+    return sel;
+  }
+
+  function markAnswers(res) {
+    const q = current, area = $("b-answer-area");
+    area.querySelectorAll("button,input,select").forEach((el) => (el.disabled = true));
+    if (q.t === "single") area.querySelectorAll(".b-opt").forEach((b) => {
+      const i = Number(b.dataset.i);
+      if (q.opts[i].ok) b.classList.add("right"); else if (i === sel) b.classList.add("wrong");
+    });
+    if (q.t === "tf") area.querySelectorAll(".b-opt").forEach((b) => {
+      const v = b.dataset.v === "1";
+      if (v === q.a) b.classList.add("right"); else if (v === sel) b.classList.add("wrong");
+    });
+    if (q.t === "multi") area.querySelectorAll(".b-opt").forEach((b) => {
+      const i = Number(b.dataset.i), picked = sel.indexOf(i) !== -1;
+      if (q.opts[i].ok) b.classList.add("right"); else if (picked) b.classList.add("wrong");
+    });
+    if (q.t === "match") area.querySelectorAll("tr").forEach((tr) => {
+      const i = Number(tr.dataset.i);
+      tr.classList.add(sel[i] === q.answer[i] ? "right" : "wrong");
+    });
+  }
+
+  function warn(msg) { const fb = $("b-feedback"); fb.className = "fb show hintonly"; fb.innerHTML = '<div class="title">' + msg + "</div>"; }
+
+  function submit() {
+    if (!current || checked) return;
+    const res = E.check(current, readUser());
+    if (!res.valid) {
+      warn(current.t === "match" ? "Dopasuj wszystkie elementy." : current.t === "order" ? "Ułóż wszystkie elementy." : current.t === "multi" ? "Zaznacz przynajmniej jedną odpowiedź." : "Wpisz liczbę.");
+      return;
+    }
+    if (exam && !exam.done) { exam.answers.push(res); exam.i++; if (exam.i < exam.total) showExamQ(); else finishExam(); return; }
+    checked = true;
+    record(current, res.ok);
+    markAnswers(res);
+    const fb = $("b-feedback");
+    const pg = '<div class="b-pg">📖 podręcznik, s. ' + current.p + "</div>";
+    if (res.ok) {
+      fb.className = "fb show ok";
+      fb.innerHTML = '<div class="title">' + PRAISE[Math.floor(Math.random() * PRAISE.length)] + "</div>" + esc(current.ex) + pg;
+    } else {
+      fb.className = "fb show bad";
+      const part = res.points > 0 ? "Prawie! (" + res.points + "/" + res.max + " pkt) " : "Nie tym razem. ";
+      fb.innerHTML = '<div class="title">' + part + "</div><p><b>Poprawnie:</b> " + esc(E.answerText(current)) + "</p>" + esc(current.ex) + pg;
+    }
+    $("b-btn-check").hidden = true;
+    $("b-btn-next").hidden = false;
+    $("b-btn-next").focus();
+  }
+
+  function next() {
+    const ls = lessons();
+    if (mode === "review") {
+      const pool = wrong.filter((q) => ls.indexOf(q.l) !== -1);
+      if (!pool.length) { $("b-card").style.display = "none"; current = null; showWarn("Brak błędów do powtórki w zaznaczonych lekcjach. Super!"); return; }
+      hideWarn();
+      const cand = pool.filter((q) => !current || q.key !== current.key);
+      const q = JSON.parse(JSON.stringify((cand.length ? cand : pool)[Math.floor(Math.random() * (cand.length ? cand.length : pool.length))]));
+      reshuffle(q);
+      render(q, "Powtórka · lekcja " + q.l + " · " + typeLabel(q));
+      return;
+    }
+    if (!ls.length) { $("b-card").style.display = "none"; current = null; showWarn("Zaznacz chociaż jedną lekcję."); return; }
+    hideWarn();
+    let q;
+    for (let i = 0; i < 25; i++) { q = E.generate({ lessons: ls }); if (recent.indexOf(q.key) === -1) break; }
+    recent.push(q.key); if (recent.length > 30) recent.shift();
+    render(q, "Lekcja " + q.l + " · " + typeLabel(q));
+  }
+  function reshuffle(q) {
+    const sh = (a) => E.shuffle(Math.random, a);
+    if (q.t === "single" || q.t === "multi") q.opts = sh(q.opts);
+    if (q.t === "order") q.shuffled = sh(q.items.map((_, i) => i));
+    if (q.t === "match") { const pairs = q.left.map((l, i) => q.right[q.answer[i]]); q.right = sh(q.right); q.answer = pairs.map((r) => q.right.indexOf(r)); }
+  }
+  function showWarn(m) { $("b-warn").textContent = m; $("b-warn").classList.add("on"); }
+  function hideWarn() { $("b-warn").classList.remove("on"); }
+
+  /* ---------- tryby ---------- */
+  function setMode(m) {
+    if (exam && !exam.done) return;
+    mode = m; exam = null;
+    ["practice", "review", "cards", "exam"].forEach((x) => $("b-mode-" + x).setAttribute("aria-pressed", x === m ? "true" : "false"));
+    $("b-exam-summary").classList.remove("on");
+    $("b-exam-setup").classList.toggle("on", m === "exam");
+    $("b-cards").classList.toggle("on", m === "cards");
+    hideWarn();
+    if (m === "exam") { current = null; $("b-card").style.display = "none"; renderHistory(); }
+    else if (m === "cards") { current = null; $("b-card").style.display = "none"; buildDeck(); }
+    else next();
+  }
+
+  /* ---------- fiszki ---------- */
+  function buildDeck() {
+    const ls = lessons();
+    if (!ls.length) { showWarn("Zaznacz chociaż jedną lekcję."); $("b-cards").classList.remove("on"); return; }
+    const all = E.flashcards(ls);
+    const unknown = all.filter((c) => !known[c.key]);
+    deck = E.shuffle(Math.random, unknown.length ? unknown : all);
+    deckIdx = 0;
+    $("b-cards").classList.add("on");
+    showCard();
+  }
+  function showCard() {
+    const ls = lessons();
+    const all = E.flashcards(ls);
+    const k = all.filter((c) => known[c.key]).length;
+    $("b-fc-progress").textContent = "Umiesz " + k + " z " + all.length + " fiszek." + (k === all.length ? " Wszystkie opanowane – brawo! Kolejne okrążenie dla utrwalenia." : "");
+    if (deckIdx >= deck.length) { buildDeck(); return; }
+    const c = deck[deckIdx];
+    $("b-fc-meta").textContent = "Lekcja " + c.l + " · s. " + c.p + " · fiszka " + (deckIdx + 1) + "/" + deck.length;
+    $("b-fc-front").textContent = c.front;
+    $("b-fc-back").innerHTML = c.back;
+    $("b-fc-back").hidden = true;
+    $("b-fc-show").hidden = false; $("b-fc-know").hidden = true; $("b-fc-again").hidden = true;
+  }
+  function cardShow() { $("b-fc-back").hidden = false; $("b-fc-show").hidden = true; $("b-fc-know").hidden = false; $("b-fc-again").hidden = false; }
+  function cardKnow() { known[deck[deckIdx].key] = 1; save(CARDS, known); deckIdx++; showCard(); }
+  function cardAgain() { const c = deck[deckIdx]; delete known[c.key]; save(CARDS, known); deck.push(c); deckIdx++; showCard(); }
+
+  /* ---------- sprawdzian ---------- */
+  function fmtTime(ms) { const t = Math.round(ms / 1000); return Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0"); }
+  function gradeFor(pct) {
+    if (pct >= 96) return "celujący (6)";
+    if (pct >= 85) return "bardzo dobry (5)";
+    if (pct >= 70) return "dobry (4)";
+    if (pct >= 50) return "dostateczny (3)";
+    if (pct >= 30) return "dopuszczający (2)";
+    return "niedostateczny (1)";
+  }
+  function renderHistory() {
+    const l = load(EXAMS, []);
+    $("b-exam-history").innerHTML = l.slice().reverse().map((e) => "<li>" + esc(e.date) + " — " + e.pts + "/" + e.max + " pkt (" + e.pct + "%), czas " + esc(e.time) + "</li>").join("");
+  }
+  function buildExam(n, ls) {
+    const qs = [], keys = new Set();
+    // co najmniej ~20% zadań za 2 pkt (przyporządkowanie / kolejność)
+    const wantBig = Math.max(2, Math.round(n * 0.2));
+    let big = 0, guard = 0;
+    while (qs.length < n && guard++ < 2000) {
+      const q = E.generate({ lessons: ls });
+      if (keys.has(q.key)) continue;
+      const isBig = q.t === "match" || q.t === "order";
+      if (!isBig && qs.length - big >= n - wantBig && big < wantBig) continue;
+      if (isBig && big >= wantBig + 2) continue;
+      keys.add(q.key); qs.push(q); if (isBig) big++;
+    }
+    // przeplot lekcji
+    return qs.sort((a, b) => a.l - b.l || Math.random() - 0.5);
+  }
+  function startExam() {
+    const ls = lessons();
+    if (!ls.length) { showWarn("Zaznacz chociaż jedną lekcję."); return; }
+    hideWarn();
+    exam = { total: examCount, qs: buildExam(examCount, ls), answers: [], i: 0, start: Date.now(), done: false, ls };
+    document.body.classList.add("bexam");
+    $("b-exam-setup").classList.remove("on");
+    exam.timer = setInterval(updProg, 1000);
+    window.scrollTo({ top: $("b-quiz").offsetTop - 10 });
+    showExamQ();
+  }
+  function updProg() { if (exam && !exam.done) $("b-progress").textContent = "Pytanie " + (exam.i + 1) + " z " + exam.total + " · " + fmtTime(Date.now() - exam.start); }
+  function showExamQ() {
+    const q = exam.qs[exam.i];
+    render(q, "Pytanie " + (exam.i + 1) + " · " + typeLabel(q) + " · " + E.maxPoints(q) + " pkt");
+    $("b-btn-check").hidden = false;
+    $("b-btn-check").textContent = exam.i === exam.total - 1 ? "Zakończ" : "Dalej";
+    if (q.t === "single" || q.t === "tf") {
+      // w sprawdzianie: zaznacz, a potem „Dalej” (można zmienić zdanie)
+      const area = $("b-answer-area");
+      area.querySelectorAll(".b-opt").forEach((b) => {
+        const nb = b.cloneNode(true); b.replaceWith(nb);
+        nb.addEventListener("click", () => {
+          sel = q.t === "single" ? Number(nb.dataset.i) : nb.dataset.v === "1";
+          area.querySelectorAll(".b-opt").forEach((x) => x.classList.toggle("sel", x === nb));
+        });
+      });
+    }
+    updProg();
+  }
+  function stopExam() {
+    if (!exam || exam.done) return;
+    if (!confirm("Przerwać sprawdzian? Wynik nie zostanie zapisany.")) return;
+    clearInterval(exam.timer); exam = null;
+    document.body.classList.remove("bexam");
+    $("b-btn-check").textContent = "Sprawdź";
+    setMode("exam");
+  }
+  function finishExam() {
+    clearInterval(exam.timer); exam.done = true; current = null;
+    document.body.classList.remove("bexam");
+    $("b-btn-check").textContent = "Sprawdź";
+    $("b-card").style.display = "none";
+    $("b-progress").textContent = "";
+    let pts = 0, max = 0;
+    const byL = {}, wrongLines = [];
+    const rows = exam.qs.map((q, i) => {
+      const a = exam.answers[i];
+      pts += a.points; max += a.max;
+      byL[q.l] = byL[q.l] || { p: 0, m: 0 }; byL[q.l].p += a.points; byL[q.l].m += a.max;
+      record(q, a.ok);
+      if (!a.ok) wrongLines.push("- " + q.q + " → odp.: " + a.userText + "; poprawnie: " + E.answerText(q));
+      return '<tr class="' + (a.ok ? "ok" : "bad") + '"><td>' + (i + 1) + "</td><td>" + esc(q.q) +
+        (a.ok ? "" : "<details><summary>Wyjaśnienie</summary>" + esc(q.ex) + " (s. " + q.p + ")</details>") +
+        "</td><td>" + esc(a.userText) + "</td><td>" + esc(E.answerText(q)) + '</td><td class="res">' + a.points + "/" + a.max + "</td></tr>";
+    }).join("");
+    const pct = Math.round((pts / max) * 100);
+    const entry = { date: new Date().toLocaleString("pl-PL", { dateStyle: "short", timeStyle: "short" }), pts, max, pct, grade: gradeFor(pct), time: fmtTime(Date.now() - exam.start) };
+    const hist = load(EXAMS, []); hist.push(entry); save(EXAMS, hist.slice(-10));
+    const lLine = Object.keys(byL).map((l) => "Lekcja " + l + ": " + byL[l].p + "/" + byL[l].m).join(" · ");
+    const text = ["Sprawdzian — biologia: układ pokarmowy", "Data: " + entry.date, "Wynik: " + pts + "/" + max + " pkt (" + pct + "%) · ocena orientacyjna: " + entry.grade, "Czas: " + entry.time, lLine]
+      .concat(wrongLines.length ? ["Błędy:"].concat(wrongLines) : ["Bez błędów!"]).join("\n");
+    $("b-summary-box").innerHTML =
+      '<div class="sum-head"><span class="sum-score">' + pts + "/" + max + " pkt</span><span><strong>" + pct + "%</strong> · ocena orientacyjna: <strong>" + entry.grade + "</strong> · czas " + entry.time + "</span></div>" +
+      '<p class="lead" style="margin:0 0 6px;">' + lLine + ". Skala ocen jest orientacyjna — w Twojej szkole może być inna. Błędne pytania trafiły do „Powtórki błędów”.</p>" +
+      '<table class="sum-table"><thead><tr><th>#</th><th>Zadanie</th><th>Twoja odpowiedź</th><th>Poprawnie</th><th>pkt</th></tr></thead><tbody>' + rows + "</tbody></table>" +
+      '<div class="sum-actions"><button type="button" class="btn btn-primary" id="b-btn-again">Nowy sprawdzian</button>' +
+      '<button type="button" class="btn btn-ghost" id="b-btn-copy">Kopiuj wynik</button>' +
+      '<button type="button" class="btn btn-ghost" id="b-btn-review">Powtórz błędy</button>' +
+      '<button type="button" class="btn btn-ghost" id="b-btn-back">Wróć do ćwiczeń</button></div>';
+    $("b-exam-summary").classList.add("on");
+    $("b-btn-again").addEventListener("click", () => setMode("exam"));
+    $("b-btn-back").addEventListener("click", () => setMode("practice"));
+    $("b-btn-review").addEventListener("click", () => setMode("review"));
+    $("b-btn-copy").addEventListener("click", (ev) => {
+      const btn = ev.currentTarget;
+      const done = () => { btn.textContent = "Skopiowano ✓"; setTimeout(() => (btn.textContent = "Kopiuj wynik"), 2000); };
+      const fallback = () => { const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); done(); } catch (e) {} ta.remove(); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback); else fallback();
+    });
+    window.scrollTo({ top: $("b-quiz").offsetTop - 10 });
+  }
+
+  /* ---------- zdarzenia ---------- */
+  $("b-btn-check").addEventListener("click", submit);
+  $("b-btn-next").addEventListener("click", next);
+  $("b-btn-stop").addEventListener("click", stopExam);
+  $("b-btn-exam-start").addEventListener("click", startExam);
+  $("b-btn-reset").addEventListener("click", () => {
+    if (!confirm("Wyczyścić wyniki, listę błędów i postęp fiszek z biologii?")) return;
+    stats = { c: 0, w: 0, byL: {} }; wrong = []; known = {};
+    save(STATS, stats); save(WRONG, wrong); save(CARDS, known); renderStats();
+  });
+  ["practice", "review", "cards", "exam"].forEach((m) => $("b-mode-" + m).addEventListener("click", () => setMode(m)));
+  document.querySelectorAll(".b-count-btn").forEach((b) => b.addEventListener("click", () => {
+    examCount = Number(b.dataset.n);
+    document.querySelectorAll(".b-count-btn").forEach((x) => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+  }));
+  [1, 2, 3, 4].forEach((l) => $("b-l" + l).addEventListener("change", () => {
+    if (mode === "cards") buildDeck(); else if ((mode === "practice" || mode === "review") && !checked) next();
+  }));
+  $("b-fc-show").addEventListener("click", cardShow);
+  $("b-fc-know").addEventListener("click", cardKnow);
+  $("b-fc-again").addEventListener("click", cardAgain);
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter" || !document.body.classList.contains("tab-bio") || !current) return;
+    if (e.target && (e.target.tagName === "BUTTON" || e.target.tagName === "SELECT")) return;
+    e.preventDefault();
+    if (!checked) submit(); else next();
+  });
+  document.addEventListener("tabchange", (e) => { if (e.detail === "bio" && mode === "practice" && !current) next(); });
+
+  fillCheat();
+  renderStats();
+  if (document.body.classList.contains("tab-bio")) next();
 })();
 </script>
 </body>
